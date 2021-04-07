@@ -1,10 +1,7 @@
 import math
 import random as rnd
 
-"""
-    Para hacer:
-     - Generar la nueva generación: hay que aplicar 
-"""
+
 # ----------------------------------------------------------------------------------------------------
 class Cromosoma(object):
 
@@ -37,19 +34,21 @@ class Cromosoma(object):
 
 class Poblacion(object):
     """Poblacion genetica del algoritmo"""
-
+    ID = 1
     #Metodos
     def __init__(self):
+        self.ID = Poblacion.ID
         self.arrGenes=[]
         self.sumaPoblacion=0
         self.mediaPoblacion=0
-        self.maxGen = Cromosoma()
-        self.minGen=Cromosoma()
+        self.maxCromosoma = Cromosoma()
+        self.minCromosoma=Cromosoma()
         #Esto es por que no puedo instanciar el objeto con el valor
-        self.minGen.valorDecimal=5**99 
+        self.minCromosoma.valorDecimal=5**99 
         for x in range(0,tPobla):
             cromosoma = Cromosoma()        
             self.arrGenes.append(cromosoma)
+        Poblacion.ID+=1
 
     def calculoSumaPobla(self):
         """Se calcula la suma de la poblacion a partir del valor de cada cromosoma"""
@@ -63,10 +62,10 @@ class Poblacion(object):
 
     def buscoMayorCromosoma(self):     
         for cromosoma in self.arrGenes:
-            if ( self.maxGen.valorDecimal < cromosoma.valorDecimal):
-                self.maxGen = cromosoma
-            if ( self.minGen.valorDecimal > cromosoma.valorDecimal):
-                self.minGen = cromosoma
+            if ( self.maxCromosoma.valorDecimal < cromosoma.valorDecimal):
+                self.maxCromosoma = cromosoma
+            if ( self.minCromosoma.valorDecimal > cromosoma.valorDecimal):
+                self.minCromosoma = cromosoma
     
     def calcularFitness(self):
         for cromosoma in self.arrGenes:        
@@ -78,15 +77,11 @@ class Poblacion(object):
         self.buscoMayorCromosoma()
         self.calcularFitness()
         
-    def muestroValoresPoblacion(self):
-        print("----------------------------------")
-        print("Los valores de la poblacion fueron:")
-        print("La media de la FO fue: ",self.mediaPoblacion)
-        print("El maximo valor de la poblacion fue: ",self.maxGen.valorDecimal)
-        print("El minimo valor de la poblacion fue: ",self.minGen.valorDecimal)
-        print("----------------------------------")
-
-
+    def muestroValoresPoblacion(self):       
+        print(f"Media de la FO fue: {self.mediaPoblacion}")
+        print(f"El cromosoma {self.maxCromosoma.arrGenes} fue el mas grande y su valor en decimal es {self.maxCromosoma.valorDecimal}")
+        print(f"El cromosoma  {self.minCromosoma.arrGenes} fue el mas chico y su valor en decimal es {self.minCromosoma.valorDecimal}")
+        
 # -----------------------------------------------------------------------------------------       
 
 class Generacion(object):
@@ -127,10 +122,13 @@ Dominio=2**30-1  #Dominio es una variable global
 #tCromo=int(input("Ingrese el tamaño del cromosoma"))
 tCromo=30
 tPobla=10
-cantCorridas=1
+cantCorridas=20
 generacion=Generacion()
 for i in range(0,cantCorridas):
     generacion.creoGeneracion()
 
 for poblacion in generacion.arrPoblaciones:
-    print(poblacion.muestroValoresPoblacion())
+    print("-----------------------------------------------------")
+    print(f"Los valores de la poblacion {poblacion.ID}:")
+    poblacion.muestroValoresPoblacion()
+    print("-----------------------------------------------------")
