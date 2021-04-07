@@ -11,6 +11,7 @@ class Cromosoma(object):
     funcObjetivo=0  
     arrGenes=[]
     funcFitness=0
+    valorDecimal=0
 
     #Metodos
     def instancioGen(self,tamaño):
@@ -18,19 +19,17 @@ class Cromosoma(object):
         for x in range(0,tamaño):
             self.arrGenes.append(rnd.randint(0,1))
         self.calculaFuncObjetivo()
-        pass
 
     def transformoBinarioAEntero(self):
         """Se calculara el valor genetico del cromosoma en numero entero"""
-        valor=0
         #Convierto el arreglo de numeros en una cadena para posteriormente pasarla a binario 
         cadena = "".join([str(_) for _ in self.arrGenes])
-        valor = int(cadena, 2)
-        return valor
+        self.valorDecimal = int(cadena, 2)
 
     def calculaFuncObjetivo(self):
-        """Se calcula el valor de cada cromosoma"""       
-        self.funcObjetivo = (self.transformoBinarioAEntero() / Dominio) ** 2 #Dominio se define en el cuerpo principal
+        """Se calcula el valor de cada cromosoma"""      
+        self.transformoBinarioAEntero()
+        self.funcObjetivo = (self.valorDecimal / Dominio) ** 2 #Dominio se define en el cuerpo principal
     
     def calculoFitness(self,sumaPoblacion):
       """Dependiendo de la suma de la poblacion, se calcula el fitness de cada cormosoma"""
@@ -47,7 +46,8 @@ class Poblacion(object):
     #Instancio
     maxPoblacion=Cromosoma()
     minPoblacion=Cromosoma()
-    minPoblacion.funcObjetivo=5**99
+    minPoblacion.valorDecimal=5**99
+   
 
     #Metodos
     def instancioPoblacion(self,tPoblacion,tCromosoma):
@@ -59,34 +59,38 @@ class Poblacion(object):
     def calculoSumaPobla(self):
         """Se calcula la suma de la poblacion a partir del valor de cada cromosoma"""
         for cromosoma in self.arrPoblacion:
-            self.sumaPoblacion += cromosoma.funcObjetivo
+            self.sumaPoblacion += cromosoma.valorDecimal
     
-    def calculoMediaPobla(self):
+    def calculoMediaFO(self):
         """Se calcula la media poblacional"""
-        self.mediaPoblacion = self.sumaPoblacion / len(self.arrPoblacion)
+        for cromosoma in self.arrPoblacion:
+            self.mediaPoblacion += cromosoma.funcObjetivo / len(self.arrPoblacion)
 
     def buscoMayorCromosoma(self):     
         for cromosoma in self.arrPoblacion:
-            if ( self.maxPoblacion.funcObjetivo < cromosoma.funcObjetivo):
+            if ( self.maxPoblacion.valorDecimal < cromosoma.valorDecimal):
                 self.maxPoblacion = cromosoma
-            if ( self.minPoblacion.funcObjetivo> cromosoma.funcObjetivo):
+            if ( self.minPoblacion.valorDecimal > cromosoma.valorDecimal):
                 self.minPoblacion = cromosoma
     
     def calculoValorPoblacion(self):
         self.calculoSumaPobla()
-        self.calculoMediaPobla()
+        self.calculoMediaFO()
         self.buscoMayorCromosoma()
         self.calcularFitness()
         
     def muestroValoresPoblacion(self):
+        print("----------------------------------")
         print("Los valores de la poblacion fueron:")
-        print("La media poblacional fue: ",self.mediaPoblacion)
-        print("El maximo valor de la poblacion fue: ",self.maxPoblacion.funcObjetivo)
-        print("El minimo valor de la poblacion fue: ",self.minPoblacion.funcObjetivo)
+        print("La media de la FO fue: ",self.mediaPoblacion)
+
+        print("El maximo valor de la poblacion fue: ",self.maxPoblacion.valorDecimal)
+        print("El minimo valor de la poblacion fue: ",self.minPoblacion.valorDecimal)
+        print("----------------------------------")
 
     def calcularFitness(self):
-        for x in self.arrPoblacion:        
-            x.calculoFitness(self.sumaPoblacion)
+        for cromosoma in self.arrPoblacion:        
+            cromosoma.calculoFitness(self.sumaPoblacion)
 
     def generarNuevaGeneracion(self):
         pass
@@ -96,34 +100,37 @@ class Generacion(object):
 
     #Atributos
     arrPoblaciones=[]
+    probCrossover = 0.75
+    probMutacion =0.05
 
     #Metodos
     def creoGeneracion(self):
         """Si se ejecuta por primera vez, generara una poblacion, si no, a la existente ya le aplicara la mutacion"""
-        if(self.arrPoblaciones.__sizeof__()==0):
-            tCromo=int(input("Ingrese el tamaño del cromosoma"))
-            tPobla=int(input("Ingrese el tamaño de la poblacion"))
-            poblacion = Poblacion(tPobla,tCromo)
-            self.arrPoblaciones.append(tPobla,tCromo)
+        if(len(self.arrPoblaciones) == 0 ):
+            poblacion = Poblacion()
+            poblacion.instancioPoblacion(tPobla, tCromo)
+            poblacion.calculoValorPoblacion()
+            poblacion.muestroValoresPoblacion()
+            self.arrPoblaciones.append(poblacion)
         else:
-            generoNuevaGeneracion()
+            self.generoNuevaGeneracion()
 
     def generoNuevaGeneracion(self):
         pass
         
 
 def programaPrincipal():
-    """
-    tCromo=int(input("Ingrese el tamaño del cromosoma"))
-    tPobla=int(input("Ingrese el tamaño de la poblacion"))
-    poblacion = Poblacion(tPobla,tCromo)
-    """
-    poblacion = Poblacion()
-    poblacion.instancioPoblacion(10,30)
-    poblacion.calculoValorPoblacion()
-    poblacion.muestroValoresPoblacion()
+    #cantidadCorridas=int(input("Ingrese la cantidad de corridas"))    
+    #tPobla=int(input("Ingrese el tamaño de la poblacion"))
+    #tCromo=int(input("Ingrese el tamaño del cromosoma"))
+    tCromo=30
+    tPobla=10
+    cantidadCorridas=20
+    i=0
+    while (i<cantidadCorridas):
+        Generacion().creoGeneracion()
+        i+=1
 
 #Main
-
 Dominio=2**30-1  #Dominio es una variable global
 programaPrincipal()
