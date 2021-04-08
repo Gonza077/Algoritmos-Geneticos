@@ -76,6 +76,34 @@ class Poblacion(object):
         self.calculoMediaFO()
         self.buscoMayorCromosoma()
         self.calcularFitness()
+
+    def seleccionoPadres(self):
+        """Se seleccionan los padres teniendo en cuenta su fitness, favoreciendo a los individuos mejores adaptados."""
+        padres = []
+
+        return padres
+
+    def aplicoCrossover(self, padres):
+        """Se crean los hijos(cromosomas) utilizando los genes de los padres."""
+        hijos = []
+
+        return hijos
+    
+    def aplicoMutacion(self, hijos):
+        """Se aplica a cada hijo la mutuación, alterando de forma aleatoria pero con una probabilidad pequeña cada gen."""
+        hijos = []
+
+        return hijos
+
+    def aplicoFaseReproduciva(self):
+        """Se seleccionan los individuos de la población que se cruzaran y se producen los descendientes."""
+        padres, hijos, nuevosHijos = []
+        padres = self.seleccionoPadres()
+        hijos = self.aplicoCrossover(padres)
+        nuevosHijos = self.aplicoMutacion(hijos)
+
+
+        return nuevosHijos
         
     def muestroValoresPoblacion(self):       
         print(f"Media de la FO fue: {self.mediaPoblacion}")
@@ -102,15 +130,18 @@ class Generacion(object):
             self.poblacion.calculoValorPoblacion()
             self.arrPoblaciones.append(self.poblacion)
         else:
-            self.generoNuevaGeneracion()
+            self.generoNuevaGeneracion(self.poblacion)
 
 
-    def generoNuevaGeneracion(self):
-        #Aca iria lo de la mutacion
-        self.poblacion=Poblacion()
-        self.poblacion.calculoValorPoblacion()
-        self.arrPoblaciones.append(self.poblacion)
-        pass
+    def generoNuevaGeneracion(self, poblacionActual):
+        nuevaPoblacion = []
+        nuevaPoblacion = self.poblacion.aplicoFaseReproduciva()
+        nuevaPoblacion.calculoValorPoblacion()
+        self.arrPoblaciones.append(nuevaPoblacion)
+        # Aca iria lo de la mutacion
+        # self.poblacion=Poblacion() --> Aca no se crea aleatoriamente la poblacion, sino que el AG comienza a generar poblaciones
+        # self.poblacion.calculoValorPoblacion()
+        # self.arrPoblaciones.append(self.poblacion)
 
 # -----------------------------------------------------------------------------------------        
 

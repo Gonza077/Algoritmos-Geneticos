@@ -60,5 +60,8 @@ cromosoma = crear_individuo(30)
 # print("El binario pasado a entero dio: " + str(binario_a_entero(entero_a_binario(entero))))
 # print("El entero pasado a binario dio:\n" + str(entero_a_binario(entero)))
 
-print(cromosoma)
-print(entero_a_binario(binario_a_entero(cromosoma)))
+# print(cromosoma)
+# print(entero_a_binario(binario_a_entero(cromosoma)))
+
+nombre = 'Nico'
+print(f"Hola : {nombre}")
