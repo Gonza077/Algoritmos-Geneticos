@@ -6,13 +6,15 @@ import random as rnd
 class Cromosoma(object):
 
     #Atributos
-    def __init__(self):
+    def __init__(self, genes = []):
         self.funcFitness=0
         self.funcObjetivo=0
         self.valorDecimal=0
-        self.arrGenes=[]
-        for x in range(0,tCromo):
-            self.arrGenes.append(rnd.randint(0, 1))
+        self.arrGenes= genes
+
+        if(len(genes) == 0):
+            for x in range(0,tCromo):
+                self.arrGenes.append(rnd.randint(0, 1))
         self.calculaFuncObjetivo()
 
     def transformoBinarioAEntero(self):
@@ -34,20 +36,36 @@ class Cromosoma(object):
 
 class Poblacion(object):
     """Poblacion genetica del algoritmo"""
+    
+    #Atributos de clase  
     ID = 1
+    ProbCrossover = 0.75
+    ProbMutacion = 0.05
+
     #Metodos
-    def __init__(self):
+    def __init__(self, arrGenes = []):
         self.ID = Poblacion.ID
-        self.arrGenes=[]
+        
         self.sumaPoblacion=0
         self.mediaPoblacion=0
         self.maxCromosoma = Cromosoma()
         self.minCromosoma=Cromosoma()
         #Esto es por que no puedo instanciar el objeto con el valor
-        self.minCromosoma.valorDecimal=5**99 
-        for x in range(0,tPobla):
-            cromosoma = Cromosoma()        
-            self.arrGenes.append(cromosoma)
+        self.minCromosoma.valorDecimal=5**99
+        self.arrGenes = []
+        
+        # Si arrGenes es vacio es porque es la primera población, sino, es una generación creada a partir de una anterior.
+        if(len(arrGenes) == 0):
+            for x in range(0,tPobla):
+                cromosoma = Cromosoma()        
+                self.arrGenes.append(cromosoma)
+        else:
+            #Si creo una nueva generación a partir de la inicial, cada cromosoma debe crearse a partir de los valores
+            #    obtenidos de la fase de reproducción
+            for x in range(0, tPobla):
+                cromosoma = Cromosoma( genes = arrGenes[i])
+                self.arrGenes.append(cromosoma)
+                
         Poblacion.ID+=1
 
     def calculoSumaPobla(self):
@@ -80,15 +98,57 @@ class Poblacion(object):
     def seleccionoPadres(self):
         """Se seleccionan los padres teniendo en cuenta su fitness, favoreciendo a los individuos mejores adaptados."""
         padres = []
+        listaSumaFit = []
+        sumaFit = 0
+
+        # Creo un arreglo con la suma de las funciones Fitness de todos los cromosomas
+            # Ej: [0, 0.09, 0.015, ... 1] -> La suma debe ser 1
+        for i in range(0, tPobla):
+            listaSumaFit.append(sumaFit)
+            sumaFit += self.arrGenes[i].funcFitness
+    
+        # Tiro un número random y veo si en que posición cae dentro del arreglo anterior (listaSumaFit)
+            # numAleatorio = 0.26513 cae en la posición 2 del arreglo -> [0, 0.09, 0.15, 0.31, ... 1] 
+        for j in range(0, tPobla - 1):
+            numAleatorio = rnd.random()
+            if( numAleatorio >= listaSumaFit[j] and numAleatorio < listaSumaFit[j + 1]):
+                padres.append(j)
 
         return padres
 
     def aplicoCrossover(self, padres):
         """Se crean los hijos(cromosomas) utilizando los genes de los padres."""
         hijos = []
+        # Este for devuelve 0, 2, 4, 6, 8
+        for i in range(0, tPobla, 2):
+            probCrossover = rnd.random()
+            if(probCrossover < Poblacion.ProbCrossover):
+                padre = self.arrGenes[i]
+                madre = self.arrGenes[i + 1]
+                #La función lista.extend() une las listas en una sola
+                hijos.extend(self.aplicoCorte(padre, madre))
 
         return hijos
     
+    def aplicoCorte(self, padre, madre):
+        """Se crean dos nuevos hijos con los genes de los padres"""
+        hijos = []
+        hijo = []
+        hija = []
+
+        posicionCorte = rnd.randint(1, 30)
+        for i in range(0, posicionCorte):
+            hijo.insert(i, padre.arrGenes[i])
+            hija.insert(i, madre.arrGenes[i])
+        for i in range(posicionCorte, tCromo):
+            hijo.insert(i, madre.arrGenes[i])
+            hija.insert(i, padre.arrGenes[i])
+        
+        hijos.append(hijo)
+        hijos.append(hija)
+
+        return hijos
+
     def aplicoMutacion(self, hijos):
         """Se aplica a cada hijo la mutuación, alterando de forma aleatoria pero con una probabilidad pequeña cada gen."""
         hijos = []
@@ -97,13 +157,14 @@ class Poblacion(object):
 
     def aplicoFaseReproduciva(self):
         """Se seleccionan los individuos de la población que se cruzaran y se producen los descendientes."""
-        padres, hijos, nuevosHijos = []
+        padres = []
+        hijos = []
+        nuevosHijos = []
         padres = self.seleccionoPadres()
         hijos = self.aplicoCrossover(padres)
-        nuevosHijos = self.aplicoMutacion(hijos)
+        # nuevosHijos = self.aplicoMutacion(hijos)
 
-
-        return nuevosHijos
+        return Poblacion(arrGenes=hijos)
         
     def muestroValoresPoblacion(self):       
         print(f"Media de la FO fue: {self.mediaPoblacion}")
@@ -113,10 +174,6 @@ class Poblacion(object):
 # -----------------------------------------------------------------------------------------       
 
 class Generacion(object):
-
-    #Atributos de clase  
-    probCrossover = 0.75
-    probMutacion = 0.5
     
     #Atributos de instancia
     def __init__(self):
@@ -153,7 +210,7 @@ Dominio=2**30-1  #Dominio es una variable global
 #tCromo=int(input("Ingrese el tamaño del cromosoma"))
 tCromo=30
 tPobla=10
-cantCorridas=20
+cantCorridas=5
 generacion=Generacion()
 for i in range(0,cantCorridas):
     generacion.creoGeneracion()
