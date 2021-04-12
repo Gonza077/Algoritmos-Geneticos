@@ -55,20 +55,15 @@ class Poblacion(object):
         #Esto es por que no puedo instanciar el objeto con el valor
         self.minCromosoma.valorDecimal=5**99
         self.arrGenes = []
-        
-        # Si arrGenes es vacio es porque es la primera población, sino, es una generación creada a partir de una anterior.
-        if(len(arrGenes) == 0):
-            for x in range(0,tPobla):
-                cromosoma = Cromosoma()        
-                self.arrGenes.append(cromosoma)
-        else:
-            #Si creo una nueva generación a partir de la inicial, cada cromosoma debe crearse a partir de los valores
-            #    obtenidos de la fase de reproducción
-            for x in range(0, tPobla):
-                cromosoma = Cromosoma( genes = arrGenes[x])
-                self.arrGenes.append(cromosoma)
+        for x in range(0,tPobla):
+            cromosoma = Cromosoma()        
+            self.arrGenes.append(cromosoma)
+
                 
         Poblacion.ID+=1
+
+    def setArrGenes(self, genes):
+        self.arrGenes = genes
 
     def calculoSumaPobla(self):
         """Se calcula la suma de la poblacion a partir del valor de cada cromosoma"""
@@ -128,7 +123,7 @@ class Poblacion(object):
             probCrossover = rnd.random()
             if(probCrossover < Poblacion.ProbCrossover):
                 print("***********************************")
-                print(f"En posición {i} hubo crossoverm prob crossvoer fue {probCrossover}")
+                print(f"En posición {i} hubo crossover, prob crossvoer fue {probCrossover}")
                 padre = self.arrGenes[i]
                 madre = self.arrGenes[i + 1]
                 print(padre.arrGenes)
@@ -171,11 +166,6 @@ class Poblacion(object):
         hija = Cromosoma()
         hija.setArrGenes(genesHija)
 
-        # print("Dentro de la función aplico corte")
-        # print(f"padre {padre.arrGenes}")
-        # print(f"madre {madre.arrGenes}")
-        # print(f"hijo {hijo.arrGenes}")
-        # print(f"hija {hija.arrGenes}")
         hijos.append(hijo)
         hijos.append(hija)
 
@@ -183,15 +173,17 @@ class Poblacion(object):
 
     def aplicoMutacion(self, hijos):
         """Se aplica a cada hijo la mutuación, alterando de forma aleatoria pero con una probabilidad pequeña cada gen."""
-        hijos = []
+        tempHijos = []
         for cromosoma in hijos:
             for i in range(0, tCromo):
-                if rnd.random() < Poblacion.ProbMutacion:
+                probMutacion = rnd.random()
+                if probMutacion < Poblacion.ProbMutacion:
+                    print(f"Muto en el cromosoma {cromosoma} posición {hijos.index(cromosoma)} el gen {i}. La probabilidad cayo en {probMutacion}")
                     if (cromosoma.arrGenes[i] == 0): cromosoma.arrGenes[i] = 1
-                    if (cromosoma.arrGenes[i] == 1): cromosoma.arrGenes[i] = 0
-            hijos.append(cromosoma)
+                    else: cromosoma.arrGenes[i] = 0
+            tempHijos.append(cromosoma)
 
-        return hijos
+        return tempHijos
 
     def aplicoFaseReproduciva(self):
         """Se seleccionan los individuos de la población que se cruzaran y se producen los descendientes."""
@@ -202,7 +194,9 @@ class Poblacion(object):
         hijos = self.aplicoCrossover(padres)
         nuevosHijos = self.aplicoMutacion(hijos)
 
-        return Poblacion(arrGenes=nuevosHijos)
+        nuevaPoblacion = Poblacion()
+        nuevaPoblacion.setArrGenes(nuevosHijos)
+        return nuevaPoblacion
         
     def muestroValoresPoblacion(self):       
         print(f"Media de la FO fue: {self.mediaPoblacion}")

@@ -55,6 +55,23 @@ def pruebaAplicoCrossover():
 
     # print(hijos[0].arrGenes)
     # print(hijos[1].arrGenes)
+
+def pruebaAplicoMutacion():
+
+    p = tp.Poblacion()
+    p.calculoValorPoblacion()
+
+
+    print("Población original -------------------------------------------------------------")
+    for i in p.arrGenes:
+        print(i.arrGenes)
+
+    hijosMutados = p.aplicoMutacion(p.arrGenes)
+    
+    print("Población mutada ---------------------------------------------------------------")
+    for i in hijosMutados:
+        print(i.arrGenes)
+
     
 
 # -------------  Ejecución de funciones de Testing ----------------
@@ -62,5 +79,6 @@ def pruebaAplicoCrossover():
 # pruebaAplicoCorte()
 # pruebaSeleccionoPadres()
 # pruebaSumaFitness()
-pruebaAplicoCrossover()
+# pruebaAplicoCrossover()
+pruebaAplicoMutacion()
 
