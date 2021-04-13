@@ -29,7 +29,9 @@ class Cromosoma(object):
 
     def calculoFitness(self,sumaPoblacion):
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada cormosoma"""
-        self.funcFitness = ( self.funcObjetivo / sumaPoblacion ) * 100
+        fitness = (self.funcObjetivo / sumaPoblacion ) * 100
+        self.funcFitness = round(fitness, 6)
+            #Redondeo a 2 decimales
 
     def setArrGenes(self, genes):
         self.arrGenes = genes
@@ -209,6 +211,7 @@ class Poblacion(object):
 
         nuevaPoblacion = Poblacion()
         nuevaPoblacion.setArrGenes(nuevosHijos)
+        nuevaPoblacion.calculoValorPoblacion()
         return nuevaPoblacion
         
     def muestroValoresPoblacion(self):       
@@ -238,7 +241,6 @@ class Generacion(object):
     def generoNuevaGeneracion(self, poblacionActual):
         nuevaPoblacion = None
         nuevaPoblacion = self.poblacion.aplicoFaseReproduciva()
-        nuevaPoblacion.calculoValorPoblacion()
         self.arrPoblaciones.append(nuevaPoblacion)
         # Aca iria lo de la mutacion
         # self.poblacion=Poblacion() --> Aca no se crea aleatoriamente la poblacion, sino que el AG comienza a generar poblaciones
