@@ -20,22 +20,37 @@ def pruebaSeleccionoPadres():
 
     padres = p.seleccionoPadres()
 
+    print(f"Len de padres es {len(padres)}")
+
     return padres
 
 def pruebaSumaFitness():
     p = tp.Poblacion()
     p.calculoValorPoblacion()
+    listaSumaFit = []
 
     sumaFit = 0
     sumaObj = 0
+    # Inicializo el arreglo con la posición uno en cero porque despues el for recorre 9 elementos del arreglo
+    #     de Cromosomas y son 10.
+    listaSumaFit.append(0) 
+
     for cromo in p.arrGenes:
         sumaFit += cromo.funcFitness
         sumaObj += cromo.funcObjetivo
+        listaSumaFit.append(sumaFit)
 
-    if (p.sumaPoblacion == sumaObj) and sumaFit == 1:
-        print("Test correcto")
-    else:
-        print("Hubo un error al ejecutra el test")
+    print(f"La suma de funciones objetivos calculadas es {sumaObj}")
+    print(f"La suma de funciones objetivos de la clase es {p.sumaPoblacion}")
+    print(f"La suma de fitness es {sumaFit}")
+    # if (p.sumaPoblacion == sumaObj) and sumaFit == 100:
+    #     print("Test correcto")
+    # else:
+    #     print("Hubo un error al ejecutar el test")
+    # print(f"La suma de los fitness es {sumaFit} y la lista  es {listaSumaFit}")
+    # print("-------------------> La lista de fitness es:")
+    # for i in p.arrGenes:
+    #     print(f"Cromosoma: {p.arrGenes.index(i)} fintess: {i.funcFitness}")
 
 def pruebaAplicoCrossover():
     p = tp.Poblacion()
@@ -71,14 +86,13 @@ def pruebaAplicoMutacion():
     print("Población mutada ---------------------------------------------------------------")
     for i in hijosMutados:
         print(i.arrGenes)
-
-    
+  
 
 # -------------  Ejecución de funciones de Testing ----------------
 
 # pruebaAplicoCorte()
 # pruebaSeleccionoPadres()
-# pruebaSumaFitness()
+pruebaSumaFitness()
 # pruebaAplicoCrossover()
-pruebaAplicoMutacion()
+# pruebaAplicoMutacion()
 
