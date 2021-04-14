@@ -215,7 +215,8 @@ class Poblacion(object):
         return nuevaPoblacion
         
     def muestroValoresPoblacion(self):       
-        print(f"Media de la Población {Poblacion.ID} fue: {self.mediaPoblacion}")
+        print(f"Media de la Población {self.ID} fue: {self.mediaPoblacion}")
+        print(f"La suma de la población es {self.sumaPoblacion}")
         print(f"El cromosoma {self.maxCromosoma.arrGenes} fue el mas grande y su valor en decimal es {self.maxCromosoma.valorDecimal}")
         print(f"El cromosoma  {self.minCromosoma.arrGenes} fue el mas chico y su valor en decimal es {self.minCromosoma.valorDecimal}")
         
