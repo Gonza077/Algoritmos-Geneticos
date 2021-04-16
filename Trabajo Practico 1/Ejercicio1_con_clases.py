@@ -24,12 +24,11 @@ class Cromosoma(object):
         self.funcFitness = round( self.funcObjetivo / sumaPoblacion,5 )
 
     def mutoGen(self):
-        for i in range(0,tCromo):
-            if(rnd.random() <= 0.05):
-                if self.arrGenes[i] == 0:
-                    self.arrGenes[i] = 1
-                else:
-                    self.arrGenes[i]= 0
+        for x in range(0,tCromo):
+            if self.arrGenes[i] == 0:
+                self.arrGenes[i] = 1
+            else:
+                self.arrGenes[i]= 0
 
     def instancioGenes(self):
         for x in range(0,tCromo):
@@ -171,9 +170,10 @@ class Poblacion(object):
                 self.arrCromosomas.append(padre)
                 self.arrCromosomas.append(madre)
             
-    def aplicoOperadorMutacion(self):      
-        for cromosoma in self.arrCromosomas:             
-            cromosoma.mutoGen()
+    def aplicoOperadorMutacion(self):
+        if(rnd.random()<= probMutacion):   
+            for cromosoma in self.arrCromosomas:             
+                cromosoma.mutoGen()
 # -----------------------------------------------------------------------------------------       
 
 class Generacion(object):
