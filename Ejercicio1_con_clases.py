@@ -213,7 +213,5 @@ generacion=Generacion()
 for i in range(0,cantCorridas):  
     generacion.creoGeneracion()
 
-promedio=0
 for poblacion in generacion.arrPoblaciones:
     poblacion.datosPoblacion()
-    promedio+=poblacion.mediaPoblacionFO /cantCorridas
