@@ -14,21 +14,22 @@ class Cromosoma(object):
         self.arrGenes=[]
     
     def calculoDatosCromosoma(self):
-        """Se calcula el valor de cada cromosoma"""      
+        """Se calcula el valor de cada cromosoma"""     
         cadena = "".join([ str(gen) for gen in self.arrGenes])  #Hace la conversion del arreglo a una cadena por ejemplo[1,0,1] a '101'
         self.valorDecimal = int(cadena, 2) #Se transofrma la cadena de genes en un valor en decimal
         self.funcObjetivo = round( ((self.valorDecimal / Dominio)**2) , 5) #Dominio se define en el cuerpo principal      
 
     def calculoFitness(self,sumaPoblacion): 
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada cromosoma"""
-        self.funcFitness = round( self.funcObjetivo / sumaPoblacion,5 )
+        self.funcFitness = self.funcObjetivo / sumaPoblacion
 
     def mutoGen(self):
-        for x in range(0,tCromo):
-            if self.arrGenes[i] == 0:
-                self.arrGenes[i] = 1
-            else:
-                self.arrGenes[i]= 0
+        numRandom=rnd.randint(0,tCromo-1)
+        print("Punto de mutacion",numRandom)
+        if(self.arrGenes[numRandom]==0):
+            self.arrGenes[numRandom]=1
+        else:
+            self.arrGenes[numRandom]=0
 
     def instancioGenes(self):
         for x in range(0,tCromo):
@@ -39,8 +40,8 @@ class Cromosoma(object):
         self.arrGenes.append(gen)
 
     def datosCromosoma(self):
-        print(f"Func Fitness: {self.funcFitness}, Valor decimal: {self.valorDecimal}, Func Objetivo: {self.funcObjetivo}")
-        print(f"Sus genes son: {self.arrGenes}")
+        cadena = "".join([ str(gen) for gen in self.arrGenes])
+        print(f"Func Fitness: {self.funcFitness}, Valor decimal: {self.valorDecimal}, Func Objetivo: {self.funcObjetivo}, Genes {cadena}")
  # -----------------------------------------------------------------------------------------------------------     
 
 class Poblacion(object):
@@ -96,15 +97,15 @@ class Poblacion(object):
     
     def datosPoblacion(self):      
         print("-----------------------------------------------------") 
-        print(f"Poblacion ID: {self.ID}, media de la FO fue: {self.mediaPoblacionFO}")
+        print(f"Poblacion ID: {self.ID}, media de la FO fue: {self.mediaPoblacionFO}")        
         """
-        for cromosoma in self.arrCromosomas:
-                print("-----------------------------------------------------")
-                cromosoma.datosCromosoma()
-                print("-----------------------------------------------------")   
-        """
+        print("-------------------------------------------------")      
+        for cromosoma in self.arrCromosomas:            
+            cromosoma.datosCromosoma()
+        print("-------------------------------------------------") 
+        """           
         cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  #Hace el casteo de un arreglo de enteros a una cadena de los genes
-        cadena2="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])
+        cadena2="".join([ str(gen) for gen in self.minCromosoma.arrGenes])
         print(f"El cromosoma {cadena1} fue el mas grande y su fitnnes es {self.maxCromosoma.funcFitness}")
         print(f"El cromosoma {cadena2} fue el mas chico y su fitnnes es {self.minCromosoma.funcFitness}")
         print("-----------------------------------------------------")
@@ -112,7 +113,7 @@ class Poblacion(object):
     def creoNuevaPoblacion(self,poblacionAnterior):
         paresPadres=self.aplicoSeleccionRuleta(poblacionAnterior)     #Devuevle los cromosomas seleccionados en la ruleta      
         self.aplicoOperadorCrossover(paresPadres) #A los cromosomas seleccionados se les aplica crossover
-        self.aplicoOperadorMutacion()  #Una vez aplicado el crossover, se les aplica la mutacion    
+        #self.aplicoOperadorMutacion()  #Una vez aplicado el crossover, se les aplica la mutacion    
 
     def aplicoSeleccionRuleta(self,poblacionAnterior):
         ruleta=[]
@@ -120,12 +121,12 @@ class Poblacion(object):
         paresPadres=[]         
         for cromosoma in poblacionAnterior.arrCromosomas:       
             valor+=cromosoma.funcFitness
-            ruleta.append(round(valor,5)) #Se redondea a 5 digitos por errores de coma flotante de python                                           
-        for i in range(0,int(tPobla/2)): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero pro que tira error
+            ruleta.append(valor)                                        
+        for i in range(int(tPobla/2)): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero pro que tira error
             pares=[]
             while ( len(pares) < 2 ): #Se debe armar el par, esto garantiza que siempre se forme
-                numAleatorio = rnd.random()       
-                for j in range(0,tPobla-1):  #Esto es ya que se debe recorrer toda la ruleta hasta encontrar el intervalo
+                numAleatorio = rnd.random()     
+                for j in range(tPobla-1):  #Esto es ya que se debe recorrer toda la ruleta hasta encontrar el intervalo
                     if (numAleatorio >= ruleta[j] and numAleatorio <= ruleta[j+1]):
                         pares.append(poblacionAnterior.arrCromosomas[j])
             paresPadres.append(pares)  
@@ -159,14 +160,41 @@ class Poblacion(object):
                 #Posteriormente se intercambian los genes de cada padre en los hijos, luego de la posicion del corte
                 for k in range(posicionCorte,tCromo):
                     hijo1.insertoGen(madre.arrGenes[k])
-                    hijo2.insertoGen(padre.arrGenes[k])
+                    hijo2.insertoGen(padre.arrGenes[k])               
+                cadena1="".join([ str(gen) for gen in padre.arrGenes])
+                cadena2="".join([ str(gen) for gen in madre.arrGenes])
+                cadena3="".join([ str(gen) for gen in hijo1.arrGenes])
+                cadena4="".join([ str(gen) for gen in hijo2.arrGenes])
+                """
+                print("---------------------------")
+                print(f"Padre: {cadena1}")
+                print(f"Madre: {cadena2}")  
+                print(f"Posicion corte: {posicionCorte}")  
+                print(f"Hijo 1: {cadena3}")
+                print(f"Hijo 2: {cadena4}")    
+                print("---------------------------")            
+                print(".------------HIJO SIN MUTAR-----------------")
+                print(f"Hijo 1: {cadena3}")
+                print(f"Hijo 2: {cadena4}")
+                """
+                if(rnd.random()<= probMutacion):
+                    print("Se aplico mutacion hijo 1")
+                    hijo1.mutoGen()
+                if(rnd.random()<= probMutacion):
+                    print("Se aplico mutacion en el hijo 2")
+                    hijo2.mutoGen()
+                """
+                print(".------------HIJO MUTADO-----------------")
+                print(f"Hijo 1: {cadena3}")
+                print(f"Hijo 2: {cadena4}")
+                """
                 self.arrCromosomas.append(hijo1)
-                self.arrCromosomas.append(hijo2)
-                """
-                print(f"Hijo 1: {hijo1.arrGenes}")
-                print(f"Hijo 2: {hijo2.arrGenes}")
-                """
+                self.arrCromosomas.append(hijo2)          
             else: #Si no se aplica, los padres vuelven a ser los hijos
+                if(rnd.random()<= probMutacion):
+                    padre.mutoGen()
+                if(rnd.random()<= probMutacion):
+                    madre.mutoGen()
                 self.arrCromosomas.append(padre)
                 self.arrCromosomas.append(madre)
             
@@ -188,26 +216,25 @@ class Generacion(object):
         poblacion=Poblacion()
         if(len(self.arrPoblaciones) == 0 ): #Por si es la poblacion inicial
             poblacion.instancioCromosomas()
-            poblacion.calculoDatosPoblacion()
-            self.arrPoblaciones.append(poblacion)
+            poblacion.calculoDatosPoblacion()           
         else:
             poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])   #Se crea la nueva poblacion a partir de la anterior       
             poblacion.calculoDatosPoblacion()
-            self.arrPoblaciones.append(poblacion) 
+        self.arrPoblaciones.append(poblacion)  
                    
 # -----------------------------------------------------------------------------------------        
 
 #Main
-tCromo=30
-tPobla=10
-cantCorridas=20
-probCrossover=0.75
-probMutacion=0.05 
-Dominio=((2**tCromo) - 1)  #Dominio es una variable global
 #cantCorridas=int(input("Ingrese la cantidad de corridas"))    
 #tPobla=int(input("Ingrese el tamaño de la poblacion"))
 #tCromo=int(input("Ingrese el tamaño del cromosoma"))
 #Dominio=((2**tCromo) - 1)  #Dominio es una variable global
+tCromo=30
+tPobla=10
+cantCorridas=5
+probCrossover=0.75
+probMutacion=0.05 
+Dominio=((2**tCromo)-1)
 generacion=Generacion()
 
 for i in range(0,cantCorridas):  
@@ -215,3 +242,4 @@ for i in range(0,cantCorridas):
 
 for poblacion in generacion.arrPoblaciones:
     poblacion.datosPoblacion()
+
