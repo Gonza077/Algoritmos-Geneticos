@@ -26,7 +26,6 @@ class Cromosoma(object):
 
     def mutoGen(self):
         numRandom=rnd.randint(0,tCromo-1)
-        print("Punto de mutacion",numRandom)
         if(self.arrGenes[numRandom]==0):
             self.arrGenes[numRandom]=1
         else:
@@ -50,7 +49,11 @@ class Poblacion(object):
     """Poblacion genetica del algoritmo"""
     IDPoblacion = 1
     
-    #Metodos
+    #Metodo de clase
+    def reseteoIDPoblacion():
+        Poblacion.IDPoblacion=1
+
+    #Metodos de instancia
     def __init__(self):
         if(Poblacion.IDPoblacion > cantCorridas):
             Poblacion.IDPoblacion = 1
@@ -97,7 +100,6 @@ class Poblacion(object):
         self.buscoMenorYMayorCromosoma()
     
     def datosPoblacion(self):      
-        print("-----------------------------------------------------") 
         print(f"Poblacion ID: {self.ID}, media de la FO fue: {self.mediaPoblacionFO}")        
         """
         print("-------------------------------------------------")      
@@ -117,7 +119,7 @@ class Poblacion(object):
         #self.aplicoOperadorMutacion()  #Una vez aplicado el crossover, se les aplica la mutacion    
 
     def aplicoSeleccionRuleta(self,poblacionAnterior):
-        ruleta=[]
+        ruleta=[0]
         valor=0     
         paresPadres=[]         
         for cromosoma in poblacionAnterior.arrCromosomas:       
@@ -131,13 +133,6 @@ class Poblacion(object):
                     if (numAleatorio >= ruleta[j] and numAleatorio <= ruleta[j+1]):
                         pares.append(poblacionAnterior.arrCromosomas[j])
             paresPadres.append(pares)  
-        """
-        for i in range(0,int(tPobla/2)):
-            pares=[]
-            while ( len(pares) < 2 ):
-                pares.append(rnd.choice(poblacionASeleccionar.arrCromosomas))
-            paresPadres.append(pares)   
-        """
         return paresPadres
 
     def aplicoOperadorCrossover(self,padres):      
@@ -145,15 +140,9 @@ class Poblacion(object):
             padre=padres[i][0] #Padres viene de a pares
             madre=padres[i][1]
             if(rnd.random() <= probCrossover):     #Se aplica crossover si el numero generado es mayor a la prob.  
-                """
-                print("SE REALIZO CROSOVER")
-                print(f"Padre: {padre.arrGenes}")
-                print(f"Padre: {madre.arrGenes}") 
-                """
                 hijo1=Cromosoma()
                 hijo2=Cromosoma()
                 posicionCorte=rnd.randint(0,tCromo)
-                #print(f"Posicion corte: {posicionCorte}")
                 #Se instnacia los primeros N genes de cada padre hasta la posicion de corte en cada hijo
                 for j in range(0,posicionCorte):
                     hijo1.insertoGen(padre.arrGenes[j])
@@ -161,54 +150,30 @@ class Poblacion(object):
                 #Posteriormente se intercambian los genes de cada padre en los hijos, luego de la posicion del corte
                 for k in range(posicionCorte,tCromo):
                     hijo1.insertoGen(madre.arrGenes[k])
-                    hijo2.insertoGen(padre.arrGenes[k])               
-                cadena1="".join([ str(gen) for gen in padre.arrGenes])
-                cadena2="".join([ str(gen) for gen in madre.arrGenes])
-                cadena3="".join([ str(gen) for gen in hijo1.arrGenes])
-                cadena4="".join([ str(gen) for gen in hijo2.arrGenes])
-                """
-                print("---------------------------")
-                print(f"Padre: {cadena1}")
-                print(f"Madre: {cadena2}")  
-                print(f"Posicion corte: {posicionCorte}")  
-                print(f"Hijo 1: {cadena3}")
-                print(f"Hijo 2: {cadena4}")    
-                print("---------------------------")            
-                print(".------------HIJO SIN MUTAR-----------------")
-                print(f"Hijo 1: {cadena3}")
-                print(f"Hijo 2: {cadena4}")
-                """
-                if(rnd.random()<= probMutacion):
-                    print("Se aplico mutacion hijo 1")
-                    hijo1.mutoGen()
-                if(rnd.random()<= probMutacion):
-                    print("Se aplico mutacion en el hijo 2")
-                    hijo2.mutoGen()
-                """
-                print(".------------HIJO MUTADO-----------------")
-                print(f"Hijo 1: {cadena3}")
-                print(f"Hijo 2: {cadena4}")
-                """
+                    hijo2.insertoGen(padre.arrGenes[k])  
+                #Luego una vez de aplicars el crossover se aplica la mutacion a los hijos             
+                self.aplicoOperadorMutacion(hijo1)
+                self.aplicoOperadorMutacion(hijo2)
+                #Se guarda cada cromosoma en la nueva poblacion
                 self.arrCromosomas.append(hijo1)
                 self.arrCromosomas.append(hijo2)          
             else: #Si no se aplica, los padres vuelven a ser los hijos
-                if(rnd.random()<= probMutacion):
-                    padre.mutoGen()
-                if(rnd.random()<= probMutacion):
-                    madre.mutoGen()
+                #Se aplica mutacion a los padres
+                self.aplicoOperadorMutacion(padre)
+                self.aplicoOperadorMutacion(madre)
+                #Se guarda cada cromosoma en la nueva poblacion
                 self.arrCromosomas.append(padre)
                 self.arrCromosomas.append(madre)
             
-    def aplicoOperadorMutacion(self):
+    def aplicoOperadorMutacion(self,cromosoma):
         if(rnd.random()<= probMutacion):   
-            for cromosoma in self.arrCromosomas:             
-                cromosoma.mutoGen()
+            cromosoma.mutoGen()
 # -----------------------------------------------------------------------------------------       
 
 class Generacion(object):
     
     #Atributos de instancia
-    def __init__(self):      
+    def __init__(self):    
         self.arrPoblaciones=[]
 
     #Metodos
@@ -224,10 +189,6 @@ class Generacion(object):
         self.arrPoblaciones.append(poblacion)
 
     def dibujoGrafica(self):
-        import numpy as np 
-
-        X = np.arange(0, tPobla)
-
         arrPromedios = []
         arrMaximos = []
         arrMinimos = []
@@ -236,22 +197,26 @@ class Generacion(object):
             arrPromedios.append(cro.mediaPoblacionFO)
             arrMaximos.append(cro.maxCromosoma.funcObjetivo)
             arrMinimos.append(cro.minCromosoma.funcObjetivo)
-       
+
         plt.plot( arrPromedios, color='r', label='Medias')
         plt.plot( arrMaximos, color='g', label='Maximos')
         plt.plot( arrMinimos, color='b', label='Minimos')
         
-        # Naming the x-axis, y-axis and the whole graph
-        plt.title("Medias, maximos y minimos de la generación actual")
+        # Se pone nombre a los ejes X e Y 
+        cantPoblacion=len(self.arrPoblaciones)
+        plt.title(f"Grafico con {cantPoblacion} corridas")
         plt.xlabel("Numero de población")
         plt.ylabel("Valor")
         plt.ylim(0, 1.25)
-        # Adding legend, which helps us recognize the curve according to it's color
+        # Se agrega la leyenda para poder diferenciar cada color
         plt.legend()
-        
-        # To load the display window
+
         plt.show()
-                   
+        
+
+    def datosGeneracion(self):
+        for poblacion in self.arrPoblaciones:
+            poblacion.datosPoblacion()             
 # -----------------------------------------------------------------------------------------        
 
 #Main
@@ -261,17 +226,23 @@ class Generacion(object):
 #Dominio=((2**tCromo) - 1)  #Dominio es una variable global
 tCromo=30
 tPobla=10
-cantCorridas=40
-probCrossover=0.85
+Corridas=[20,100,200]
+probCrossover=0.75
 probMutacion=0.05 
 Dominio=((2**tCromo)-1)
-generacion=Generacion()
+generaciones=[]
 
-for i in range(0,cantCorridas):  
-    generacion.creoGeneracion()
+for x in Corridas:
+    global cantCorridas
+    cantCorridas=x
+    generacion=Generacion()
+    for i in range(cantCorridas):        
+        generacion.creoGeneracion()
+    Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
+    generaciones.append(generacion)
 
-generacion.dibujoGrafica()
+#for generacion in generaciones:
+#    generacion.datosGeneracion()
 
-# for poblacion in generacion.arrPoblaciones:
-#     poblacion.datosPoblacion()
-
+for generacion in generaciones:
+    generacion.dibujoGrafica()
