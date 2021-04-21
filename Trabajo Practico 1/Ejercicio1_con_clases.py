@@ -1,6 +1,7 @@
 import math
 import random as rnd
 import numpy as npm
+import matplotlib.pyplot as plt
 
 # ----------------------------------------------------------------------------------------------------
 class Cromosoma(object):
@@ -220,7 +221,36 @@ class Generacion(object):
         else:
             poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])   #Se crea la nueva poblacion a partir de la anterior       
             poblacion.calculoDatosPoblacion()
-        self.arrPoblaciones.append(poblacion)  
+        self.arrPoblaciones.append(poblacion)
+
+    def dibujoGrafica(self):
+        import numpy as np 
+
+        X = np.arange(0, tPobla)
+
+        arrPromedios = []
+        arrMaximos = []
+        arrMinimos = []
+
+        for cro in self.arrPoblaciones:
+            arrPromedios.append(cro.mediaPoblacionFO)
+            arrMaximos.append(cro.maxCromosoma.funcObjetivo)
+            arrMinimos.append(cro.minCromosoma.funcObjetivo)
+       
+        plt.plot( arrPromedios, color='r', label='Medias')
+        plt.plot( arrMaximos, color='g', label='Maximos')
+        plt.plot( arrMinimos, color='b', label='Minimos')
+        
+        # Naming the x-axis, y-axis and the whole graph
+        plt.title("Medias, maximos y minimos de la generación actual")
+        plt.xlabel("Numero de población")
+        plt.ylabel("Valor")
+        plt.ylim(0, 1.25)
+        # Adding legend, which helps us recognize the curve according to it's color
+        plt.legend()
+        
+        # To load the display window
+        plt.show()
                    
 # -----------------------------------------------------------------------------------------        
 
@@ -231,8 +261,8 @@ class Generacion(object):
 #Dominio=((2**tCromo) - 1)  #Dominio es una variable global
 tCromo=30
 tPobla=10
-cantCorridas=5
-probCrossover=0.75
+cantCorridas=40
+probCrossover=0.85
 probMutacion=0.05 
 Dominio=((2**tCromo)-1)
 generacion=Generacion()
@@ -240,6 +270,8 @@ generacion=Generacion()
 for i in range(0,cantCorridas):  
     generacion.creoGeneracion()
 
-for poblacion in generacion.arrPoblaciones:
-    poblacion.datosPoblacion()
+generacion.dibujoGrafica()
+
+# for poblacion in generacion.arrPoblaciones:
+#     poblacion.datosPoblacion()
 
