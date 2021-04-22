@@ -1,7 +1,8 @@
 import math
 import random as rnd
-import numpy as npm
 import matplotlib.pyplot as plt
+import openpyxl as opyxl
+import os.path as path
 
 # ----------------------------------------------------------------------------------------------------
 class Cromosoma(object):
@@ -42,6 +43,10 @@ class Cromosoma(object):
     def datosCromosoma(self):
         cadena = "".join([ str(gen) for gen in self.arrGenes])
         print(f"Func Fitness: {self.funcFitness}, Valor decimal: {self.valorDecimal}, Func Objetivo: {self.funcObjetivo}, Genes {cadena}")
+ 
+    def ATupla(self):
+        cadena="".join([str(gen) for gen in self.arrGenes])
+        return [self.funcObjetivo,self.funcFitness,self.valorDecimal,cadena]
  # -----------------------------------------------------------------------------------------------------------     
 
 class Poblacion(object):
@@ -168,6 +173,11 @@ class Poblacion(object):
     def aplicoOperadorMutacion(self,cromosoma):
         if(rnd.random()<= probMutacion):   
             cromosoma.mutoGen()
+
+    def ATupla(self):
+        cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  #Hace el casteo de un arreglo de enteros a una cadena de los genes
+        cadena2="".join([ str(gen) for gen in self.minCromosoma.arrGenes])       
+        return [self.ID,self.minCromosoma.funcObjetivo,self.maxCromosoma.funcObjetivo,cadena1,cadena2,self.mediaPoblacionFO]
 # -----------------------------------------------------------------------------------------       
 
 class Generacion(object):
@@ -187,7 +197,7 @@ class Generacion(object):
             poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])   #Se crea la nueva poblacion a partir de la anterior       
             poblacion.calculoDatosPoblacion()
         self.arrPoblaciones.append(poblacion)
-
+    
     def dibujoGrafica(self):
         arrPromedios = []
         arrMaximos = []
@@ -213,10 +223,18 @@ class Generacion(object):
 
         plt.show()
         
-
+    def cargoDatosExcel(self,wb):
+         #Se crea una instancia de un libro en blanco que NO esta activa
+        hoja=wb.create_sheet("Generacion")     
+        hoja.append(("Poblacion","Min. FO","Max. FO","Genes cromosoma Mayor","Genes cromosoma menor","Media FO"))
+        for poblacion in self.arrPoblaciones:                      
+            hoja.append(poblacion.ATupla())  
+            #Se pasan los datos de la poblacion en formato de tupla, para poder registrarlos en el excel
+        wb.save("DatosEjercicio1.xlsx")            
+    
     def datosGeneracion(self):
-        for poblacion in self.arrPoblaciones:
-            poblacion.datosPoblacion()             
+        pass
+
 # -----------------------------------------------------------------------------------------        
 
 #Main
@@ -241,8 +259,13 @@ for x in Corridas:
     Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
     generaciones.append(generacion)
 
-#for generacion in generaciones:
-#    generacion.datosGeneracion()
+"""
+for generacion in generaciones:
+   generacion.datosGeneracion()
 
 for generacion in generaciones:
     generacion.dibujoGrafica()
+"""
+wb = opyxl.Workbook()    
+for generacion in generaciones:
+    generacion.cargoDatosExcel(wb)
