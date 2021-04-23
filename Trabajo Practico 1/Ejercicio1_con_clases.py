@@ -1,8 +1,6 @@
-import math
 import random as rnd
 import matplotlib.pyplot as plt
 import openpyxl as opyxl
-import os.path as path
 
 # ----------------------------------------------------------------------------------------------------
 class Cromosoma(object):
@@ -15,6 +13,26 @@ class Cromosoma(object):
         self.valorDecimal=0
         self.arrGenes=[]
     
+    #Operadores logicos, ya que Python no permite comparar obejtos 
+    def __gt__(self, cromosoma):
+        return self.valorDecimal > cromosoma.valorDecimal
+
+    def __lt__(self, cromosoma):
+        return self.valorDecimal < cromosoma.valorDecimal
+
+    def __ge__(self, cromosoma):
+        return self.valorDecimal >= cromosoma.valorDecimal
+
+    def __le__(self, cromosoma):
+        return self.valorDecimal <= cromosoma.valorDecimal
+
+    def __eq__(self, cromosoma):
+        return self.valorDecimal == cromosoma.valorDecimal
+
+    def __ne__(self, cromosoma):
+        return self.valorDecimal != cromosoma.valorDecimal
+
+    #Metodos de instancia
     def calculoDatosCromosoma(self):
         """Se calcula el valor de cada cromosoma"""     
         cadena = "".join([ str(gen) for gen in self.arrGenes])  #Hace la conversion del arreglo a una cadena por ejemplo[1,0,1] a '101'
@@ -86,14 +104,35 @@ class Poblacion(object):
         """Se calcula la media poblacional""" 
         self.mediaPoblacionFO = round( self.sumaPoblacion / len(self.arrCromosomas) ,5)
 
-    def buscoMenorYMayorCromosoma(self):
-        self.maxCromosoma=self.arrCromosomas[0] #Para poder tener como base el primer cromosoma y comparar el resto
-        self.minCromosoma=self.arrCromosomas[0]
-        for cromosoma in self.arrCromosomas:
-            if (self.maxCromosoma.valorDecimal < cromosoma.valorDecimal):
-                self.maxCromosoma = cromosoma
-            if (self.minCromosoma.valorDecimal > cromosoma.valorDecimal):
+    def buscoMenorCromosoma(self):
+        self.minCromosoma=self.arrCromosomas[0] #Para tener como base un cromosoma y poder partir a buscar al mayor
+        for cromosoma in self.arrCromosomas:               
+            if (self.minCromosoma> cromosoma):
                 self.minCromosoma = cromosoma               
+    
+    def buscoMayorCromosoma(self):
+        """ Busca al mayor cromosoma de la poblacion instnaciada"""
+        self.maxCromosoma=self.arrCromosomas[0] #Para tener como base un cromosoma y poder partir a buscar al menor
+        for cromosoma in self.arrCromosomas:
+            if (self.maxCromosoma < cromosoma):
+                self.maxCromosoma = cromosoma
+
+    def buscoMayoresCromosomas(self,poblacionAnterior):
+        """ Busca al mayor cromosoma de la poblacion enviada como parametro"""
+        cromoMayor1=poblacionAnterior.arrCromosomas[0]
+        cromoMayor2=poblacionAnterior.arrCromosomas[1]
+        for cromosoma in poblacionAnterior.arrCromosomas:
+            if (cromoMayor1 < cromosoma):
+                cromoMayor1 = cromosoma
+        poblacionAnterior.arrCromosomas.pop(poblacionAnterior.arrCromosomas.index(cromoMayor1))   #Esto es para sa          
+        for cromosoma in poblacionAnterior.arrCromosomas:
+            if (cromoMayor2 < cromosoma ):
+                cromoMayor2 = cromosoma
+        self.arrCromosomas.append(cromoMayor1)
+        self.arrCromosomas.append(cromoMayor2)
+        print(f"Primer cromosoma mas grande en la poblacion anterior {cromoMayor1.funcObjetivo}")
+        print(f"Segundo cromosoma mas grande cromosoma de la poblacion anterior {cromoMayor2.funcObjetivo}")
+        
 
     def calculoDatosPoblacion(self):
         for cromosoma in self.arrCromosomas:
@@ -102,8 +141,9 @@ class Poblacion(object):
         for cromosoma in self.arrCromosomas:        
             cromosoma.calculoFitness(self.sumaPoblacion)
         self.calculoMediaFO()
-        self.buscoMenorYMayorCromosoma()
-    
+        self.buscoMenorCromosoma()
+        self.buscoMayorCromosoma()
+
     def datosPoblacion(self):      
         print(f"Poblacion ID: {self.ID}, media de la FO fue: {self.mediaPoblacionFO}")        
         """
@@ -118,10 +158,22 @@ class Poblacion(object):
         print(f"El cromosoma {cadena2} fue el mas chico y su fitnnes es {self.minCromosoma.funcFitness}")
         print("-----------------------------------------------------")
         
-    def creoNuevaPoblacion(self,poblacionAnterior):
-        paresPadres=self.aplicoSeleccionRuleta(poblacionAnterior)     #Devuevle los cromosomas seleccionados en la ruleta      
-        self.aplicoOperadorCrossover(paresPadres) #A los cromosomas seleccionados se les aplica crossover
-        #self.aplicoOperadorMutacion()  #Una vez aplicado el crossover, se les aplica la mutacion    
+    def aplicoSeleccionRuleta2(self,poblacionAnterior):
+        ruleta=[0]
+        valor=0     
+        paresPadres=[]         
+        for cromosoma in poblacionAnterior.arrCromosomas:       
+            valor+=cromosoma.funcFitness
+            ruleta.append(valor)                                        
+        for i in range(int(len(poblacionAnterior.arrCromosomas)/2)): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero pro que tira error
+            pares=[]
+            while ( len(pares) < 2 ): #Se debe armar el par, esto garantiza que siempre se forme
+                numAleatorio = rnd.random()     
+                for j in range(len(poblacionAnterior.arrCromosomas)-1):  #Esto es ya que se debe recorrer toda la ruleta hasta encontrar el intervalo
+                    if (numAleatorio >= ruleta[j] and numAleatorio <= ruleta[j+1]):
+                        pares.append(poblacionAnterior.arrCromosomas[j])
+            paresPadres.append(pares)  
+        return paresPadres
 
     def aplicoSeleccionRuleta(self,poblacionAnterior):
         ruleta=[0]
@@ -174,6 +226,13 @@ class Poblacion(object):
         if(rnd.random()<= probMutacion):   
             cromosoma.mutoGen()
 
+    def creoNuevaPoblacion(self,poblacionAnterior):             
+        paresPadres=self.aplicoSeleccionRuleta2(poblacionAnterior)     #Devuevle los cromosomas seleccionados en la ruleta 
+        self.aplicoOperadorCrossover(paresPadres) #A los cromosomas seleccionados se les aplica crossover   
+    
+    def aplicoEtilismo(self,poblacionAnterior):
+        self.buscoMayoresCromosomas(poblacionAnterior)    
+
     def ATupla(self):
         cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  #Hace el casteo de un arreglo de enteros a una cadena de los genes
         cadena2="".join([ str(gen) for gen in self.minCromosoma.arrGenes])       
@@ -194,8 +253,12 @@ class Generacion(object):
             poblacion.instancioCromosomas()
             poblacion.calculoDatosPoblacion()           
         else:
-            poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])   #Se crea la nueva poblacion a partir de la anterior       
-            poblacion.calculoDatosPoblacion()
+            if (etilismo==False): #Si no se aplica el etilismo, no se buscan los dos emjroes cromosomas de la poblacion anterior
+                poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])   #Se crea la nueva poblacion a partir de la anterior       
+                poblacion.calculoDatosPoblacion()
+            else:
+                poblacion.aplicoEtilismo(self.arrPoblaciones[-1])   #Se buscan los dos mejores cromosomas de la poblacion anterior
+                poblacion.calculoDatosPoblacion()
         self.arrPoblaciones.append(poblacion)
     
     def dibujoGrafica(self):
@@ -233,21 +296,28 @@ class Generacion(object):
         wb.save("DatosEjercicio1.xlsx")            
     
     def datosGeneracion(self):
-        pass
+        for poblacion in self.arrPoblaciones:
+            poblacion.datosPoblacion()
+        self.dibujoGrafica()
+
 
 # -----------------------------------------------------------------------------------------        
 
 #Main
+
 #cantCorridas=int(input("Ingrese la cantidad de corridas"))    
 #tPobla=int(input("Ingrese el tamaño de la poblacion"))
 #tCromo=int(input("Ingrese el tamaño del cromosoma"))
 #Dominio=((2**tCromo) - 1)  #Dominio es una variable global
+
 tCromo=30
 tPobla=10
-Corridas=[20,100,200]
+Corridas=[20,100,200]    
+#Corridas=[200]
 probCrossover=0.75
 probMutacion=0.05 
 Dominio=((2**tCromo)-1)
+etilismo=False  #Se usara para saber si se aplcia etilismo o no
 generaciones=[]
 
 for x in Corridas:
@@ -259,13 +329,11 @@ for x in Corridas:
     Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
     generaciones.append(generacion)
 
-"""
-for generacion in generaciones:
-   generacion.datosGeneracion()
 
 for generacion in generaciones:
-    generacion.dibujoGrafica()
+   generacion.datosGeneracion()
 """
 wb = opyxl.Workbook()    
 for generacion in generaciones:
     generacion.cargoDatosExcel(wb)
+"""
