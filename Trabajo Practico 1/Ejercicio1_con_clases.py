@@ -154,8 +154,8 @@ class Poblacion(object):
         """           
         cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  #Hace el casteo de un arreglo de enteros a una cadena de los genes
         cadena2="".join([ str(gen) for gen in self.minCromosoma.arrGenes])
-        print(f"El cromosoma {cadena1} fue el mas grande y su fitnnes es {self.maxCromosoma.funcFitness}")
-        print(f"El cromosoma {cadena2} fue el mas chico y su fitnnes es {self.minCromosoma.funcFitness}")
+        print(f"El cromosoma {cadena1} fue el mas grande y su FO es {self.maxCromosoma.funcObjetivo}")
+        print(f"El cromosoma {cadena2} fue el mas chico y su FO es {self.minCromosoma.funcObjetivo}")
         print("-----------------------------------------------------")
         
     def aplicoSeleccionRuleta2(self,poblacionAnterior):
@@ -221,14 +221,47 @@ class Poblacion(object):
                 #Se guarda cada cromosoma en la nueva poblacion
                 self.arrCromosomas.append(padre)
                 self.arrCromosomas.append(madre)
-            
+    
+    def aplicoOperadorCrossover2(self,padres, poblacionAnterior): 
+        #ESTE METODO CAMBIA LA FORMA DE QUE HICIMOS EL ANTERIOR     
+        while(len(self.arrCromosomas)<tPobla): #Como la funcion de elitismo quita los 2 mejores cromosomas, itero sobre los que restan
+            i=0
+            padre=padres[i][0] #Padres viene de a pares
+            madre=padres[i][1]
+            if(rnd.random() <= probCrossover):     #Se aplica crossover si el numero generado es mayor a la prob.  
+                hijo1=Cromosoma()
+                hijo2=Cromosoma()
+                posicionCorte=rnd.randint(0,tCromo)
+                #Se instancia los primeros N genes de cada padre hasta la posicion de corte en cada hijo
+                for j in range(0,posicionCorte):
+                    hijo1.insertoGen(padre.arrGenes[j])
+                    hijo2.insertoGen(madre.arrGenes[j])
+                #Posteriormente se intercambian los genes de cada padre en los hijos, luego de la posicion del corte
+                for k in range(posicionCorte,tCromo):
+                    hijo1.insertoGen(madre.arrGenes[k])
+                    hijo2.insertoGen(padre.arrGenes[k])  
+                #Luego una vez de aplicars el crossover se aplica la mutacion a los hijos             
+                self.aplicoOperadorMutacion(hijo1)
+                self.aplicoOperadorMutacion(hijo2)
+                #Se guarda cada cromosoma en la nueva poblacion
+                self.arrCromosomas.append(hijo1)
+                self.arrCromosomas.append(hijo2)          
+            else: #Si no se aplica, los padres vuelven a ser los hijos
+                #Se aplica mutacion a los padres
+                self.aplicoOperadorMutacion(padre)
+                self.aplicoOperadorMutacion(madre)
+                #Se guarda cada cromosoma en la nueva poblacion
+                self.arrCromosomas.append(padre)
+                self.arrCromosomas.append(madre)
+        i+=1
+
     def aplicoOperadorMutacion(self,cromosoma):
         if(rnd.random()<= probMutacion):   
             cromosoma.mutoGen()
 
     def creoNuevaPoblacion(self,poblacionAnterior):             
         paresPadres=self.aplicoSeleccionRuleta2(poblacionAnterior)     #Devuevle los cromosomas seleccionados en la ruleta 
-        self.aplicoOperadorCrossover(paresPadres, poblacionAnterior)#A los cromosomas seleccionados se les aplica crossover   
+        self.aplicoOperadorCrossover2(paresPadres, poblacionAnterior)#A los cromosomas seleccionados se les aplica crossover   
     
     def aplicoElitismo(self,poblacionAnterior):
         self.buscoMayoresCromosomas(poblacionAnterior)
@@ -314,11 +347,11 @@ class Generacion(object):
 tCromo=30
 tPobla=10
 #Corridas=[20,100,200]    
-Corridas=[200]
+Corridas=[20]
 probCrossover=0.75
 probMutacion=0.05 
 Dominio=((2**tCromo)-1)
-elitismo=True  #Se usara para saber si se aplica elitismo o no
+elitismo=False  #Se usara para saber si se aplica elitismo o no
 generaciones=[]
 
 for x in Corridas:
