@@ -1,6 +1,6 @@
 import random as rnd
 import matplotlib.pyplot as plt
-#import openpyxl as opyxl
+import openpyxl as opyxl
 
 # ----------------------------------------------------------------------------------------------------
 class Cromosoma(object):
@@ -105,14 +105,14 @@ class Poblacion(object):
         self.mediaPoblacionFO = round( self.sumaPoblacion / len(self.arrCromosomas) ,5)
 
     def buscoMenorCromosoma(self):
-        self.minCromosoma=self.arrCromosomas[0] #Para tener como base un cromosoma y poder partir a buscar al mayor
+        self.minCromosoma=self.arrCromosomas[0] 
         for cromosoma in self.arrCromosomas:               
             if (self.minCromosoma> cromosoma):
                 self.minCromosoma = cromosoma               
     
     def buscoMayorCromosoma(self):
         """ Busca al mayor cromosoma de la poblacion instnaciada"""
-        self.maxCromosoma=self.arrCromosomas[0] #Para tener como base un cromosoma y poder partir a buscar al menor
+        self.maxCromosoma=self.arrCromosomas[0] 
         for cromosoma in self.arrCromosomas:
             if (self.maxCromosoma < cromosoma):
                 self.maxCromosoma = cromosoma
@@ -124,14 +124,12 @@ class Poblacion(object):
         for cromosoma in poblacionAnterior.arrCromosomas:
             if (cromoMayor1 < cromosoma):
                 cromoMayor1 = cromosoma
-        poblacionAnterior.arrCromosomas.pop(poblacionAnterior.arrCromosomas.index(cromoMayor1))   #Esto es para sa     
+        poblacionAnterior.arrCromosomas.pop(poblacionAnterior.arrCromosomas.index(cromoMayor1))  
         for cromosoma in poblacionAnterior.arrCromosomas:
             if (cromoMayor2 < cromosoma ):
                 cromoMayor2 = cromosoma
         self.arrCromosomas.append(cromoMayor1)
         self.arrCromosomas.append(cromoMayor2)
-        print(f"Primer cromosoma mas grande en la poblacion anterior {cromoMayor1.funcObjetivo}")
-        print(f"Segundo cromosoma mas grande cromosoma de la poblacion anterior {cromoMayor2.funcObjetivo}")
         
 
     def calculoDatosPoblacion(self):
@@ -145,36 +143,13 @@ class Poblacion(object):
         self.buscoMayorCromosoma()
 
     def datosPoblacion(self):      
-        print(f"Poblacion ID: {self.ID}, media de la FO fue: {self.mediaPoblacionFO}")        
-        """
-        print("-------------------------------------------------")      
-        for cromosoma in self.arrCromosomas:            
-            cromosoma.datosCromosoma()
-        print("-------------------------------------------------") 
-        """           
+        print(f"Poblacion ID: {self.ID}, media de la FO fue: {self.mediaPoblacionFO}")                  
         cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  #Hace el casteo de un arreglo de enteros a una cadena de los genes
         cadena2="".join([ str(gen) for gen in self.minCromosoma.arrGenes])
         print(f"El cromosoma {cadena1} fue el mas grande y su FO es {self.maxCromosoma.funcObjetivo}")
         print(f"El cromosoma {cadena2} fue el mas chico y su FO es {self.minCromosoma.funcObjetivo}")
         print("-----------------------------------------------------")
         
-    def aplicoSeleccionRuleta2(self,poblacionAnterior):
-        ruleta=[0]
-        valor=0     
-        paresPadres=[]         
-        for cromosoma in poblacionAnterior.arrCromosomas:       
-            valor+=cromosoma.funcFitness
-            ruleta.append(valor)                                        
-        for i in range(int(len(poblacionAnterior.arrCromosomas)/2)): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero por que tira error
-            pares=[]
-            while ( len(pares) < 2 ): #Se debe armar el par, esto garantiza que siempre se forme
-                numAleatorio = rnd.random()     
-                for j in range(len(poblacionAnterior.arrCromosomas)-1):  #Esto es ya que se debe recorrer toda la ruleta hasta encontrar el intervalo
-                    if (numAleatorio >= ruleta[j] and numAleatorio <= ruleta[j+1]):
-                        pares.append(poblacionAnterior.arrCromosomas[j])
-            paresPadres.append(pares)  
-        return paresPadres
-
     def aplicoSeleccionRuleta(self,poblacionAnterior):
         ruleta=[0]
         valor=0     
@@ -182,7 +157,7 @@ class Poblacion(object):
         for cromosoma in poblacionAnterior.arrCromosomas:       
             valor+=cromosoma.funcFitness
             ruleta.append(valor)                                        
-        for i in range(int(tPobla/2)): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero pro que tira error
+        for i in range(int(tPobla/2)): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero por que tira error
             pares=[]
             while ( len(pares) < 2 ): #Se debe armar el par, esto garantiza que siempre se forme
                 numAleatorio = rnd.random()     
@@ -192,43 +167,13 @@ class Poblacion(object):
             paresPadres.append(pares)  
         return paresPadres
 
-    def aplicoOperadorCrossover(self,padres, poblacionAnterior):      
-        for i in range(0,int(len(poblacionAnterior.arrCromosomas)/2)): #Como la funcion de elitismo quita los 2 mejores cromosomas, itero sobre los que restan
-            padre=padres[i][0] #Padres viene de a pares
-            madre=padres[i][1]
-            if(rnd.random() <= probCrossover):     #Se aplica crossover si el numero generado es mayor a la prob.  
-                hijo1=Cromosoma()
-                hijo2=Cromosoma()
-                posicionCorte=rnd.randint(0,tCromo)
-                #Se instancia los primeros N genes de cada padre hasta la posicion de corte en cada hijo
-                for j in range(0,posicionCorte):
-                    hijo1.insertoGen(padre.arrGenes[j])
-                    hijo2.insertoGen(madre.arrGenes[j])
-                #Posteriormente se intercambian los genes de cada padre en los hijos, luego de la posicion del corte
-                for k in range(posicionCorte,tCromo):
-                    hijo1.insertoGen(madre.arrGenes[k])
-                    hijo2.insertoGen(padre.arrGenes[k])  
-                #Luego una vez de aplicars el crossover se aplica la mutacion a los hijos             
-                self.aplicoOperadorMutacion(hijo1)
-                self.aplicoOperadorMutacion(hijo2)
-                #Se guarda cada cromosoma en la nueva poblacion
-                self.arrCromosomas.append(hijo1)
-                self.arrCromosomas.append(hijo2)          
-            else: #Si no se aplica, los padres vuelven a ser los hijos
-                #Se aplica mutacion a los padres
-                self.aplicoOperadorMutacion(padre)
-                self.aplicoOperadorMutacion(madre)
-                #Se guarda cada cromosoma en la nueva poblacion
-                self.arrCromosomas.append(padre)
-                self.arrCromosomas.append(madre)
     
-    def aplicoOperadorCrossover2(self,padres, poblacionAnterior): 
-        #ESTE METODO CAMBIA LA FORMA DE QUE HICIMOS EL ANTERIOR     
-        while(len(self.arrCromosomas)<tPobla): #Como la funcion de elitismo quita los 2 mejores cromosomas, itero sobre los que restan
+    def aplicoOperadorCrossover(self,padres, poblacionAnterior):     
+        while(len(self.arrCromosomas)<tPobla): 
             i=0
             padre=padres[i][0] #Padres viene de a pares
             madre=padres[i][1]
-            if(rnd.random() <= probCrossover):     #Se aplica crossover si el numero generado es mayor a la prob.  
+            if(rnd.random() <= probCrossover):      
                 hijo1=Cromosoma()
                 hijo2=Cromosoma()
                 posicionCorte=rnd.randint(0,tCromo)
@@ -246,7 +191,7 @@ class Poblacion(object):
                 #Se guarda cada cromosoma en la nueva poblacion
                 self.arrCromosomas.append(hijo1)
                 self.arrCromosomas.append(hijo2)          
-            else: #Si no se aplica, los padres vuelven a ser los hijos
+            else:
                 #Se aplica mutacion a los padres
                 self.aplicoOperadorMutacion(padre)
                 self.aplicoOperadorMutacion(madre)
@@ -260,15 +205,15 @@ class Poblacion(object):
             cromosoma.mutoGen()
 
     def creoNuevaPoblacion(self,poblacionAnterior):             
-        paresPadres=self.aplicoSeleccionRuleta2(poblacionAnterior)     #Devuevle los cromosomas seleccionados en la ruleta 
-        self.aplicoOperadorCrossover2(paresPadres, poblacionAnterior)#A los cromosomas seleccionados se les aplica crossover   
-    
+        paresPadres=self.aplicoSeleccionRuleta(poblacionAnterior)     
+        self.aplicoOperadorCrossover(paresPadres, poblacionAnterior)
+
     def aplicoElitismo(self,poblacionAnterior):
         self.buscoMayoresCromosomas(poblacionAnterior)
         self.creoNuevaPoblacion(poblacionAnterior)
 
     def ATupla(self):
-        cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  #Hace el casteo de un arreglo de enteros a una cadena de los genes
+        cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  
         cadena2="".join([ str(gen) for gen in self.minCromosoma.arrGenes])       
         return [self.ID,self.minCromosoma.funcObjetivo,self.maxCromosoma.funcObjetivo,cadena1,cadena2,self.mediaPoblacionFO]
 # -----------------------------------------------------------------------------------------       
@@ -283,15 +228,15 @@ class Generacion(object):
     def creoGeneracion(self):
         """Si se ejecuta por primera vez, generara una poblacion, si no, a la ultima existente se le aplicara algun operador genetico"""
         poblacion=Poblacion()
-        if(len(self.arrPoblaciones) == 0 ): #Por si es la poblacion inicial
+        if(len(self.arrPoblaciones) == 0 ): 
             poblacion.instancioCromosomas()
             poblacion.calculoDatosPoblacion()           
         else:
             if (elitismo==False): #Si no se aplica el elitismo, no se buscan los dos mejores cromosomas de la poblacion anterior
-                poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])   #Se crea la nueva poblacion a partir de la anterior    
+                poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])      
                 poblacion.calculoDatosPoblacion()
             else:
-                poblacion.aplicoElitismo(self.arrPoblaciones[-1])   #Se buscan los dos mejores cromosomas de la poblacion anterior
+                poblacion.aplicoElitismo(self.arrPoblaciones[-1])   
                 poblacion.calculoDatosPoblacion()
         self.arrPoblaciones.append(poblacion)
     
@@ -326,15 +271,12 @@ class Generacion(object):
         hoja.append(("Poblacion","Min. FO","Max. FO","Genes cromosoma Mayor","Genes cromosoma menor","Media FO"))
         for poblacion in self.arrPoblaciones:                      
             hoja.append(poblacion.ATupla())  
-            #Se pasan los datos de la poblacion en formato de tupla, para poder registrarlos en el excel
         wb.save("DatosEjercicio1.xlsx")            
     
     def datosGeneracion(self):
         for poblacion in self.arrPoblaciones:
             poblacion.datosPoblacion()
         self.dibujoGrafica()
-
-
 # -----------------------------------------------------------------------------------------        
 
 #Main
@@ -346,12 +288,11 @@ class Generacion(object):
 
 tCromo=30
 tPobla=10
-#Corridas=[20,100,200]    
-Corridas=[20]
+Corridas=[20,100,200]    
 probCrossover=0.75
 probMutacion=0.05 
 Dominio=((2**tCromo)-1)
-elitismo=False  #Se usara para saber si se aplica elitismo o no
+elitismo=True  #Se usara para saber si se aplica elitismo o no
 generaciones=[]
 
 for x in Corridas:
@@ -366,6 +307,7 @@ for x in Corridas:
 
 for generacion in generaciones:
    generacion.datosGeneracion()
+   
 """
 wb = opyxl.Workbook()    
 for generacion in generaciones:
