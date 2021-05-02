@@ -1,6 +1,7 @@
 import random as rnd
 import matplotlib.pyplot as plt
 import openpyxl as opyxl
+from tabulate import tabulate
 
 # ----------------------------------------------------------------------------------------------------
 class Cromosoma(object):
@@ -215,7 +216,7 @@ class Poblacion(object):
     def ATupla(self):
         cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  
         cadena2="".join([ str(gen) for gen in self.minCromosoma.arrGenes])       
-        return [self.ID,self.minCromosoma.funcObjetivo,self.maxCromosoma.funcObjetivo,cadena1,cadena2,self.mediaPoblacionFO]
+        return [self.ID,self.minCromosoma.funcObjetivo,cadena2,self.maxCromosoma.funcObjetivo,cadena1,self.mediaPoblacionFO]
 # -----------------------------------------------------------------------------------------       
 
 class Generacion(object):
@@ -268,14 +269,20 @@ class Generacion(object):
     def cargoDatosExcel(self,wb):
          #Se crea una instancia de un libro en blanco que NO esta activa
         hoja=wb.create_sheet("Generacion")     
-        hoja.append(("Poblacion","Min. FO","Max. FO","Genes cromosoma Mayor","Genes cromosoma menor","Media FO"))
+        hoja.append(("Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"))
         for poblacion in self.arrPoblaciones:                      
             hoja.append(poblacion.ATupla())  
         wb.save("DatosEjercicio1.xlsx")            
     
     def datosGeneracion(self):
+        tuplas=[]
+        if (len(self.arrPoblaciones)>20):
+            tuplas.append(self.arrPoblaciones[0].ATupla()) #Poblacion inicial
         for poblacion in self.arrPoblaciones:
-            poblacion.datosPoblacion()
+            if (poblacion.ID % ((len(self.arrPoblaciones)/20)) == 0): #Dependiendo del tamaño de la poblacion, y la cantidad de registros que se quieran mostrar, en este caso 20
+                tuplas.append(poblacion.ATupla())
+        cabecera=["Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"]
+        print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
         self.dibujoGrafica()
 # -----------------------------------------------------------------------------------------        
 
@@ -292,7 +299,7 @@ Corridas=[20,100,200]
 probCrossover=0.75
 probMutacion=0.05 
 Dominio=((2**tCromo)-1)
-elitismo=True  #Se usara para saber si se aplica elitismo o no
+elitismo=False  #Se usara para saber si se aplica elitismo o no
 generaciones=[]
 
 for x in Corridas:
@@ -304,12 +311,11 @@ for x in Corridas:
     Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
     generaciones.append(generacion)
 
-
+print("\n")
 for generacion in generaciones:
-   generacion.datosGeneracion()
+    generacion.datosGeneracion()
+    print("\n")
    
-"""
 wb = opyxl.Workbook()    
 for generacion in generaciones:
     generacion.cargoDatosExcel(wb)
-"""
