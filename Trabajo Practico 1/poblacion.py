@@ -100,8 +100,23 @@ class Poblacion(object):
             paresPadres.append(pares)  
         return paresPadres
 
+    def seleccionTorneo(self, poblacionAnterior):
+        t = 2
+        paresPadres = []
+        for _ in range(0,5):
+            pares = []
+            for _ in range(0, t):
+                # Elijo aleatoriamente 2 cromosomas
+                crom1 = poblacionAnterior.arrCromosomas[rnd.randint(0,9)]
+                crom2 = poblacionAnterior.arrCromosomas[rnd.randint(0,9)]
+                if crom1.valorDecimal >= crom2.valorDecimal: # Elijo el mejor de ambos
+                    pares.append(crom1)
+                else:
+                    pares.append(crom2)
+            paresPadres.append(pares)
+        return paresPadres
     
-    def aplicoOperadorCrossover(self,padres, poblacionAnterior):     
+    def aplicoOperadorCrossover(self,padres):     
         for par in padres:  #Padres viene de a pares
             padre=par[0] 
             madre=par[1]
@@ -137,11 +152,15 @@ class Poblacion(object):
 
     def creoNuevaPoblacion(self,poblacionAnterior):             
         paresPadres=self.aplicoSeleccionRuleta(poblacionAnterior)     
-        self.aplicoOperadorCrossover(paresPadres, poblacionAnterior)
+        self.aplicoOperadorCrossover(paresPadres)
 
     def aplicoElitismo(self,poblacionAnterior):
         self.buscoMayoresCromosomas(poblacionAnterior)
         self.creoNuevaPoblacion(poblacionAnterior)
+
+    def aplicoTorneo(self, poblacionAnterior):
+        paresPadres = self.seleccionTorneo(poblacionAnterior)
+        self.aplicoOperadorCrossover(paresPadres)
 
     def ATupla(self):
         cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  

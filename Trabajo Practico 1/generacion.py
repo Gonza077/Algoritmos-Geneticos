@@ -7,6 +7,7 @@ from poblacion import Poblacion
 class Generacion(object):
     
     elitismo=None
+    torneo=None
 
     #Atributos de instancia
     def __init__(self):    
@@ -22,6 +23,9 @@ class Generacion(object):
         else:
             if (Generacion.elitismo): #Si no se aplica el elitismo, no se buscan los dos mejores cromosomas de la poblacion anterior    
                 poblacion.aplicoElitismo(self.arrPoblaciones[-1])   
+                poblacion.calculoDatosPoblacion()
+            elif(Generacion.torneo):
+                poblacion.aplicoTorneo(self.arrPoblaciones[-1])
                 poblacion.calculoDatosPoblacion()
             else:   
                 poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])      

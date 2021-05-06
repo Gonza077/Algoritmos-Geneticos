@@ -15,7 +15,8 @@ Cromosoma.Dominio=((2**30)-1)
 Poblacion.tPobla=10
 Poblacion.probCrossover=0.75
 Poblacion.probMutacion=0.05
-Generacion.elitismo=True 
+Generacion.elitismo=False
+Generacion.torneo = True
 
 for x in Corridas:
     global cantCorridas
@@ -34,6 +35,3 @@ for generacion in generaciones:
 wb = opyxl.Workbook()    
 for generacion in generaciones:
     generacion.cargoDatosExcel(wb)
-
-
-
