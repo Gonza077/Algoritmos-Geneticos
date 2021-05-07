@@ -1,6 +1,7 @@
 from generacion import Generacion
 from poblacion import Poblacion
 from cromosoma import Cromosoma
+import operadoresGeneticos
 import openpyxl as opyxl
 
 #cantCorridas=int(input("Ingrese la cantidad de corridas"))    
@@ -13,16 +14,14 @@ generaciones=[]
 Cromosoma.tCromo=30
 Cromosoma.Dominio=((2**30)-1)
 Poblacion.tPobla=10
-Poblacion.probCrossover=0.75
-Poblacion.probMutacion=0.05
-Generacion.elitismo=False
-Generacion.torneo = True
+Poblacion.tipoSeleccion=operadoresGeneticos.Torneo()
+Poblacion.tipoCrossover=operadoresGeneticos.CrossOverUnPunto()
+Poblacion.tipoMutacion=operadoresGeneticos.MutacionInvertida()
+Poblacion.elitismo=True 
 
 for x in Corridas:
-    global cantCorridas
-    cantCorridas=x
     generacion=Generacion()
-    for i in range(cantCorridas):        
+    for _ in range(x):        
         generacion.creoGeneracion()
     Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
     generaciones.append(generacion)
@@ -32,6 +31,10 @@ for generacion in generaciones:
     generacion.datosGeneracion()
     print("\n")
 
+"""
 wb = opyxl.Workbook()    
 for generacion in generaciones:
     generacion.cargoDatosExcel(wb)
+"""
+
+
