@@ -15,9 +15,9 @@ Cromosoma.tCromo=30
 Cromosoma.Dominio=((2**30)-1)
 Poblacion.tPobla=10
 Poblacion.tipoSeleccion=operadoresGeneticos.Torneo()
-Poblacion.tipoCrossover=operadoresGeneticos.CrossOverUnPunto()
-Poblacion.tipoMutacion=operadoresGeneticos.MutacionInvertida()
-Poblacion.elitismo=True 
+Poblacion.tipoCrossover=operadoresGeneticos.CrossOverUnPunto(0.75)
+Poblacion.tipoMutacion=operadoresGeneticos.MutacionInvertida(0.05)
+Poblacion.elitismo=False 
 
 for x in Corridas:
     generacion=Generacion()

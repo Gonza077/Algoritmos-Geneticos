@@ -82,7 +82,7 @@ class Poblacion(object):
         cromosomasNuevos=[] 
         if (Poblacion.elitismo):
             self.buscoMayoresCromosomas(poblacionAnterior)
-        paresPadres=self.tipoSeleccion.aplicarSeleccion(poblacionAnterior,Poblacion.elitismo)   
+        paresPadres=self.tipoSeleccion.aplicarSeleccion(poblacionAnterior,len(self.arrCromosomas))   
         cromosomasNuevos=self.tipoCrossover.aplicoCrossover(paresPadres)  #Por que a los cromosomas del elitismo, no hay que modificarlos 
         self.tipoMutacion.aplicoMutacion(cromosomasNuevos)
         for cromosoma in cromosomasNuevos:
