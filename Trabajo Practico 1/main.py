@@ -17,7 +17,7 @@ Poblacion.tPobla=10
 Poblacion.tipoSeleccion=operadoresGeneticos.Torneo()
 Poblacion.tipoCrossover=operadoresGeneticos.CrossOverUnPunto(0.75)
 Poblacion.tipoMutacion=operadoresGeneticos.MutacionInvertida(0.05)
-Poblacion.elitismo=False 
+Poblacion.elitismo=True 
 
 for x in Corridas:
     generacion=Generacion()
@@ -30,11 +30,10 @@ print("\n")
 for generacion in generaciones:
     generacion.datosGeneracion()
     print("\n")
-
+    
 """
 wb = opyxl.Workbook()    
 for generacion in generaciones:
     generacion.cargoDatosExcel(wb)
 """
-
 

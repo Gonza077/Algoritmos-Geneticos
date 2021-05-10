@@ -15,11 +15,10 @@ class Generacion(object):
         """Si se ejecuta por primera vez, generara una poblacion, si no, a la ultima existente se le aplicara algun operador genetico"""
         poblacion=Poblacion()
         if(self.arrPoblaciones == [] ): 
-            poblacion.instancioCromosomas()
-            poblacion.calculoDatosPoblacion()           
+            poblacion.instancioCromosomas()       
         else:              
             poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])      
-            poblacion.calculoDatosPoblacion()                     
+        poblacion.calculoDatosPoblacion()                     
         self.arrPoblaciones.append(poblacion)
     
     def dibujoGrafica(self):

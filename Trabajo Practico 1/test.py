@@ -1,5 +1,6 @@
 from poblacion import Poblacion
 from cromosoma import Cromosoma
+import copy
 import generacion
 
 Cromosoma.tCromo=10
@@ -8,27 +9,14 @@ Poblacion.tPobla=10
 Poblacion.probCrossover=0.75
 Poblacion.probMutacion=0.05
 
-pobla=Poblacion()
+cr=Cromosoma()
+cr2=Cromosoma()
+cr2.valorDecimal=35
+cr1=copy.deepcopy(cr)
 
-pobla.instancioCromosomas()
+cr1.valorDecimal=257
 
-for cromosoma in pobla.arrCromosomas:
-    print(cromosoma.arrGenes)
-pobla.calculoDatosPoblacion()
-pares = pobla.aplicoSeleccionRuleta(pobla)
+lista=[cr,cr2,cr1]
 
-for x in pares:
-    print(x)
-pobla.creoNuevaPoblacion(pobla)
+lista.sort(reverse=True)
 
-print("---------------------------------------")
-for cromosoma in pobla.arrCromosomas:
-    print(cromosoma.arrGenes)
-pobla.calculoDatosPoblacion()
-pares = pobla.aplicoSeleccionRuleta(pobla)
-
-for x in pares:
-    print(x)
-par1=pares[0]
-print(par1[0])
-print(par1[1])

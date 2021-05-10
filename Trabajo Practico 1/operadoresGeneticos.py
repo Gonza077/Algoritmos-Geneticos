@@ -4,14 +4,14 @@ import cromosoma as cr
 
 class Ruleta():
 
-    def aplicarSeleccion(self,poblacionAnterior,cantCromosomasPobla):   
+    def aplicarSeleccion(self,poblacionAnterior,cantCromosomasPobla):
         ruleta=[0]
         valor=0     
         paresPadres=[]         
         for cromosoma in poblacionAnterior.arrCromosomas:       
             valor+=cromosoma.funcFitness
             ruleta.append(valor)
-        for _ in range (int((len(poblacionAnterior.arrCromosomas)- cantCromosomasPobla)/2)): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero por que tira error
+        for _ in range ((len(poblacionAnterior.arrCromosomas)- cantCromosomasPobla) // 2): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero por que tira error
                 pares=[]
                 while ( len(pares) < 2 ): #Se debe armar el par, esto garantiza que siempre se forme
                     numAleatorio = rnd.random()     
@@ -26,7 +26,7 @@ class Torneo():
     def aplicarSeleccion(self, poblacionAnterior,cantCromosomasPobla):
         t = 2
         paresPadres = []
-        for _ in range(int((len(poblacionAnterior.arrCromosomas)- cantCromosomasPobla)/2)):
+        for _ in range ((len(poblacionAnterior.arrCromosomas)- cantCromosomasPobla)//2):
             pares = []
             for _ in range(0, t):
                 # Elijo aleatoriamente 2 cromosomas
@@ -40,8 +40,6 @@ class Torneo():
         return paresPadres
 
 class CrossOverUnPunto():
-
-    probCrossover=None
 
     def __init__(self,probCross):
         self.probCrossover=probCross

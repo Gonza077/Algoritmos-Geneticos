@@ -1,5 +1,6 @@
 import random as rnd
 from cromosoma import Cromosoma
+import copy
 from enum import Enum
 
 class Poblacion(object):
@@ -41,33 +42,24 @@ class Poblacion(object):
         self.mediaPoblacionFO = self.sumaPoblacion / len(self.arrCromosomas)
 
     def buscoMenorCromosoma(self):
-        self.minCromosoma=self.arrCromosomas[0] 
+        self.minCromosoma=copy.deepcopy(self.arrCromosomas[0]) #Deepcopy nos permite tomar el objeto sin hacer referencia a la memoria
         for cromosoma in self.arrCromosomas:               
             if (self.minCromosoma > cromosoma):
-                self.minCromosoma = cromosoma               
+                self.minCromosoma = copy.deepcopy(cromosoma)        
     
     def buscoMayorCromosoma(self):
         """ Busca al mayor cromosoma de la poblacion instnaciada"""
-        self.maxCromosoma=self.arrCromosomas[0] 
+        self.maxCromosoma=copy.deepcopy(self.arrCromosomas[0])  #Deepcopy nos permite tomar el objeto sin hacer referencia a la memoria
         for cromosoma in self.arrCromosomas:
             if (self.maxCromosoma < cromosoma):
-                self.maxCromosoma = cromosoma
+                self.maxCromosoma= copy.deepcopy(cromosoma) 
 
     def buscoMayoresCromosomas(self,poblacionAnterior):
         """ Busca al mayor cromosoma de la poblacion enviada como parametro"""
-        cromoMayor1=poblacionAnterior.arrCromosomas[0]
-        cromoMayor2=poblacionAnterior.arrCromosomas[1]
-        for cromosoma in poblacionAnterior.arrCromosomas:
-            if (cromoMayor1 < cromosoma):
-                cromoMayor1 = cromosoma
-        poblacionAnterior.arrCromosomas.pop(poblacionAnterior.arrCromosomas.index(cromoMayor1))
-        for cromosoma in poblacionAnterior.arrCromosomas:
-            if (cromoMayor2 < cromosoma):
-                cromoMayor2 = cromosoma
-        poblacionAnterior.arrCromosomas.append(cromoMayor1)
-        self.arrCromosomas.append(cromoMayor1)
-        self.arrCromosomas.append(cromoMayor2)
-        
+        poblacionAnterior.arrCromosomas.sort(reverse=True)  #Ordena los cromosomas de mayor a menor segun su valor decimal
+        self.arrCromosomas.append(copy.deepcopy(poblacionAnterior.arrCromosomas[0]))
+        self.arrCromosomas.append(copy.deepcopy(poblacionAnterior.arrCromosomas[1]))
+
     def calculoDatosPoblacion(self):
         for cromosoma in self.arrCromosomas:
             cromosoma.calculoDatosCromosoma()
@@ -87,14 +79,6 @@ class Poblacion(object):
         self.tipoMutacion.aplicoMutacion(cromosomasNuevos)
         for cromosoma in cromosomasNuevos:
             self.arrCromosomas.append(cromosoma)
-
-    def datosPoblacion(self):      
-        print(f"Poblacion ID: {self.ID}, media de la FO fue: {self.mediaPoblacionFO}")                  
-        cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  #Hace el casteo de un arreglo de enteros a una cadena de los genes
-        cadena2="".join([ str(gen) for gen in self.minCromosoma.arrGenes])
-        print(f"El cromosoma {cadena1} fue el mas grande y su FO es {self.maxCromosoma.funcObjetivo}")
-        print(f"El cromosoma {cadena2} fue el mas chico y su FO es {self.minCromosoma.funcObjetivo}")
-        print("-----------------------------------------------------")       
 
     def ATupla(self):
         cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  
