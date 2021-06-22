@@ -19,4 +19,5 @@ for i in range(0,10):
     elementos.append(Elemento().setValor(valores[i]).setVolumen(volumenes[i]))
 
 #Realizar las busquedas a partir de aca
-#
+mochila.algoritmoDeBusqueda=None
+mochila.llenarMochila(elementos)
