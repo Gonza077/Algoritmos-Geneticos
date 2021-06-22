@@ -22,8 +22,8 @@ class Elemento():
     def getVolumen(self):
         return self._volumen
 
-    def datos(self):
-        print(f"ID {self._ID} -> Volumen {self._volumen} - Valor {self._valor} ")
+    def datosATupla(self):
+        return [self._ID,self._volumen,self._valor]
 
 
 
