@@ -8,21 +8,21 @@ class Solucion:
 
     def getVolumen(self):
         volumen = 0
-        for i in range(0, len(self.lista_binaria) - 1):
+        for i in range(0, len(self.lista_binaria)):
             if(self.lista_binaria[i] == 1):
                 volumen += self.elementos[i].getVolumen()
         return volumen
 
     def getValor(self):
         valor = 0
-        for i in range(0, len(self.lista_binaria) - 1):
+        for i in range(0, len(self.lista_binaria)):
             if(self.lista_binaria[i] == 1):
                 valor += self.elementos[i].getValor()
         return valor
 
     def getElementos(self):
         mis_elementos = []
-        for i in range(0, len(self.lista_binaria) - 1):
+        for i in range(0, len(self.lista_binaria)):
             if(self.lista_binaria[i] == 1):
-                mis_elementos.append(i)
+                mis_elementos.append(i+1)
         return mis_elementos

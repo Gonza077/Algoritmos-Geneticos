@@ -76,8 +76,15 @@ for sol_actual in soluciones_posibles:
 print(f"Se evaluaron {len(soluciones)} soluciones.")
 print(f"Se descartaron {len(soluciones_descartadas)} soluciones por no cumplir con la restricción de volumen.")
 print(f"Se consideraron {len(soluciones_posibles)} soluciones para encontrar la mejor.")
-print(f"La mejor soluciones encontrada fue: {mejor_solucion.getElementos()}")
+print(f"La mejor solucion encontrada fue: {mejor_solucion.getElementos()}")
 print(f"   Su valor total es {mejor_solucion.getValor()} y su volumen es {mejor_solucion.getVolumen()}.")
+
+#Pruebas
+print(int("1110111101",2))
+print(soluciones[955].getValor())
+print(soluciones[956].getValor())
+print(soluciones[957].getValor())
+print(soluciones[958].getValor())
 
 
 
