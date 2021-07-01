@@ -26,3 +26,5 @@ class Solucion:
             if(self.lista_binaria[i] == 1):
                 mis_elementos.append(i+1)
         return mis_elementos
+
+

@@ -18,6 +18,9 @@ class Mochila:
     def guardoElemento(self,elemen):
         self._arrElementos.append(elemen)
         self._volActual+=elemen.getVolumen()
+
+    def getElementos(self):
+        return self._arrElementos
             
     def datosMochila(self):
         tuplas=[]

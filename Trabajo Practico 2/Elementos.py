@@ -22,6 +22,9 @@ class Elemento():
     def getVolumen(self):
         return self._volumen
 
+    def getValorSobreVolumen(self):
+        return self._valor/self._volumen
+
     def datosATupla(self):
         return [self._ID,self._volumen,self._valor]
 

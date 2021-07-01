@@ -40,17 +40,17 @@ for i in range(0,10):
 # *******************
 # -----------------------------------------------------------------------------------------
 
-# Crear espacio de soluciones, son 1024 posibilidades
-
+# Crear arreglo con el espacio de soluciones completo, son 1024 posibilidades
 soluciones = []
-
 # Esto es importante porque el profe nos dijo que se tiene que VER COMO Y CUANDO GENERAMOS LAS
 #    1024 POSIBLES SOLUCIONES, sino no estaríamos entendiendo que es una busqueda exhaustiva
 
-# Cada solucion es es una lista de 10 elementos donde un 0 significa que el elemento no esta en la
-#    mochila y un 1 que esta.
+# Cada solució n es es una lista de 10 elementos donde un 0 significa que el elemento no esta en la
+#    mochila y un 1 que si esta.
 for i in range(0, 1024):
     num_binario = entero_a_binario(i)
+    # Cuando creo una solución le paso la lista de elemntos para que pueda calcular su valor
+    #    aunque se podría hacer de otra manera, esta manera es medio rebuscada
     soluciones.append(Solucion(num_binario, elementos))
 
 soluciones_descartadas = []
@@ -71,20 +71,51 @@ for sol_actual in soluciones_posibles:
     if(sol_actual.getValor() > mejor_solucion.getValor()):
         mejor_solucion = sol_actual
 
-# Mostrar información
 
+
+# Mostrar información
+print()
+print("--------------------------------------------")
+print("Solución hayada con el algoritmo exhaustivo:")
+print("--------------------------------------------")
 print(f"Se evaluaron {len(soluciones)} soluciones.")
 print(f"Se descartaron {len(soluciones_descartadas)} soluciones por no cumplir con la restricción de volumen.")
 print(f"Se consideraron {len(soluciones_posibles)} soluciones para encontrar la mejor.")
 print(f"La mejor solucion encontrada fue: {mejor_solucion.getElementos()}")
 print(f"   Su valor total es {mejor_solucion.getValor()} y su volumen es {mejor_solucion.getVolumen()}.")
 
-#Pruebas
-print(int("1110111101",2))
-print(soluciones[955].getValor())
-print(soluciones[956].getValor())
-print(soluciones[957].getValor())
-print(soluciones[958].getValor())
+
+
+def getProximoElemento(mochila):
+    ''' Esta función devuelve el proximo mejor elemento para agregar a la mochila
+        O Falso en caso de que no haya mas elementos para agregar.'''
+    
+    # Ordeno los elementos segun su valor/volumen
+    elementos.sort(reverse = True, key=lambda x: x.getValorSobreVolumen())
+    
+    # Busco cual de los elementos que quedan disponibles pueden agregarse a la mochile y devuelvo
+    #    el primero que encuentra. En caso de que no se puede agregar ninguno devuelve False
+    for i in range(len(mochila.getElementos()), len(elementos)):
+        if(mochila.getVolumenActual() + elementos[i].getVolumen() <= Mochila.volMaximo ):
+            return elementos[i]
+    return False
+
+
+# Algoritmo Goloso
+
+mochila = Mochila()
+# Agrego los elementos con mayor valor/volumen a la mochila hasta que no pueda agregar mas 
+while( getProximoElemento(mochila) != False):
+    mochila.guardoElemento(getProximoElemento(mochila))
+
+# Mostrar información
+print()
+print("--------------------------------------------")
+print("Solución hayada con el algoritmo Goloso:")
+print("--------------------------------------------")
+print(f"Lista de elementos en la mochila: ")
+mochila.datosMochila()
+
 
 
 
