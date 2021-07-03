@@ -1,121 +1,58 @@
-from Exhaustiva import *
+from AlgoritmosDeBusqueda.Exhaustiva import *
+from AlgoritmosDeBusqueda.Greedy import *
 from Elementos import *
 from Mochila import *
 from Solucion import *
 
-def entero_a_binario(num, size = 10):
-    """
-    	Recibe un número entero positivo y devuelve su representación binaria en una lista de dimension 10.
-    	Se puede cambiar el tamaño del arreglo devuelto modificando el parametro "size".
-    """
-    lista = [] 
-    # 53    - 1 1 0 1 0 1 - 32 16 8 4 2 1
-    for i in range(size, 0, -1):
-        if (num < 2**(i - 1)):
-            lista.append(0)
-        else:
-            lista.append(1)
-            num -= 2** (i - 1)
-    return lista
+#Definicion de parametros para el caso 1
+def AplicarCaso1():
+    Mochila.volMaximo=4200
+    valores=[20,40,50,36,25,64,54,18,46,28]
+    volumenes=[150,325,600,805,430,1200,770,60,930,353]
+    elementos=[]
+    #Se instancian los elementos
+    for i in range(0,10):
+        elementos.append(Elemento().setValor(valores[i]).setVolumen(volumenes[i]))
+    return elementos
 
-#Definicion de parametros 
-Mochila.volMaximo=4200
-elementos=[]
-valores=[20,40,50,36,25,64,54,18,46,28]
-volumenes=[150,325,600,805,430,1200,770,60,930,353]
+#Definicion de parametros para el caso 2
+def AplicarCaso2():
+    Mochila.pesoMaximo=3000
+    valores=[72,32,60]
+    pesos=[1800,600,1200]
+    elementos=[]
+    #Se instancian los elementos
+    for i in range(0,3):
+        elementos.append(Elemento().setValor(valores[i]).setPeso(pesos[i]))
+    return elementos
 
-#Se instancian los elementos
-for i in range(0,10):
-    elementos.append(Elemento().setValor(valores[i]).setVolumen(volumenes[i]))
-
-# mochila = Mochila()
-# busqueda= Exhaustiva()
-# busqueda.aplicoBusqueda(elementos,mochila)
-# #Realizar las busquedas a partir de aca
-
-# mochila.datosMochila()
-
-
-# -----------------------------------------------------------------------------------------
-# *******************
-# -----------------------------------------------------------------------------------------
-
-# Crear arreglo con el espacio de soluciones completo, son 1024 posibilidades
-soluciones = []
-# Esto es importante porque el profe nos dijo que se tiene que VER COMO Y CUANDO GENERAMOS LAS
-#    1024 POSIBLES SOLUCIONES, sino no estaríamos entendiendo que es una busqueda exhaustiva
-
-# Cada solució n es es una lista de 10 elementos donde un 0 significa que el elemento no esta en la
-#    mochila y un 1 que si esta.
-for i in range(0, 1024):
-    num_binario = entero_a_binario(i)
-    # Cuando creo una solución le paso la lista de elemntos para que pueda calcular su valor
-    #    aunque se podría hacer de otra manera, esta manera es medio rebuscada
-    soluciones.append(Solucion(num_binario, elementos))
-
-soluciones_descartadas = []
-soluciones_posibles = []
-
-# Evaluar todas las soluciones
-for i in range(0, 1024):
-    solucion_actual = soluciones[i]
-    if(solucion_actual.getVolumen() > Mochila.volMaximo):
-        soluciones_descartadas.append(solucion_actual)
-    else:
-        soluciones_posibles.append(solucion_actual)
-
-# Buscar la mejor solucion entre las soluciones posibles
-mejor_solucion = soluciones_posibles[0]
-
-for sol_actual in soluciones_posibles:
-    if(sol_actual.getValor() > mejor_solucion.getValor()):
-        mejor_solucion = sol_actual
-
-
-
+#elementos = AplicarCaso1()
+elementos= AplicarCaso2()
+busqueda = Exhaustiva()
+# Crear espacio de soluciones, son 1024 posibilidades
+# Cada solucion es es una lista de 10 elementos donde un 0 significa que el elemento no esta en la
+# mochila y un 1 que esta, de ahi salen la canWtidad de soluciones 2^10.
+busqueda.buscoSolucion(elementos)
 # Mostrar información
 print()
 print("--------------------------------------------")
-print("Solución hayada con el algoritmo exhaustivo:")
+print("Solución hallada con el algoritmo exhaustivo:")
 print("--------------------------------------------")
-print(f"Se evaluaron {len(soluciones)} soluciones.")
-print(f"Se descartaron {len(soluciones_descartadas)} soluciones por no cumplir con la restricción de volumen.")
-print(f"Se consideraron {len(soluciones_posibles)} soluciones para encontrar la mejor.")
-print(f"La mejor solucion encontrada fue: {mejor_solucion.getElementos()}")
-print(f"   Su valor total es {mejor_solucion.getValor()} y su volumen es {mejor_solucion.getVolumen()}.")
+print(f"Se evaluaron {Exhaustiva.cantSoluciones} soluciones.")
+print(f"Se descartaron {busqueda.getSolucionesDescartadas()} soluciones por no cumplir con la restricción de volumen.")
+print(f"Se consideraron {busqueda.getSolucionesAceptadas()} soluciones")
+print("La mejor solucion encontrada es la siguiente")
+busqueda.datosMejorSolucion()
 
-
-
-def getProximoElemento(mochila):
-    ''' Esta función devuelve el proximo mejor elemento para agregar a la mochila
-        O Falso en caso de que no haya mas elementos para agregar.'''
-    
-    # Ordeno los elementos segun su valor/volumen
-    elementos.sort(reverse = True, key=lambda x: x.getValorSobreVolumen())
-    
-    # Busco cual de los elementos que quedan disponibles pueden agregarse a la mochile y devuelvo
-    #    el primero que encuentra. En caso de que no se puede agregar ninguno devuelve False
-    for i in range(len(mochila.getElementos()), len(elementos)):
-        if(mochila.getVolumenActual() + elementos[i].getVolumen() <= Mochila.volMaximo ):
-            return elementos[i]
-    return False
-
-
-# Algoritmo Goloso
-
-mochila = Mochila()
-# Agrego los elementos con mayor valor/volumen a la mochila hasta que no pueda agregar mas 
-while( getProximoElemento(mochila) != False):
-    mochila.guardoElemento(getProximoElemento(mochila))
-
-# Mostrar información
+#Se cambia el tipo de busqueda
+busqueda=Greedy()
+busqueda.buscoSolucion(elementos)
 print()
 print("--------------------------------------------")
-print("Solución hayada con el algoritmo Goloso:")
+print("Solución hallada con el algoritmo Goloso:")
 print("--------------------------------------------")
-print(f"Lista de elementos en la mochila: ")
-mochila.datosMochila()
-
+print("La mejor solucion encontrada es la siguiente")
+busqueda.datosMejorSolucion()
 
 
 
