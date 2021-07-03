@@ -2,7 +2,6 @@ from AlgoritmosDeBusqueda.Exhaustiva import *
 from AlgoritmosDeBusqueda.Greedy import *
 from Elementos import *
 from Mochila import *
-from Solucion import *
 
 #Definicion de parametros para el caso 1
 def AplicarCaso1():
@@ -26,8 +25,8 @@ def AplicarCaso2():
         elementos.append(Elemento().setValor(valores[i]).setPeso(pesos[i]))
     return elementos
 
-#elementos = AplicarCaso1()
-elementos= AplicarCaso2()
+elementos = AplicarCaso1()
+#elementos= AplicarCaso2()
 busqueda = Exhaustiva()
 # Crear espacio de soluciones, son 1024 posibilidades
 # Cada solucion es es una lista de 10 elementos donde un 0 significa que el elemento no esta en la

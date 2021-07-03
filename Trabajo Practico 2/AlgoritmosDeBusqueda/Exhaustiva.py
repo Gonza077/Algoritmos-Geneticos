@@ -1,5 +1,4 @@
 from AlgoritmosDeBusqueda.Busqueda import *
-from Solucion import *
 from Mochila import *
 
 class Exhaustiva(Busqueda):
