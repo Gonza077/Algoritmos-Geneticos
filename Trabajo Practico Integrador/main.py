@@ -1,18 +1,22 @@
-from generacion import Generacion
-from poblacion import Poblacion
-from cromosoma import Cromosoma
-import operadoresGeneticos
+from Generacion import *
+from Poblacion import *
+from ParqueEolico import *
+from OperadoresGeneticos import *
 import openpyxl as opyxl
+
 
 Corridas=[1500]   
 generaciones=[]
-Cromosoma.tCromo=50
-Cromosoma.Dominio=((2**30)-1)
-Poblacion.tParque=50
-Poblacion.tipoSeleccion=operadoresGeneticos.Ruleta()
-Poblacion.tipoCrossover=operadoresGeneticos.CrossOverUnPunto(0.75)
-Poblacion.tipoMutacion=operadoresGeneticos.MutacionInvertida(0.20)
-Poblacion.TamañoCelda= 90
+#Parametros del Parque
+ParqueEolico.cantAerogeneradores=25
+#Parametros de la Poblacion
+Poblacion.TamañoCelda=90
+Poblacion.CantParques=50
+Poblacion.tipoSeleccion=Ruleta()
+Poblacion.tipoCrossover=CrossOverUnPunto(0.75)
+Poblacion.tipoMutacion=MutacionInvertida(0.20)
+#Parametos de los parques
+
 #Poblacion.elitismo=False 
 
 for x in Corridas:
@@ -26,7 +30,8 @@ print("\n")
 for generacion in generaciones:
     generacion.datosGeneracion()
     print("\n")
-    
+
+#Esto es para registrar los datos en el excel
 """
 wb = opyxl.Workbook()    
 for generacion in generaciones:

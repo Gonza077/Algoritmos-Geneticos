@@ -1,8 +1,8 @@
 import random as rnd
 import matplotlib.pyplot as plt
 import openpyxl as opyxl
+from Poblacion import * 
 from tabulate import tabulate
-from poblacion import Poblacion
 
 class Generacion(object):
     
@@ -15,12 +15,14 @@ class Generacion(object):
         """Si se ejecuta por primera vez, generara una poblacion, si no, a la ultima existente se le aplicara algun operador genetico"""
         poblacion=Poblacion()
         if(self.arrPoblaciones == [] ): 
-            poblacion.instancioCromosomas()       
+            poblacion.instacioParques()       
         else:              
             poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])      
         poblacion.calculoDatosPoblacion()                     
         self.arrPoblaciones.append(poblacion)
     
+    #Esto ya no serviria por que no tenemos estos nuevos valores
+    """
     def dibujoGrafica(self):
         arrPromedios = []
         arrMaximos = []
@@ -45,6 +47,7 @@ class Generacion(object):
         plt.legend()
 
         plt.show()
+    
         
     def cargoDatosExcel(self,wb):
          #Se crea una instancia de un libro en blanco que NO esta activa
@@ -53,7 +56,7 @@ class Generacion(object):
         for poblacion in self.arrPoblaciones:                      
             hoja.append(poblacion.ATupla())  
         wb.save("DatosEjercicio1.xlsx")            
-    
+
     def datosGeneracion(self):
         tuplas=[]
         for poblacion in self.arrPoblaciones:
@@ -61,4 +64,5 @@ class Generacion(object):
                 tuplas.append(poblacion.ATupla())
         cabecera=["Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"]
         print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
-        self.dibujoGrafica()
+        #self.dibujoGrafica()
+    """

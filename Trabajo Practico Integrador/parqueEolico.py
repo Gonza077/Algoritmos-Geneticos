@@ -1,61 +1,74 @@
 import random as rnd
-from cromosoma import Cromosoma
-import copy
-from enum import Enum
+import numpy as np
 
-class parqueEolico(object):
- 
-    """parqueEolico genetica del algoritmo"""
-    IDparqueEolico = 1
-    tParque=None
-    cantMaxCromosomas=25
-    tipoCrossover=None
-    tipoSeleccion=None
-    tipoMutacion=None
+class ParqueEolico(object):
+    
+    IDParque=1
+    cantAerogeneradores=None
 
+    #Atributos
+    def __init__(self):         
+        self.fitnessParque=0
+        self.potenciaParque=0
+        self.terrenoParque=np.array([[0]*10]*10) #Definira una matriz de 10*10
+    
+    #Operadores logicos, ya que Python no permite comparar obejtos 
+    def __gt__(self, parque):
+        return self.potenciaParque > parque.potenciaParque
 
-    #Metodo de clase
-    @staticmethod
-    def reseteoIDparqueEolico():
-        parqueEolico.IDparqueEolico=1
+    def __lt__(self, parque):
+        return self.potenciaParque < parque.potenciaParque
+
+    def __ge__(self, parque):
+        return self.potenciaParque >= parque.potenciaParque
+
+    def __le__(self, parque):
+        return self.potenciaParque <= parque.potenciaParque
+
+    def __eq__(self, parque):
+        return self.potenciaParque == parque.potenciaParque
+
+    def __ne__(self, parque):
+        return self.potenciaParque != parque.potenciaParque
 
     #Metodos de instancia
-    def __init__(self):
-        self.ID = parqueEolico.IDparqueEolico
-        parqueEolico.IDparqueEolico +=1       
-        self.arrCromosomas=[]
-        self.potencia=0
-        self.mediaPotencia=0   
+
+    def calculoDatosParque(self):
+        """Se calcula el valor de cada parque"""  
+        #FALTA CALCULAR LOS VALORES DEL PARQUE
         
-    def instancioCromosomas(self):
-        for _ in range(0,parqueEolico.tParque):
-            cromosoma = Cromosoma() 
-            cromosoma.instancioGenes()   
-            self.arrCromosomas.append(cromosoma)
+    def calculoFitness(self,sumaPoblacion): 
+        """Dependiendo de la suma de la poblacion, se calcula el fitness de cada parque"""
+        self.funcFitness = self.potenciaParque / sumaPoblacion
 
-    def calculoSumaPobla(self):
-        """Se calcula la suma de la parqueEolico a partir del valor de cada cromosoma"""
-        for cromosoma in self.arrCromosomas:
-            #Aca tendriamos que calcular cada potencia en base si hay molinos adelante del mismo
-            #Hay que pensar como hacerlo
-            self.potencia += cromosoma.funcObjetivo / self.cantMaxCromosomas
+    def mutoGen(self):
+        #FALTA DEFINIR
+        pass
 
-    def calculoMediaFO(self):
-        """Se calcula la media parqueEolicoal""" 
-        self.mediaPotencia = self.potencia / len(self.arrCromosomas)
+    def insertoGen(self,gen):
+        """Se envia el gen a insertar en el arreglo del parque"""
+        #FALTA DEFINIR 
+        pass
 
-    def calculoDatosparqueEolico(self):
-        for cromosoma in self.arrCromosomas:
-            cromosoma.calculoDatosCromosoma()
-        self.calculoSumaPobla()
-        for cromosoma in self.arrCromosomas:        
-            cromosoma.calculoFitness(self.potencia)
-        self.calculoMediaFO()
+    def intancioAerogeneradores(self):
+        contador=0
+        while(contador<ParqueEolico.cantAerogeneradores):
+            contador+=1
+            #Se toma un indice de fila al azar
+            filRnd=random.randrange(len(self.terrenoParque))
+            #Se toma un indice de columna al azar
+            colRnd=random.randrange(len(self.terrenoParque[0]))
+            self.terrenoParque[filRnd,colRnd]=1
+    
 
-    def creoNuevoParqueEolico(self,parqueEolicoAnterior):
-        cromosomasNuevos=[] 
-        paresPadres=self.tipoSeleccion.aplicarSeleccion(parqueEolicoAnterior,len(self.arrCromosomas))   
-        cromosomasNuevos=self.tipoCrossover.aplicoCrossover(paresPadres)  #Por que a los cromosomas del elitismo, no hay que modificarlos 
-        self.tipoMutacion.aplicoMutacion(cromosomasNuevos)
-        for cromosoma in cromosomasNuevos:
-            self.arrCromosomas.append(cromosoma)
+    def datosParque(self):
+        print(f"Func Fitness: {self.fitnessParque}, Potencia Parque: {self.potenciaParque}")
+        for fila in self.terrenoParque:
+            print(fila)
+ 
+    def ATupla(self):
+        #Chequear que esto funcione
+        """
+        cadena="".join([str(gen) for gen in self.terrenoParque])
+        return [self.fitnessParque,self.potenciaParque,cadena]
+        """

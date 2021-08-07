@@ -1,5 +1,5 @@
 from AlgoritmosDeBusqueda.Exhaustiva import *
-from AlgoritmosDeBusqueda.Greedy import *
+from AlgoritmosDeBusqueda.greedy import *
 from Elementos import *
 from Mochila import *
 
