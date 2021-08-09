@@ -30,13 +30,14 @@ class Poblacion(object):
             parqueEolico = ParqueEolico()
             parqueEolico.intancioAerogeneradores()   
             self.arrParques.append(parqueEolico)
+        ParqueEolico.reseteoIDParques()
 
     def calculoSumaPobla(self):
         """Se calcula la suma de la parqueEolico a partir del valor de cada cromosoma"""
         for parque in self.arrParques:
             self.sumatoriaPotencia += parque.potenciaParque
 
-    def calculoDatosparqueEolico(self):
+    def calculoDatosParqueEolico(self):
         #Calculo los datos de cada parque
         for parque in self.arrParques:
             parque.calculoDatosParque()
@@ -53,3 +54,9 @@ class Poblacion(object):
         self.tipoMutacion.aplicoMutacion(parquesNuevos)
         for parque in parquesNuevos:
             self.arrParques.append(cromosoma)
+    
+    def diseñoParques(self):
+        for parque in self.arrParques:
+            print(f"Distribucion del Parque N°: {parque.ID}")
+            parque.distribucionParque()
+        

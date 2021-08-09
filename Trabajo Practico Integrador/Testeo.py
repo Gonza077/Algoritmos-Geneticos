@@ -1,25 +1,28 @@
 import random
 import numpy as np
+from Generacion import *
+from Poblacion import *
+from ParqueEolico import *
+#from OperadoresGeneticos import *
+
+Corridas=[2]   
+generaciones=[]
+#Parametros del Parque
+ParqueEolico.cantAerogeneradores=25
+#Parametros de la Poblacion
+Poblacion.TamañoCelda=90
+Poblacion.CantParques=2
 
 #Testeo de la construccion de la matriz
-arr=np.array([[0]*12]*10)
+for x in Corridas:
+    generacion=Generacion()
+    for _ in range(x):        
+        generacion.creoGeneracion()
+    Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
+    generaciones.append(generacion)
 
-for fila in arr:
-    print(fila)
-
-print()
-cont=0
-while cont<25:
-    cont+=1
-    #Se toma un indice de fila al azar
-    filRnd=random.randrange(len(arr))
-    #Se toma un indice de columna al azar
-    colRnd=random.randrange(len(arr[0]))
-    arr[filRnd,colRnd]=1
-
-for fila in arr:
-    print(fila)
-print(cont)
+for gene in generaciones:
+    gene.datosGeneracion()
 
 
     

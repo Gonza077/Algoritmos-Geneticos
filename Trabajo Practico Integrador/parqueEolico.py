@@ -7,10 +7,16 @@ class ParqueEolico(object):
     cantAerogeneradores=None
 
     #Atributos
-    def __init__(self):         
+    def __init__(self):   
+        self.ID = ParqueEolico.IDParque
+        ParqueEolico.IDParque +=1  
         self.fitnessParque=0
         self.potenciaParque=0
         self.terrenoParque=np.array([[0]*10]*10) #Definira una matriz de 10*10
+
+    @staticmethod
+    def reseteoIDParques():
+         ParqueEolico.IDParque=1
     
     #Operadores logicos, ya que Python no permite comparar obejtos 
     def __gt__(self, parque):
@@ -55,9 +61,9 @@ class ParqueEolico(object):
         while(contador<ParqueEolico.cantAerogeneradores):
             contador+=1
             #Se toma un indice de fila al azar
-            filRnd=random.randrange(len(self.terrenoParque))
+            filRnd=rnd.randrange(len(self.terrenoParque))
             #Se toma un indice de columna al azar
-            colRnd=random.randrange(len(self.terrenoParque[0]))
+            colRnd=rnd.randrange(len(self.terrenoParque[0]))
             self.terrenoParque[filRnd,colRnd]=1
     
 
@@ -66,9 +72,7 @@ class ParqueEolico(object):
         for fila in self.terrenoParque:
             print(fila)
  
-    def ATupla(self):
-        #Chequear que esto funcione
-        """
-        cadena="".join([str(gen) for gen in self.terrenoParque])
-        return [self.fitnessParque,self.potenciaParque,cadena]
-        """
+    def distribucionParque(self):
+        for fila in self.terrenoParque:
+            print(fila)
+        print()

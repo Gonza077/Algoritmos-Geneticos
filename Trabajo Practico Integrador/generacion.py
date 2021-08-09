@@ -17,8 +17,9 @@ class Generacion(object):
         if(self.arrPoblaciones == [] ): 
             poblacion.instacioParques()       
         else:              
-            poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])      
-        poblacion.calculoDatosPoblacion()                     
+            #poblacion.creoNuevoParqueEolico(self.arrPoblaciones[-1]) 
+            poblacion.instacioParques() #TESTEO PARA VER SI CREA LAS DEMAS   
+        #poblacion.calculoDatosPoblacion()                     
         self.arrPoblaciones.append(poblacion)
     
     #Esto ya no serviria por que no tenemos estos nuevos valores
@@ -55,14 +56,18 @@ class Generacion(object):
         hoja.append(("Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"))
         for poblacion in self.arrPoblaciones:                      
             hoja.append(poblacion.ATupla())  
-        wb.save("DatosEjercicio1.xlsx")            
+        wb.save("DatosEjercicio1.xlsx")        
+    """    
 
     def datosGeneracion(self):
-        tuplas=[]
+        tuplas=[]      
         for poblacion in self.arrPoblaciones:
-            #if (poblacion.ID % ((len(self.arrPoblaciones)/20)) == 0): #Dependiendo del tamaño de la poblacion, y la cantidad de registros que se quieran mostrar, en este caso 20
-                tuplas.append(poblacion.ATupla())
-        cabecera=["Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"]
-        print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
+            print("---------------------------------------------")
+            print(f"Poblacion N°{poblacion.ID}\n")
+            #tuplas.append(poblacion.ATupla())
+            poblacion.diseñoParques()
+            print("---------------------------------------------")  
+        #cabecera=["Parque","Potencia en kW"]
+        #print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
         #self.dibujoGrafica()
-    """
+    
