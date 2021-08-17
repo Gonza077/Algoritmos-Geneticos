@@ -4,19 +4,17 @@ from ParqueEolico import *
 from OperadoresGeneticos import *
 import openpyxl as opyxl
 
-
 Corridas=[1500]   
 generaciones=[]
-#Parametros del Parque
-ParqueEolico.cantAerogeneradores=25
+#Parametros del Parque 
+ParqueEolico.CantAerogeneradores=25
+ParqueEolico.VelocidadViento=18 #Velocidad del viento
+Poblacion.TamañoCelda=180  #Distancia Minima de 4*R, donde R es 45 m
 #Parametros de la Poblacion
-Poblacion.TamañoCelda=90
-Poblacion.CantParques=50
+Poblacion.CantParques=50   #Cantidad de parques x Poblacion
 Poblacion.tipoSeleccion=Ruleta()
 Poblacion.tipoCrossover=CrossOverUnPunto(0.75)
 Poblacion.tipoMutacion=MutacionInvertida(0.20)
-#Parametos de los parques
-
 #Poblacion.elitismo=False 
 
 for x in Corridas:

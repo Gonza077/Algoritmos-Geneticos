@@ -7,7 +7,6 @@ class Poblacion(object):
     """Almacenara los 50 parques eolicos del AG"""
 
     IDPoblacion = 1
-    TamañoCelda=None
     CantParques=None
     tipoCrossover=None
     tipoSeleccion=None
