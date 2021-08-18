@@ -7,7 +7,7 @@ class ParqueEolico(object):
     IDParque=1
     CantAeroGeneradores=None
     TamañoCelda=None
-    velViento=None
+    VelocidadViento=None
 
     #Atributos
     def __init__(self):   
@@ -41,38 +41,36 @@ class ParqueEolico(object):
         return self.potenciaParque != parque.potenciaParque
 
     #Metodos de instancia
-
-    def calculoDatosParque(self):
+    def calculoPotenciaParque(self):
         """Se calcula la potencia total de cada parque"""  
         for fila in self.terrenoParque:
-            velViento=ParqueEolico.velViento #Se inicializa la velocidad inicial del viento proveniente de la Izquierda hacia la Derecha
+            velViento=ParqueEolico.VelocidadViento #Se inicializa la velocidad inicial del viento proveniente de la Izquierda hacia la Derecha
             aeroFilas=np.where(fila==1)[0] #Devuelve una tupla con un arreglo y el tipo de dato, solo tomo el arreglo
             if(len(aeroFilas)>=2):  #Si existen al menos dos generadores en una fila existira el efecto estela
                 #Efecto estela simpe
-                for i in range(0,len(aeroFilas)-1):
+                for i in range(len(aeroFilas)-1):
                     velViento = self.efectoEstela(velViento,aeroFilas[i+1]-aeroFilas[i]) #Distancia en indices entre cada aerogenerador
-                    #print(f"La distancia entre AeroGenerador N° {aeroFilas[i] +1} y {aeroFilas[i+1] +1} es {aeroFilas[i+1]-aeroFilas[i]} de la fila {fila}")
-                    
                     self.calculoPotenciaAerogenerador(velViento)
             else:
-                self.calculoPotenciaAerogenerador(velViento)    
+                self.calculoPotenciaAerogenerador(velViento)   
 
-    def efectoEstela(self,velViento,disIndices):
+    def efectoEstela(self,velViento,distanciaCasillas):
         a=0.3333
         radioAero=45
         coefDeArrastre= round(( 1 / (2 * math.log(80/0.05))),4) #Aproximadamente 0.0678
-        return velViento * ( 1 - ( 2 * a / (1 + (coefDeArrastre * disIndices*ParqueEolico.TamañoCelda) / radioAero )**2) ) 
+        return velViento * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * ParqueEolico.TamañoCelda) / radioAero )**2) ) 
 
-    def calculoPotenciaAerogenerador(self,velViento):
-        #Aca deberia calcularse la potencia que cada aerogenerador generaria dependiendo de la velocidad del viento
-        #Habria que definir un arreglo que contenga las velocidades y la potencia que se genera
-        #Cada potencia se puede tomar de la pagina donde encontramos los aerogeneradores, esa que aparece en el grafico
-        pass
-
+    def calculoPotenciaAerogenerador(self,velViento):  
+        #Cada indice de la lista contiene una lista donde el primer indice indica la velocidad del viento y el segundo la potencia asociada  
+        velocidadesViento=[[0, 0],[1, 0],[2, 0],[3, 10],[4, 46],[5, 170],[6, 355],[7, 580],[8, 874],[9, 1219],[10, 1544],[11, 1740],[12, 1789],[13, 1800],[14, 1800],[15, 1800],[16, 1800],[17, 1800],[18, 1800],[19, 1800],[20, 1800],[21, 1800],[22, 1800],[23, 1800],[24, 1800],[25, 1800],[26, 0]]
+        for i in range(len(velocidadesViento)-1):
+            if velocidadesViento[i][0]<=velViento and velocidadesViento[i+1][0]>velViento:
+                self.potenciaParque += velocidadesViento[i][1]
+                break
         
     def calculoFitness(self,sumaPoblacion): 
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada parque"""
-        self.funcFitness = self.potenciaParque / sumaPoblacion
+        self.fitnessParque = self.potenciaParque / sumaPoblacion
 
     def mutoGen(self):
         #FALTA DEFINIR
@@ -93,13 +91,10 @@ class ParqueEolico(object):
             colRnd=rnd.randrange(len(self.terrenoParque[0]))
             self.terrenoParque[filRnd,colRnd]=1
     
-
     def datosParque(self):
-        print(f"Func Fitness: {self.fitnessParque}, Potencia Parque: {self.potenciaParque}")
-        for fila in self.terrenoParque:
-            print(fila)
- 
-    def distribucionParque(self):
+        print(f"Fitness: {self.fitnessParque}, Potencia Parque: {self.potenciaParque}")
         for fila in self.terrenoParque:
             print(fila)
         print()
+ 
+        

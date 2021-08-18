@@ -1,6 +1,5 @@
 from enum import Enum
 import random as rnd
-import cromosoma as cr
 
 class Ruleta():
 

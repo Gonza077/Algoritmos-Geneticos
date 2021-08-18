@@ -39,7 +39,7 @@ class Poblacion(object):
     def calculoDatosParqueEolico(self):
         #Calculo los datos de cada parque
         for parque in self.arrParques:
-            parque.calculoDatosParque()
+            parque.calculoPotenciaParque()
         #Calculo la sumatoria de potencia de la poblacion
         self.calculoSumaPobla()
         #Calculo del Fitness de cada parque
@@ -57,5 +57,4 @@ class Poblacion(object):
     def diseñoParques(self):
         for parque in self.arrParques:
             print(f"Distribucion del Parque N°: {parque.ID}")
-            parque.distribucionParque()
-        
+            parque.datosParque() 

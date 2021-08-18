@@ -19,7 +19,7 @@ class Generacion(object):
         else:              
             #poblacion.creoNuevoParqueEolico(self.arrPoblaciones[-1]) 
             poblacion.instacioParques() #TESTEO PARA VER SI CREA LAS DEMAS   
-        #poblacion.calculoDatosPoblacion()                     
+        poblacion.calculoDatosParqueEolico()                     
         self.arrPoblaciones.append(poblacion)
     
     #Esto ya no serviria por que no tenemos estos nuevos valores
