@@ -1,6 +1,7 @@
 import random as rnd
 import numpy as np
 import math
+import copy 
 
 class ParqueEolico(object):
     
@@ -11,11 +12,11 @@ class ParqueEolico(object):
 
     #Atributos
     def __init__(self):   
-        self.ID = ParqueEolico.IDParque
-        ParqueEolico.IDParque +=1  
+        self.ID = ParqueEolico.IDParque  
         self.fitnessParque=0
         self.potenciaParque=0
         self.terrenoParque=np.array([[0]*10]*10) #Definira una matriz de 10*10
+        ParqueEolico.IDParque +=1
 
     @staticmethod
     def reseteoIDParques():
@@ -44,7 +45,7 @@ class ParqueEolico(object):
     def calculoPotenciaParque(self):
         """Se calcula la potencia total de cada parque"""  
         for fila in self.terrenoParque:
-            velViento=ParqueEolico.VelocidadViento #Se inicializa la velocidad inicial del viento proveniente de la Izquierda hacia la Derecha
+            velViento=copy.deepcopy(ParqueEolico.VelocidadViento) #Se inicializa la velocidad inicial del viento proveniente de la Izquierda hacia la Derecha
             aeroFilas=np.where(fila==1)[0] #Devuelve una tupla con un arreglo y el tipo de dato, solo tomo el arreglo
             if(len(aeroFilas)>=2):  #Si existen al menos dos generadores en una fila existira el efecto estela
                 #Efecto estela simpe
@@ -92,7 +93,7 @@ class ParqueEolico(object):
             self.terrenoParque[filRnd,colRnd]=1
     
     def datosParque(self):
-        print(f"Fitness: {self.fitnessParque}, Potencia Parque: {self.potenciaParque}")
+        print(f"Parque N° {self.ID} -- Fitness: {self.fitnessParque} -- Potencia Parque: {self.potenciaParque}")
         for fila in self.terrenoParque:
             print(fila)
         print()

@@ -4,7 +4,6 @@ import copy
 from enum import Enum
 
 class Poblacion(object):
-    """Almacenara los 50 parques eolicos del AG"""
 
     IDPoblacion = 1
     CantParques=None
@@ -19,10 +18,10 @@ class Poblacion(object):
 
     #Metodos de instancia
     def __init__(self):
-        self.ID = Poblacion.IDPoblacion
-        Poblacion.IDPoblacion +=1  
+        self.ID = Poblacion.IDPoblacion 
         self.sumatoriaPotencia=0     
         self.arrParques=[] 
+        Poblacion.IDPoblacion +=1 
         
     def instacioParques(self):
         for _ in range(0,Poblacion.CantParques):
@@ -55,6 +54,8 @@ class Poblacion(object):
             self.arrParques.append(cromosoma)
     
     def diseñoParques(self):
+        print("---------------------------------------------")
+        print(f"Poblacion N°{self.ID}\n")
         for parque in self.arrParques:
-            print(f"Distribucion del Parque N°: {parque.ID}")
             parque.datosParque() 
+        print("---------------------------------------------")
