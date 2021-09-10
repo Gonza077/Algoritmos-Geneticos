@@ -30,24 +30,20 @@ def buscarRuta(listaCiudades, nombreCiudad):
     # Se supone que ingresa siempre una ciudad válida
     ciudad = getCiudad(listaCiudades, nombreCiudad)
 
-    # Guardo la ciudad de partida y busco la proxima mas cercana
-    # HECHO https://realpython.com/python-type-checking/#type-systems
+    # TORESEARCH Solución a un error de tipos de datos, 
+    #   TODO/DONE https://realpython.com/python-type-checking/#type-systems
     
     # Tengo que ir descartando de la busqueda las ciudades que ya estan en el arreglo de rutas.
     #     Creo que va a hacer el arreglo de ciudades con objetos y no con tuplas.
-    
-    ruta.append(ciudad)
     proxCiudad = ciudad.getCiudadMasCercana(ruta)
+    
     # TODO No esta funcionando el corte. Cuando llega a la ultima ciudad deberia cortar y tira error
-    while len(ruta) <= 24:
+    while len(ruta) <= 23:
         ruta.append(proxCiudad)
         # Le tengo que pedir a la lista de ciudades que cargamos desde Pandas
         #     donde esta la proxima mas cercana.
         ciudad = getCiudad(listaCiudades, proxCiudad.getNombre())
-        if ciudad.getCiudadMasCercana(ruta) == False:
-            print(f'Entro al false, proxCiudad vale {proxCiudad}')
-        else:
-            proxCiudad = ciudad.getCiudadMasCercana(ruta)
+        proxCiudad = ciudad.getCiudadMasCercana(ruta)
     # Agrego la ultima ciudad que encontro
     ruta.append(ciudad)
     # Agrego al final de nuevo la ciudad inicial, nos dijo en clase Victor que lo hagamos
@@ -83,7 +79,8 @@ def main():
         print(f"Lista de ciudades filtradas: {ciudades_filtradas}")
         arreglo_distancias = list(map(lambda x:x.getDistancia(), ciudades_filtradas))
         print(f"Lista de ciudades mapeadas: {arreglo_distancias}")
+        print(f"Total de ciudades mapeadas: {len(arreglo_distancias)}")
         print(f"La distancia total es: {np.sum(arreglo_distancias)}")
 
 # Programa Principal
-# main()
+main()
