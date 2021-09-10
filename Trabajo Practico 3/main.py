@@ -4,7 +4,7 @@ import numpy as np
 
 def cargarCiudades():
     ciudades=[]
-    hojaExcel = pd.read_excel('./TablaCapitales.xlsx')
+    hojaExcel = pd.read_excel('./TablaCapitalesOriginal.xlsx')
     for fila in hojaExcel.values:
         ciudad=Ciudad()
         ciudad.agregarNombre(fila[0])
@@ -86,4 +86,4 @@ def main():
         print(f"La distancia total es: {np.sum(arreglo_distancias)}")
 
 # Programa Principal
-main()
+# main()

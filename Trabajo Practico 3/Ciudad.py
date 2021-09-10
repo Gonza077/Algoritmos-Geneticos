@@ -17,16 +17,24 @@ class Ciudad():
         self._nombre=nomb
 
     def getCiudadMasCercana(self, ruta):
-        """Ordena las ciudad por distancia y verifica que la mas proxima no este en la ruta actual."""
+        """ Devuelve la ciudad mas cercana que no este incluida en la ruta pasada como parametro.
+                Ordena las ciudad por distancia y verifica que la mas proxima no este en la ruta actual.
+        """
         if len(ruta) == 24:
             return False
         self._ciudades.sort(key = lambda c: c.getDistancia())
         nombres_ruta = list(map(lambda c: c.getNombre(), ruta))
-        # print(nombres_ruta)
         for c in self._ciudades:
             if (c.getNombre() not in nombres_ruta and c.getDistancia() != 0):
                 return c
     
+    def getDistanciaTo(self, ciudadSiguiente):
+        # self._ciudades.pop(ciudadSiguiente)
+        
+        for c in self._ciudades:
+            if (c.getNombre() == ciudadSiguiente.getNombre()):
+                return c.getDistancia()
+
     def getNombre(self):
         return self._nombre
 
