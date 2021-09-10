@@ -18,14 +18,14 @@ class Ciudad():
 
     def getCiudadMasCercana(self, ruta):
         """Ordena las ciudad por distancia y verifica que la mas proxima no este en la ruta actual."""
+        if len(ruta) == 24:
+            return False
         self._ciudades.sort(key = lambda c: c.getDistancia())
-        for i in self._ciudades:
-            print(f'Ciudad: {i.getNombre()} distancia: {i.getDistancia()}')
+        nombres_ruta = list(map(lambda c: c.getNombre(), ruta))
+        # print(nombres_ruta)
         for c in self._ciudades:
-            if (c not in ruta and c.getDistancia() != 0):
+            if (c.getNombre() not in nombres_ruta and c.getDistancia() != 0):
                 return c
-        return None
-        
     
     def getNombre(self):
         return self._nombre

@@ -15,8 +15,8 @@ def cargarCiudades():
 
 ciudades=cargarCiudades()
 
-for ciudad in ciudades:
-    ciudad.datosCiudad()
+# for ciudad in ciudades:
+#     ciudad.datosCiudad()
 
 def getCiudad(listaCiudades, nombre):
     for ciu in listaCiudades:
@@ -32,15 +32,22 @@ def buscarRuta(listaCiudades, nombreCiudad):
 
     # Guardo la ciudad de partida y busco la proxima mas cercana
     # HECHO https://realpython.com/python-type-checking/#type-systems
+    
     # Tengo que ir descartando de la busqueda las ciudades que ya estan en el arreglo de rutas.
     #     Creo que va a hacer el arreglo de ciudades con objetos y no con tuplas.
+    
     ruta.append(ciudad)
     proxCiudad = ciudad.getCiudadMasCercana(ruta)
     # TODO No esta funcionando el corte. Cuando llega a la ultima ciudad deberia cortar y tira error
-    while proxCiudad != None:
+    while len(ruta) <= 24:
         ruta.append(proxCiudad)
+        # Le tengo que pedir a la lista de ciudades que cargamos desde Pandas
+        #     donde esta la proxima mas cercana.
         ciudad = getCiudad(listaCiudades, proxCiudad.getNombre())
-        proxCiudad = ciudad.getCiudadMasCercana(ruta)
+        if ciudad.getCiudadMasCercana(ruta) == False:
+            print(f'Entro al false, proxCiudad vale {proxCiudad}')
+        else:
+            proxCiudad = ciudad.getCiudadMasCercana(ruta)
     # Agrego la ultima ciudad que encontro
     ruta.append(ciudad)
     # Agrego al final de nuevo la ciudad inicial, nos dijo en clase Victor que lo hagamos
