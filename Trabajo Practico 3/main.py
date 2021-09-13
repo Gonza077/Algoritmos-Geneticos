@@ -12,8 +12,10 @@ def cargarCiudades():
         ciudades.append(ciudad)
     return ciudades
 
+def nombreCiudades():
+    nombres=[]
+    for ciudad in ciudades:
+        nombres.append(ciudad._nombre)
+    return nombres
+
 ciudades=cargarCiudades()
-
-for ciudad in ciudades:
-    ciudad.datosCiudad()
-
