@@ -4,8 +4,7 @@ import numpy as np
 
 def cargarCiudades():
     ciudades=[]
-    # hojaExcel = pd.read_excel('./TablaCapitales.xlsx')
-    hojaExcel = pd.read_excel('./TablaCapitales2.xlsx')
+    hojaExcel = pd.read_excel('./TablaCapitales.xlsx')
     for fila in hojaExcel.values:
         ciudad=Ciudad()
         ciudad.agregarNombre(fila[0])
