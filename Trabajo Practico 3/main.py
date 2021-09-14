@@ -4,7 +4,8 @@ import numpy as np
 
 def cargarCiudades():
     ciudades=[]
-    hojaExcel = pd.read_excel('./TablaCapitalesOriginal.xlsx')
+    # hojaExcel = pd.read_excel('./TablaCapitales.xlsx')
+    hojaExcel = pd.read_excel('./TablaCapitales2.xlsx')
     for fila in hojaExcel.values:
         ciudad=Ciudad()
         ciudad.agregarNombre(fila[0])
@@ -15,8 +16,8 @@ def cargarCiudades():
 
 ciudades=cargarCiudades()
 
-# for ciudad in ciudades:
-#     ciudad.datosCiudad()
+for ciudad in ciudades:
+    ciudad.datosCiudad()
 
 def getCiudad(listaCiudades, nombre):
     for ciu in listaCiudades:
@@ -33,6 +34,7 @@ def buscarRuta(listaCiudades, nombreCiudad):
     # TORESEARCH Solución a un error de tipos de datos, 
     #   TODO/DONE https://realpython.com/python-type-checking/#type-systems
     
+    ruta.append(ciudad)
     # Tengo que ir descartando de la busqueda las ciudades que ya estan en el arreglo de rutas.
     #     Creo que va a hacer el arreglo de ciudades con objetos y no con tuplas.
     proxCiudad = ciudad.getCiudadMasCercana(ruta)
@@ -44,13 +46,30 @@ def buscarRuta(listaCiudades, nombreCiudad):
         #     donde esta la proxima mas cercana.
         ciudad = getCiudad(listaCiudades, proxCiudad.getNombre())
         proxCiudad = ciudad.getCiudadMasCercana(ruta)
-    # Agrego la ultima ciudad que encontro
-    ruta.append(ciudad)
-    # Agrego al final de nuevo la ciudad inicial, nos dijo en clase Victor que lo hagamos
-    ciudad  = getCiudad(listaCiudades, nombreCiudad)
-    ruta.append(ciudad)
-        
+    # Saco la ciudad inicial, ya que luego la agregamos al final
+    ruta.pop(0)
+    # Agrego la distancia de la ciudad final a la incial, nos dijo Victor en clase que lo hagamos.
+    proxCiudad = ciudad.getCiudadMasCercana(ruta)
+    ruta.append(proxCiudad)
+
     return ruta
+
+def buscarRutaMinima(listaCiudades):
+    rutaMinima = []
+    # Uso esta distancia mínima para buscar la menor, se podría hacer de una mejor manera, OBVIO.
+    distanciaMinima = 100000
+
+    for ciu in listaCiudades:
+        ruta = buscarRuta(listaCiudades, ciu.getNombre())
+        arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
+        distTotal = np.sum(arreglo_distancias)
+        if (distTotal < distanciaMinima):
+            distanciaMinima = distTotal
+            rutaMinima = ruta
+        print(f"La ruta mínima desde {ciu.getNombre()} es de:{distTotal} Km.")
+        # print(f'{list(map(lambda x:x.getNombre(), ruta))}')
+
+    return rutaMinima
 
 def condicionFiltro(x):
     return type(x.getDistancia()) == float
@@ -72,15 +91,25 @@ def main():
         ciudad_origen = input()
         ruta = buscarRuta(ciudades, ciudad_origen)
         print(f"La ruta encontrada es:")
-        for c in ruta:
-            print(f"Ciudad: {c.getNombre()} - Distancia {c.getDistancia()}")
-        #
+        print(f'{list(map(lambda x:x.getNombre(), ruta))}')
+        # for c in ruta:
+        #     print(f"Ciudad: {c.getNombre()} - Distancia {c.getDistancia()}")
         ciudades_filtradas = list(filter(condicionFiltro, ruta))
-        print(f"Lista de ciudades filtradas: {ciudades_filtradas}")
+        # print(f"Lista de ciudades filtradas: {ciudades_filtradas}")
         arreglo_distancias = list(map(lambda x:x.getDistancia(), ciudades_filtradas))
-        print(f"Lista de ciudades mapeadas: {arreglo_distancias}")
-        print(f"Total de ciudades mapeadas: {len(arreglo_distancias)}")
+        # print(f"Lista de ciudades mapeadas: {arreglo_distancias}")
+        print(f"Total de ciudades: {len(arreglo_distancias)}")
         print(f"La distancia total es: {np.sum(arreglo_distancias)}")
 
+    if opc1 == 2:
+        ruta = buscarRutaMinima(ciudades)
+        print("La ruta minima encontrada es:")
+        print(f'{list(map(lambda x:x.getNombre(), ruta))}')
+        ciudades_filtradas = list(filter(condicionFiltro, ruta))
+        # print(f"Lista de ciudades filtradas: {ciudades_filtradas}")
+        arreglo_distancias = list(map(lambda x:x.getDistancia(), ciudades_filtradas))
+        # print(f"Lista de ciudades mapeadas: {arreglo_distancias}")
+        print(f"Total de ciudades: {len(arreglo_distancias)}")
+        print(f"La distancia total es: {np.sum(arreglo_distancias)}")
 # Programa Principal
 main()

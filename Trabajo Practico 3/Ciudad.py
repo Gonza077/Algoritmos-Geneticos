@@ -22,7 +22,11 @@ class Ciudad():
         """
         if len(ruta) == 24:
             return False
+        # Ordenar las ciudades por distancia
         self._ciudades.sort(key = lambda c: c.getDistancia())
+        # Crear una lista con los nombres de las ciudades.
+        #     Se usa porque las ciudades que estan en la ruta no son el mismo objeto que las de
+        #     que tiene la ciudad cargadas.
         nombres_ruta = list(map(lambda c: c.getNombre(), ruta))
         for c in self._ciudades:
             if (c.getNombre() not in nombres_ruta and c.getDistancia() != 0):
