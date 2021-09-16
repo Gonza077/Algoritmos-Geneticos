@@ -1,77 +1,14 @@
-from Ciudad import *
+from Busqueda import *
+from AlgoritmoGenetico.Cromosoma import *
+from AlgoritmoGenetico.Poblacion import *
+from AlgoritmoGenetico.Generacion import *
+from AlgoritmoGenetico.OperadoresGeneticos import *
+from CiudadesDAO import CiudadesDAO
 import pandas as pd
-import numpy as np
+import numpy as np 
 
-def cargarCiudades():
-    ciudades=[]
-    hojaExcel = pd.read_excel('./TablaCapitales.xlsx')
-    for fila in hojaExcel.values:
-        ciudad=Ciudad()
-        ciudad.agregarNombre(fila[0])
-        for j in range(1,len(fila)):
-            ciudad.agregarCiudad(hojaExcel.columns[j], fila[j])
-        ciudades.append(ciudad)
-    return ciudades
-
-ciudades=cargarCiudades()
-
-for ciudad in ciudades:
-    ciudad.datosCiudad()
-
-def getCiudad(listaCiudades, nombre):
-    for ciu in listaCiudades:
-        if ciu.getNombre().lower() == nombre.lower():
-            return ciu
-            
-def buscarRuta(listaCiudades, nombreCiudad):
-    ruta = []
-    ciudad = Ciudad()
-
-    # Se supone que ingresa siempre una ciudad válida
-    ciudad = getCiudad(listaCiudades, nombreCiudad)
-
-    # TORESEARCH Solución a un error de tipos de datos, 
-    #   TODO/DONE https://realpython.com/python-type-checking/#type-systems
-    
-    ruta.append(ciudad)
-    # Tengo que ir descartando de la busqueda las ciudades que ya estan en el arreglo de rutas.
-    #     Creo que va a hacer el arreglo de ciudades con objetos y no con tuplas.
-    proxCiudad = ciudad.getCiudadMasCercana(ruta)
-    
-    # TODO No esta funcionando el corte. Cuando llega a la ultima ciudad deberia cortar y tira error
-    while len(ruta) <= 23:
-        ruta.append(proxCiudad)
-        # Le tengo que pedir a la lista de ciudades que cargamos desde Pandas
-        #     donde esta la proxima mas cercana.
-        ciudad = getCiudad(listaCiudades, proxCiudad.getNombre())
-        proxCiudad = ciudad.getCiudadMasCercana(ruta)
-    # Saco la ciudad inicial, ya que luego la agregamos al final
-    ruta.pop(0)
-    # Agrego la distancia de la ciudad final a la incial, nos dijo Victor en clase que lo hagamos.
-    proxCiudad = ciudad.getCiudadMasCercana(ruta)
-    ruta.append(proxCiudad)
-
-    return ruta
-
-def buscarRutaMinima(listaCiudades):
-    rutaMinima = []
-    # Uso esta distancia mínima para buscar la menor, se podría hacer de una mejor manera, OBVIO.
-    distanciaMinima = 100000
-
-    for ciu in listaCiudades:
-        ruta = buscarRuta(listaCiudades, ciu.getNombre())
-        arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
-        distTotal = np.sum(arreglo_distancias)
-        if (distTotal < distanciaMinima):
-            distanciaMinima = distTotal
-            rutaMinima = ruta
-        print(f"La ruta mínima desde {ciu.getNombre()} es de:{distTotal} Km.")
-        # print(f'{list(map(lambda x:x.getNombre(), ruta))}')
-
-    return rutaMinima
-
-def condicionFiltro(x):
-    return type(x.getDistancia()) == float
+#CARGA DE LOS DATOS DEL EXCEL
+CiudadesDAO.cargarCiudades()
 
 # Se podría meter todo esto en una función
 def main():
@@ -84,11 +21,10 @@ def main():
 
     opc1 = int(input('Ingrese su opción: '))
 
-
     if opc1 == 1:
         print(f"Ingrese su ciudad de origen:")
         ciudad_origen = input()
-        ruta = buscarRuta(ciudades, ciudad_origen)
+        ruta = buscarRuta(CiudadesDAO.retornarCiudades(), ciudad_origen)
         print(f"La ruta encontrada es:")
         print(f'{list(map(lambda x:x.getNombre(), ruta))}')
         # for c in ruta:
@@ -101,7 +37,7 @@ def main():
         print(f"La distancia total es: {np.sum(arreglo_distancias)}")
 
     if opc1 == 2:
-        ruta = buscarRutaMinima(ciudades)
+        ruta = buscarRutaMinima(CiudadesDAO.retornarCiudades())
         print("La ruta minima encontrada es:")
         print(f'{list(map(lambda x:x.getNombre(), ruta))}')
         ciudades_filtradas = list(filter(condicionFiltro, ruta))
@@ -110,5 +46,28 @@ def main():
         # print(f"Lista de ciudades mapeadas: {arreglo_distancias}")
         print(f"Total de ciudades: {len(arreglo_distancias)}")
         print(f"La distancia total es: {np.sum(arreglo_distancias)}")
+
+    if opc1 == 3:
+        #Se definen todos los parametros del AG
+        Corridas=[200]   
+        generaciones=[]
+        Cromosoma.tCromo=23
+        Poblacion.tPobla=50
+        #Poblacion.tipoSeleccion=operadoresGeneticos.Ruleta()
+        #Poblacion.tipoCrossover=operadoresGeneticos.CrossOverUnPunto(0.75)
+        #Poblacion.tipoMutacion=operadoresGeneticos.MutacionInvertida(0.05)
+        Poblacion.elitismo=False 
+        #Se genera cada generacion
+        for x in Corridas:
+            generacion=Generacion()
+            for _ in range(x):        
+                generacion.creoGeneracion()
+            Poblacion.reseteoIDPoblacion() #Se vuelve a setear el ID a 1
+            generaciones.append(generacion)
+        print("\n")
+        for generacion in generaciones:
+            generacion.datosGeneracion()
+            print("\n")
+    
 # Programa Principal
 main()

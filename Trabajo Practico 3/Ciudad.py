@@ -1,6 +1,9 @@
 class Ciudad():
 
+    IDCiudad = 1
+
     def __init__(self):
+        self._idCiudad=self.IDCiudad+1
         self._nombre=None
         self._distancia=None
         self._ciudades=[]

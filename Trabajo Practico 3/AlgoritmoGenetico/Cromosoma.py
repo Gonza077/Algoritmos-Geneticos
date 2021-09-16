@@ -1,5 +1,5 @@
-from main import cargarCiudades
 import random
+from CiudadesDAO import CiudadesDAO
 import copy
 
 class Cromosoma():
@@ -18,13 +18,6 @@ class Cromosoma():
             self._genes.append(pick)
 
     def calcularFuncObjetivo(self):
-        """ TODO
-        recive un cromosoma con las 23 ciudades generadas al azar
-        while ?condicion
-            get ciudad by id    
-            get distancia ciudad actual ciudad siguiente
-            sumar todas las distancias
-        """
         distTotal = 0
         idCiudades = copy.deepcopy(self._genes)
         # Solo para prueba
@@ -41,4 +34,5 @@ class Cromosoma():
 
     def mostrarGenes(self):
         print('Lista de genes:')
+        print(CiudadesDAO.retornarCiudades())
         print(self._genes)
