@@ -1,4 +1,5 @@
-from Busqueda import *
+from Busquedas import *
+from UserInterface import uiPyQT
 from AlgoritmoGenetico.Cromosoma import *
 from AlgoritmoGenetico.Poblacion import *
 from AlgoritmoGenetico.Generacion import *
@@ -6,12 +7,15 @@ from AlgoritmoGenetico.OperadoresGeneticos import *
 from CiudadesDAO import CiudadesDAO
 import pandas as pd
 import numpy as np 
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication
+import sys
 
 #CARGA DE LOS DATOS DEL EXCEL
 CiudadesDAO.cargarCiudades()
 
 # Se podría meter todo esto en una función
-def main():
+def menuConsola():
     print(f"--------------------------------------------------------")
     print(f"Que desea hacer:")
     print(f"1- Buscar ruta mínima desde una ciudad:")
@@ -24,7 +28,7 @@ def main():
     if opc1 == 1:
         print(f"Ingrese su ciudad de origen:")
         ciudad_origen = input()
-        ruta = buscarRuta(CiudadesDAO.retornarCiudades(), ciudad_origen)
+        ruta = buscarRuta(ciudad_origen)
         print(f"La ruta encontrada es:")
         print(f'{list(map(lambda x:x.getNombre(), ruta))}')
         # for c in ruta:
@@ -37,7 +41,7 @@ def main():
         print(f"La distancia total es: {np.sum(arreglo_distancias)}")
 
     if opc1 == 2:
-        ruta = buscarRutaMinima(CiudadesDAO.retornarCiudades())
+        ruta = buscarRutaMinima()
         print("La ruta minima encontrada es:")
         print(f'{list(map(lambda x:x.getNombre(), ruta))}')
         ciudades_filtradas = list(filter(condicionFiltro, ruta))
@@ -69,5 +73,22 @@ def main():
             generacion.datosGeneracion()
             print("\n")
     
-# Programa Principal
-main()
+
+class ExampleApp(QtWidgets.QMainWindow, uiPyQT.Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(ExampleApp, self).__init__(parent)
+        self.setupUi(self)
+
+def main():
+    #CARGA DE LOS DATOS DEL EXCEL
+    CiudadesDAO.cargarCiudades()
+    app = QApplication(sys.argv)
+    form = ExampleApp()
+    form.show()
+    app.exec_()
+
+if __name__ == '__main__':
+    main()
+    #menuConsola()
+
+

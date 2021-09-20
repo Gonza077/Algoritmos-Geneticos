@@ -1,18 +1,19 @@
 from Ciudad import *
 from CiudadesDAO import CiudadesDAO
+import pandas as pd
 import numpy as np
 
-def getCiudad(listaCiudades, nombre):
+def getCiudad(nombre):
     for ciu in CiudadesDAO.retornarCiudades():
         if ciu.getNombre().lower() == nombre.lower():
             return ciu
-    
-def buscarRuta(listaCiudades, nombreCiudad):
+            
+def buscarRuta(nombreCiudad):
     ruta = []
     ciudad = Ciudad()
 
     # Se supone que ingresa siempre una ciudad válida
-    ciudad = getCiudad(listaCiudades, nombreCiudad)
+    ciudad = getCiudad(nombreCiudad)
 
     # TORESEARCH Solución a un error de tipos de datos, 
     #   TODO/DONE https://realpython.com/python-type-checking/#type-systems
@@ -27,7 +28,7 @@ def buscarRuta(listaCiudades, nombreCiudad):
         ruta.append(proxCiudad)
         # Le tengo que pedir a la lista de ciudades que cargamos desde Pandas
         #     donde esta la proxima mas cercana.
-        ciudad = getCiudad(listaCiudades, proxCiudad.getNombre())
+        ciudad = getCiudad(proxCiudad.getNombre())
         proxCiudad = ciudad.getCiudadMasCercana(ruta)
     # Saco la ciudad inicial, ya que luego la agregamos al final
     ruta.pop(0)
@@ -36,13 +37,13 @@ def buscarRuta(listaCiudades, nombreCiudad):
     ruta.append(proxCiudad)
     return ruta
 
-def buscarRutaMinima(listaCiudades):
+def buscarRutaMinima():
     rutaMinima = []
     # Uso esta distancia mínima para buscar la menor, se podría hacer de una mejor manera, OBVIO.
     distanciaMinima = float("inf")
 
-    for ciu in listaCiudades:
-        ruta = buscarRuta(listaCiudades, ciu.getNombre())
+    for ciu in CiudadesDAO.retornarCiudades():
+        ruta = buscarRuta(ciu.getNombre())
         arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
         distTotal = np.sum(arreglo_distancias)
         if (distTotal < distanciaMinima):
@@ -50,8 +51,8 @@ def buscarRutaMinima(listaCiudades):
             rutaMinima = ruta
         print(f"La ruta mínima desde {ciu.getNombre()} es de:{distTotal} Km.")
         # print(f'{list(map(lambda x:x.getNombre(), ruta))}')
-
     return rutaMinima
 
 def condicionFiltro(x):
     return type(x.getDistancia()) == float
+

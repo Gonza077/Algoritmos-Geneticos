@@ -3,13 +3,15 @@ from CiudadesDAO import CiudadesDAO
 import copy
 
 class Cromosoma():
+    
+    tCromo=None
 
     def __init__(self):
         self._genes = []
         self._funcObjetivo = 0
 
         # Crear una lista con los números del 1 al 23.
-        lista = [ num for num in range(1,24)]
+        lista = copy.deepcopy(CiudadesDAO.retornarCiudades()) 
 
         # Agregar genes al cromosoma hasta llegar a los 23
         while lista:
@@ -34,5 +36,4 @@ class Cromosoma():
 
     def mostrarGenes(self):
         print('Lista de genes:')
-        print(CiudadesDAO.retornarCiudades())
         print(self._genes)

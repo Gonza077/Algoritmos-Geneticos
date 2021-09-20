@@ -1,9 +1,8 @@
 class Ciudad():
-
+    
     IDCiudad = 1
 
     def __init__(self):
-        self._idCiudad=self.IDCiudad+1
         self._nombre=None
         self._distancia=None
         self._ciudades=[]
@@ -12,7 +11,7 @@ class Ciudad():
         ciudad= Ciudad()
         ciudad.agregarNombre(nomb)
         ciudad.agregarDistancia(dist)
-        if self._nombre==nomb:  #Esto por que lo asigna como nan, un formato de Pandas para que no dificulte posteriormente
+        if self._nombre==nomb:  
             ciudad.agregarDistancia(0)
         self._ciudades.append(ciudad)
     
@@ -21,7 +20,7 @@ class Ciudad():
 
     def getCiudadMasCercana(self, ruta):
         """ Devuelve la ciudad mas cercana que no este incluida en la ruta pasada como parametro.
-                Ordena las ciudad por distancia y verifica que la mas proxima no este en la ruta actual.
+            Ordena las ciudad por distancia y verifica que la mas proxima no este en la ruta actual.
         """
         if len(ruta) == 24:
             return False
@@ -36,14 +35,15 @@ class Ciudad():
                 return c
     
     def getDistanciaTo(self, ciudadSiguiente):
-        # self._ciudades.pop(ciudadSiguiente)
-        
         for c in self._ciudades:
             if (c.getNombre() == ciudadSiguiente.getNombre()):
                 return c.getDistancia()
 
     def getNombre(self):
         return self._nombre
+    
+    def getID(self):
+        return self._idCiudad
 
     def getDistancia(self):
         return self._distancia
@@ -52,11 +52,13 @@ class Ciudad():
         self._distancia=dist
     
     def datosCiudad(self):
-        print("-------------------------------------------------")
-        print(f"Ciudad {self._nombre}, distancias a otras ciudades: \n")
+        #print("-------------------------------------------------")
+        print(f"Ciudad {self._nombre} - ID {self._idCiudad}")
+        """
         for ciudad in self._ciudades:
             print(f"{ciudad._nombre} a una distancia --> {ciudad._distancia} Km")
         print("-------------------------------------------------")
+        """
     
     
 

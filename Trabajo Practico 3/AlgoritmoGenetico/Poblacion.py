@@ -25,10 +25,11 @@ class Poblacion(object):
         self.mediaPoblacionFO=0   
         
     def instancioCromosomas(self):
-        for _ in range(0,Poblacion.tPobla):
-            cromosoma = Cromosoma() 
-            cromosoma.instancioGenes()   
+        for i in range(Poblacion.tPobla):
+            cromosoma = Cromosoma()   
+            Cromosoma._idCiudad=Cromosoma.IDCiudad+1
             self.arrCromosomas.append(cromosoma)
+        Cromosoma.IDCiudad=1
 
     def calculoSumaPobla(self):
         """Se calcula la suma de la poblacion a partir del valor de cada cromosoma"""
@@ -36,7 +37,7 @@ class Poblacion(object):
             self.sumaPoblacion += cromosoma.funcObjetivo
 
     def buscoMayoresCromosomas(self,poblacionAnterior):
-        """ Busca al mayor cromosoma de la poblacion enviada como parametro"""
+        """ Busca a los dos mayores cromosomas de la poblacion, recibe un arreglo de cromosomas"""
         poblacionAnterior.arrCromosomas.sort(reverse=True)  #Ordena los cromosomas de mayor a menor segun su valor decimal
         self.arrCromosomas.append(copy.deepcopy(poblacionAnterior.arrCromosomas[0]))
         self.arrCromosomas.append(copy.deepcopy(poblacionAnterior.arrCromosomas[1]))
