@@ -32,7 +32,39 @@ class Example(QtWidgets.QMainWindow):
         self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
         self.show()
 
+class Punto(object):
+    # Variables iniciales de referencia para dibujar puntos en las provincias del mapa.
+    CERO_X = 932.5
+    CERO_Y = 310
+
+    def __init__(self, idCiudad, nombre, pos_x, pos_y, numero):
+        self.pos_x = self.CERO_X + pos_x
+        self.pos_y = self.CERO_Y + pos_y
+        self.idCiudad = idCiudad
+        self.nombreCiudad = nombre
+        self.text = numero
+
+    def getNombre(self):
+        return self.nombreCiudad
+
+    def setText(self, text):
+        self.text = text
+
+    def dibujarPunto(self, mainWindow):
+        # creating a label widget
+        # by default label will display at top left corner
+        self.circulo = QLabel(' ' + self.text, mainWindow)
+        # moving position
+        self.circulo.move(self.pos_x, self.pos_y)
+        # making label square in size
+        self.circulo.resize(30, 30)
+        # setting up border and radius
+        self.circulo.setStyleSheet("border: 2px solid green; border-radius: 15px; color: red; background-color: white")
+        self.circulo.show()
+
 class Ui_MainWindow(object):
+
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1200, 700)
@@ -84,12 +116,12 @@ class Ui_MainWindow(object):
         self.selectCiudad.addItem("")
         self.selectCiudad.addItem("")
         self.btnRutaMinima = QtWidgets.QPushButton(self.mainBox)
-        self.btnRutaMinima.setGeometry(QtCore.QRect(30, 240, 161, 51))
+        self.btnRutaMinima.setGeometry(QtCore.QRect(30, 240, 171, 51))
         self.btnRutaMinima.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.btnRutaMinima.setAutoDefault(False)
         self.btnRutaMinima.setObjectName("btnRutaMinima")
         self.btnRutaAGenetico = QtWidgets.QPushButton(self.mainBox)
-        self.btnRutaAGenetico.setGeometry(QtCore.QRect(30, 370, 161, 51))
+        self.btnRutaAGenetico.setGeometry(QtCore.QRect(30, 370, 171, 51))
         self.btnRutaAGenetico.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.btnRutaAGenetico.setAutoDefault(False)
         self.btnRutaAGenetico.setObjectName("btnRutaAGenetico")
@@ -118,29 +150,54 @@ class Ui_MainWindow(object):
             self.selectCiudad.setItemText(i + 1, nombre)
             print(f'Id: {i + 1} Ciudad: {nombre}')
 
+    def setPuntosMapa(self, ruta = []):
+        posiciones_x = [ 30, -50, 30, -5, 0, -140, -120, -140, 10, 80, -120, -5, -120, -130, -80, -75, -120, -160, -90, -20, -80, -50, -60, -90 ]
+        posiciones_y = [ -50, -90, -150, -265, 0, -165, -30, 20, -85, -170, 140, -220, 230, -210, -188, -258, -240, -120, -60, -120, 5, -155, 280, 60 ]
+        nombres = nombreCiudades()
+        for i, nombre in enumerate(nombres):
+            if not(ruta):
+                punto = Punto(i + 1, nombre, posiciones_x[i], posiciones_y[i], str(i))
+                punto.dibujarPunto(self)
+            else:
+                # text = str(int(nombres.index(ruta[i].getNombre())) + 1)
+                nombres_ruta = list(map(lambda i:i.getNombre(), ruta))
+                text = str(int(nombres_ruta.index(nombres[i])) + 1)
+                print(f'En ruta posicion {ruta[i].getNombre()} se encontro la posición: {text}')
+                print(f'index nombres devolvio {nombres.index(ruta[i].getNombre())}')
+                punto = Punto(i + 1, nombre, posiciones_x[i], posiciones_y[i], text)
+                punto.dibujarPunto(self)
+
+
     def selectCiudad_onChanged(self, text):
         # print(f'La ciudad selecionada es: {text}')
         ruta = buscarRuta(cargarCiudades(), text)
         print("La ruta minima encontrada es:")
         print(f'{list(map(lambda x:x.getNombre(), ruta))}')
         arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
-        # print(f"Lista de ciudades mapeadas: {arreglo_distancias}")
-        print(f"Total de ciudades: {len(arreglo_distancias)}")
-        print(f"La distancia total es: {np.sum(arreglo_distancias)}")
+        distancia = np.sum(arreglo_distancias)
+        print(f"La distancia total es: {distancia}")
         # self.qlabel = QLabel(self)
         # self.qlabel.move(30,70)
+        # Strign con la lista de ciudades de la ruta encontrada.
         rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
-        self.labelRespuesta.setText(rutaString)
+        respuesta = f"La distancia entre {ruta[23].getNombre()} y {ruta[0].getNombre()} \n es de {distancia} KMs"
+        self.labelRespuesta.setText(respuesta)
         self.labelRespuesta.adjustSize()
+        self.setPuntosMapa(ruta)
         # self.mainBox.setParent(self.labelRespuesta)
         # self.qlabel.setText(text)
         # self.qlabel.adjustSize()
 
     def btnRutaMinimia_clicked(self):
         ruta = buscarRutaMinima(cargarCiudades())
+        # Strign con la lista de ciudades de la ruta encontrada.
         rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
-        self.labelRespuesta.setText(rutaString)
+        arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
+        distancia = np.sum(arreglo_distancias)
+        respuesta = f"La distancia entre {ruta[23].getNombre()} y {ruta[0].getNombre()} \n es de {distancia} KMs"
+        self.labelRespuesta.setText(respuesta)
         self.labelRespuesta.adjustSize()
+        self.setPuntosMapa(ruta)
 
     def moussePressEvent(self, event):
         if event.buttons() and Qt.LeftButton:
@@ -148,17 +205,6 @@ class Ui_MainWindow(object):
             print(f'Posicion y  : {event.pos().y()}')
     
         self.update()
-
-    def dibujarPunto(self, x, y, numero):
-        # creating a label widget
-        # by default label will display at top left corner
-        self.criculo1 = QLabel(' ' + numero, self)
-        # moving position
-        self.criculo1.move(x, y)
-        # making label square in size
-        self.criculo1.resize(30, 30)
-        # setting up border and radius
-        self.criculo1.setStyleSheet("border: 2px solid green; border-radius: 15px; color: red; background-color: white")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -192,33 +238,36 @@ class Ui_MainWindow(object):
         pixmapImagen = QPixmap('provincias.png').scaled(365, 634, Qt.KeepAspectRatio,
                                                   Qt.SmoothTransformation)
 
-        # Mostrar imagen
-        cero_x = 932.5
-        cero_y = 310
         self.labelImagen.setPixmap(pixmapImagen)  
-        self.dibujarPunto(cero_x, cero_y, '1')
-        self.dibujarPunto(cero_x - 80, cero_y + 5, '2')
-        self.dibujarPunto(cero_x - 140, cero_y + 20, '3')
-        self.dibujarPunto(cero_x - 120, cero_y -30, '4')
-        self.dibujarPunto(cero_x - 90, cero_y - 60, '5')
-        self.dibujarPunto(cero_x - 50, cero_y - 90, '6')
-        self.dibujarPunto(cero_x - 20, cero_y - 120, '7')
-        self.dibujarPunto(cero_x + 10, cero_y - 85, '8')
-        self.dibujarPunto(cero_x - 90, cero_y + 60, '9')
-        self.dibujarPunto(cero_x - 120, cero_y + 140, '10')
-        self.dibujarPunto(cero_x - 120, cero_y + 230, '11')
-        self.dibujarPunto(cero_x - 160, cero_y - 120, '12')
-        self.dibujarPunto(cero_x - 140, cero_y - 165, '13')
-        self.dibujarPunto(cero_x - 130, cero_y - 210, '14')
-        self.dibujarPunto(cero_x - 120, cero_y - 245, '15')
-        self.dibujarPunto(cero_x - 75, cero_y - 258, '16')
-        self.dibujarPunto(cero_x - 50, cero_y - 155, '17')
-        self.dibujarPunto(cero_x - 5, cero_y - 220, '18')
-        self.dibujarPunto(cero_x - 5, cero_y - 265, '19')
-        self.dibujarPunto(cero_x + 30, cero_y - 150, '20')
-        self.dibujarPunto(cero_x + 80, cero_y - 170, '21')
-        self.dibujarPunto(cero_x + 30, cero_y - 50, '22')
-        self.dibujarPunto(cero_x - 60, cero_y + 280, '23')
-        self.dibujarPunto(cero_x - 80, cero_y - 188, '24')
+        self.setPuntosMapa()
+        # Mostrar imagen
+        # cero_x = 932.5
+        # cero_y = 310
+        # self.dibujarPunto(cero_x + 30, cero_y - 50, '1')
+        # self.dibujarPunto(cero_x - 50, cero_y - 90, '2')
+        # self.dibujarPunto(cero_x + 30, cero_y - 150, '3')
+        # self.dibujarPunto(cero_x - 5, cero_y - 265, '4')
+        # self.dibujarPunto(cero_x, cero_y, '5') # LaPlata
+        # self.dibujarPunto(cero_x - 140, cero_y - 165, '6')
+        # self.dibujarPunto(cero_x - 120, cero_y -30, '7')
+        # self.dibujarPunto(cero_x - 140, cero_y + 20, '8')
+        # self.dibujarPunto(cero_x + 10, cero_y - 85, '9')
+        # self.dibujarPunto(cero_x + 80, cero_y - 170, '10')
+
+
+        # self.dibujarPunto(cero_x - 80, cero_y + 5, '')
+        # self.dibujarPunto(cero_x - 90, cero_y - 60, '5')
+        # self.dibujarPunto(cero_x - 20, cero_y - 120, '7')
+        # self.dibujarPunto(cero_x - 90, cero_y + 60, '9')
+        # self.dibujarPunto(cero_x - 120, cero_y + 140, '10')
+        # self.dibujarPunto(cero_x - 120, cero_y + 230, '11')
+        # self.dibujarPunto(cero_x - 160, cero_y - 120, '12')
+        # self.dibujarPunto(cero_x - 130, cero_y - 210, '14')
+        # self.dibujarPunto(cero_x - 120, cero_y - 245, '15')
+        # self.dibujarPunto(cero_x - 75, cero_y - 258, '16')
+        # self.dibujarPunto(cero_x - 50, cero_y - 155, '17')
+        # self.dibujarPunto(cero_x - 5, cero_y - 220, '18')
+        # self.dibujarPunto(cero_x - 60, cero_y + 280, '23')
+        # self.dibujarPunto(cero_x - 80, cero_y - 188, '24')
 
 
