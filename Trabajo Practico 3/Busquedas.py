@@ -10,14 +10,9 @@ def getCiudad(nombre):
             
 def buscarRuta(nombreCiudad):
     ruta = []
-    ciudad = Ciudad()
-
     # Se supone que ingresa siempre una ciudad válida
     ciudad = getCiudad(nombreCiudad)
 
-    # TORESEARCH Solución a un error de tipos de datos, 
-    #   TODO/DONE https://realpython.com/python-type-checking/#type-systems
-    
     ruta.append(ciudad)
     # Tengo que ir descartando de la busqueda las ciudades que ya estan en el arreglo de rutas.
     #     Creo que va a hacer el arreglo de ciudades con objetos y no con tuplas.
@@ -36,7 +31,7 @@ def buscarRuta(nombreCiudad):
     proxCiudad = ciudad.getCiudadMasCercana(ruta)
     ruta.append(proxCiudad)
     return ruta
-
+    
 def buscarRutaMinima():
     rutaMinima = []
     # Uso esta distancia mínima para buscar la menor, se podría hacer de una mejor manera, OBVIO.

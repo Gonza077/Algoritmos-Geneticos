@@ -103,21 +103,23 @@ class Ui_MainWindow(object):
 
     def selectCiudad_onChanged(self, text):
         # print(f'La ciudad selecionada es: {text}')
-        ruta = buscarRuta(text)
-        #print("La ruta minima encontrada es:")
-        #print(f'{list(map(lambda x:x.getNombre(), ruta))}')
-        arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
-        # print(f"Lista de ciudades mapeadas: {arreglo_distancias}")
-        #print(f"Total de ciudades: {len(arreglo_distancias)}")
-        #print(f"La distancia total es: {np.sum(arreglo_distancias)}")
-        # self.qlabel = QLabel(self)
-        # self.qlabel.move(30,70)
-        rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
-        self.labelRespuesta.setText(rutaString)
-        self.labelRespuesta.adjustSize()
-        # self.mainBox.setParent(self.labelRespuesta)
-        # self.qlabel.setText(text)
-        # self.qlabel.adjustSize()
+        if(text!="Seleccione ciudad ..."):
+            ruta = buscarRuta(text)
+            #print("La ruta minima encontrada es:")
+            #print(f'{list(map(lambda x:x.getNombre(), ruta))}')
+            arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
+            # print(f"Lista de ciudades mapeadas: {arreglo_distancias}")
+            #print(f"Total de ciudades: {len(arreglo_distancias)}")
+            #print(f"La distancia total es: {np.sum(arreglo_distancias)}")
+            # self.qlabel = QLabel(self)
+            # self.qlabel.move(30,70)
+            rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
+            self.labelRespuesta.setText(rutaString)
+            self.labelRespuesta.adjustSize()
+            # self.mainBox.setParent(self.labelRespuesta)
+            # self.qlabel.setText(text)
+            # self.qlabel.adjustSize()
+
 
     def btnRutaMinimia_clicked(self):
         ruta = buscarRutaMinima()

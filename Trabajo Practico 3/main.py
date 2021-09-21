@@ -73,7 +73,6 @@ def menuConsola():
             generacion.datosGeneracion()
             print("\n")
     
-
 class ExampleApp(QtWidgets.QMainWindow, uiPyQT.Ui_MainWindow):
     def __init__(self, parent=None):
         super(ExampleApp, self).__init__(parent)
