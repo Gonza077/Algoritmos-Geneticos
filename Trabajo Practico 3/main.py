@@ -11,9 +11,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
 import sys
 
-#CARGA DE LOS DATOS DEL EXCEL
-CiudadesDAO.cargarCiudades()
-
 # Se podría meter todo esto en una función
 def menuConsola():
     print(f"--------------------------------------------------------")
@@ -79,14 +76,14 @@ class ExampleApp(QtWidgets.QMainWindow, uiPyQT.Ui_MainWindow):
         self.setupUi(self)
 
 def main():
-    #CARGA DE LOS DATOS DEL EXCEL
-    CiudadesDAO.cargarCiudades()
     app = QApplication(sys.argv)
     form = ExampleApp()
     form.show()
     app.exec_()
 
 if __name__ == '__main__':
+    #CARGA DE LOS DATOS DEL EXCEL
+    CiudadesDAO.cargarCiudades()
     main()
     #menuConsola()
 

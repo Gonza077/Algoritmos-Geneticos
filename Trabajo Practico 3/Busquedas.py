@@ -3,15 +3,11 @@ from CiudadesDAO import CiudadesDAO
 import pandas as pd
 import numpy as np
 
-def getCiudad(nombre):
-    for ciu in CiudadesDAO.retornarCiudades():
-        if ciu.getNombre().lower() == nombre.lower():
-            return ciu
-            
+           
 def buscarRuta(nombreCiudad):
     ruta = []
     # Se supone que ingresa siempre una ciudad válida
-    ciudad = getCiudad(nombreCiudad)
+    ciudad = CiudadesDAO.getCiudad(nombreCiudad)
 
     ruta.append(ciudad)
     # Tengo que ir descartando de la busqueda las ciudades que ya estan en el arreglo de rutas.
@@ -23,7 +19,7 @@ def buscarRuta(nombreCiudad):
         ruta.append(proxCiudad)
         # Le tengo que pedir a la lista de ciudades que cargamos desde Pandas
         #     donde esta la proxima mas cercana.
-        ciudad = getCiudad(proxCiudad.getNombre())
+        ciudad = CiudadesDAO.getCiudad(proxCiudad.getNombre())
         proxCiudad = ciudad.getCiudadMasCercana(ruta)
     # Saco la ciudad inicial, ya que luego la agregamos al final
     ruta.pop(0)
@@ -36,7 +32,6 @@ def buscarRutaMinima():
     rutaMinima = []
     # Uso esta distancia mínima para buscar la menor, se podría hacer de una mejor manera, OBVIO.
     distanciaMinima = float("inf")
-
     for ciu in CiudadesDAO.retornarCiudades():
         ruta = buscarRuta(ciu.getNombre())
         arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
@@ -44,10 +39,8 @@ def buscarRutaMinima():
         if (distTotal < distanciaMinima):
             distanciaMinima = distTotal
             rutaMinima = ruta
-        print(f"La ruta mínima desde {ciu.getNombre()} es de:{distTotal} Km.")
+        #print(f"La ruta mínima desde {ciu.getNombre()} es de:{distTotal} Km.")
         # print(f'{list(map(lambda x:x.getNombre(), ruta))}')
     return rutaMinima
 
-def condicionFiltro(x):
-    return type(x.getDistancia()) == float
 

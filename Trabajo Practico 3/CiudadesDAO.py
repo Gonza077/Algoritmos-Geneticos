@@ -20,3 +20,8 @@ class CiudadesDAO():
     @classmethod
     def retornarCiudades(self):
         return self._ciudades
+
+    def getCiudad(nombre):
+        for ciu in CiudadesDAO.retornarCiudades():
+            if ciu.getNombre().lower() == nombre.lower():
+                return ciu
