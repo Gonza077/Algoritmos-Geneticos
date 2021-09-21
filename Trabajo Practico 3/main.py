@@ -1,15 +1,11 @@
-from Busquedas import *
 from UserInterface import uiPyQT
-from AlgoritmoGenetico.Cromosoma import *
-from AlgoritmoGenetico.Poblacion import *
 from AlgoritmoGenetico.Generacion import *
-from AlgoritmoGenetico.OperadoresGeneticos import *
 from CiudadesDAO import CiudadesDAO
-import pandas as pd
-import numpy as np 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
 import sys
+import pandas as pd
+import numpy as np 
 
 # Se podría meter todo esto en una función
 def menuConsola():
@@ -52,7 +48,7 @@ def menuConsola():
         #Se definen todos los parametros del AG
         Corridas=[200]   
         generaciones=[]
-        Cromosoma.tCromo=23
+        Cromosoma.tCromo=24
         Poblacion.tPobla=50
         #Poblacion.tipoSeleccion=operadoresGeneticos.Ruleta()
         #Poblacion.tipoCrossover=operadoresGeneticos.CrossOverUnPunto(0.75)

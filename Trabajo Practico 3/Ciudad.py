@@ -7,21 +7,14 @@ class Ciudad():
         self._distancia=None
         self._ciudades=[]
 
-    def agregarCiudad(self,nomb,dist):
-        ciudad= Ciudad()
-        ciudad.agregarNombre(nomb)
-        ciudad.agregarDistancia(dist)
-        if self._nombre==nomb:  
-            ciudad.agregarDistancia(0)
+    def agregarCiudad(self,ciudad):
         self._ciudades.append(ciudad)
     
     def agregarNombre(self,nomb):
         self._nombre=nomb
 
     def getCiudadMasCercana(self, ruta):
-        """ Devuelve la ciudad mas cercana que no este incluida en la ruta pasada como parametro.
-            Ordena las ciudad por distancia y verifica que la mas proxima no este en la ruta actual.
-        """
+        """ Devuelve la ciudad mas cercana que no este incluida en la ruta pasada como parametro. Ordena las ciudad por distancia y verifica que la mas proxima no este en la ruta actual. """
         if len(ruta) == 24:
             return False
         # Ordenar las ciudades por distancia
@@ -52,13 +45,7 @@ class Ciudad():
         self._distancia=dist
     
     def datosCiudad(self):
-        #print("-------------------------------------------------")
         print(f"Ciudad {self._nombre} - ID {self._idCiudad}")
-        """
-        for ciudad in self._ciudades:
-            print(f"{ciudad._nombre} a una distancia --> {ciudad._distancia} Km")
-        print("-------------------------------------------------")
-        """
     
     
 

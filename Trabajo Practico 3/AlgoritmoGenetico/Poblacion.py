@@ -34,7 +34,7 @@ class Poblacion(object):
     def calculoSumaPobla(self):
         """Se calcula la suma de la poblacion a partir del valor de cada cromosoma"""
         for cromosoma in self.arrCromosomas:
-            self.sumaPoblacion += cromosoma.funcObjetivo
+            self.sumaPoblacion += cromosoma.getFuncObjetivo()
 
     def buscoMayoresCromosomas(self,poblacionAnterior):
         """ Busca a los dos mayores cromosomas de la poblacion, recibe un arreglo de cromosomas"""
@@ -49,8 +49,6 @@ class Poblacion(object):
         for cromosoma in self.arrCromosomas:        
             cromosoma.calculoFitness(self.sumaPoblacion)
         self.calculoMediaFO()
-        self.buscoMenorCromosoma()
-        self.buscoMayorCromosoma()
 
     def creoNuevaPoblacion(self,poblacionAnterior):
         cromosomasNuevos=[] 

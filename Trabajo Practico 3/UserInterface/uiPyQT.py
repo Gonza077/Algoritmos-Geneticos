@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
-
 # Form implementation generated from reading ui file 'UITP3Viajante.ui'
-#
 # Created by: PyQt5 UI code generator 5.14.1
-#
 # WARNING! All changes made in this file will be lost!
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from Busquedas import *
+from CiudadesDAO import CiudadesDAO
 import numpy as np
 
 class Example(QtWidgets.QMainWindow):
@@ -46,12 +42,6 @@ class Punto(object):
         self.idCiudad = idCiudad
         self.nombreCiudad = nombre
         self.text = numero
-
-    def getNombre(self):
-        return self.nombreCiudad
-
-    def setText(self, text):
-        self.text = text
 
     def dibujarPunto(self, mainWindow):
         # creating a label widget
@@ -93,7 +83,6 @@ class Ui_MainWindow(object):
         self.selectCiudad = QtWidgets.QComboBox(self.mainBox)
         self.selectCiudad.setGeometry(QtCore.QRect(30, 130, 171, 51))
         self.selectCiudad.setObjectName("selectCiudad")
-        self.setItemsCombo()
         self.btnRutaMinima = QtWidgets.QPushButton(self.mainBox)
         self.btnRutaMinima.setGeometry(QtCore.QRect(30, 240, 171, 51))
         self.btnRutaMinima.setMaximumSize(QtCore.QSize(16777215, 16777215))
@@ -116,18 +105,17 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
     
     def setItemsCombo(self):
-        for ciu in CiudadesDAO.retornarCiudades():
+        for ciu in CiudadesDAO.retornarCiudades():         
             self.selectCiudad.addItem("")
-            #EL -1 ES POR QUE EL ID DE LA CIUDAD ARRANCA EN 1 Y EL DEL COMBO EN 0 
-            self.selectCiudad.setItemText(ciu.getID()-1, ciu.getNombre())
-    
+            self.selectCiudad.setItemText(ciu.getID(), ciu.getNombre())
+            
     def setPuntosMapa(self, ruta = []):
         posiciones_x = [ 30, -50, 30, -5, 0, -140, -120, -140, 10, 80, -120, -5, -120, -130, -80, -75, -120, -160, -90, -20, -80, -50, -60, -90 ]
         posiciones_y = [ -50, -90, -150, -265, 0, -165, -30, 20, -85, -170, 140, -220, 230, -210, -188, -258, -240, -120, -60, -120, 5, -155, 280, 60 ]
         nombres=[]
         for ciudad in CiudadesDAO.retornarCiudades():
             nombres.append(ciudad._nombre)
-        for i, nombre in enumerate(CiudadesDAO.retornarCiudades()):
+        for i, nombre in enumerate(nombres):
             if not(ruta):
                 punto = Punto(i + 1, nombre, posiciones_x[i], posiciones_y[i], str(i))
                 punto.dibujarPunto(self)
@@ -142,30 +130,28 @@ class Ui_MainWindow(object):
 
     def selectCiudad_onChanged(self, text):
         if (text!="Seleccione ciudad ..."):
-            ruta = buscarRuta(text)
-            #print("La ruta minima encontrada es:")
-            #print(f'{list(map(lambda x:x.getNombre(), ruta))}')
-            #print(f"La distancia total es: {distancia}")
+            ruta = CiudadesDAO.buscarRuta(text)
             arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
             distancia = np.sum(arreglo_distancias)
             # Strign con la lista de ciudades de la ruta encontrada.
             rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
             respuesta = f"La distancia entre {ruta[23].getNombre()} y {ruta[0].getNombre()} \n es de {distancia} KMs"
-            self.labelRespuesta.setText(rutaString + "\n"*2 + respuesta)
+            self.labelRespuesta.setText("Recorrido partiendo de la ciudad de "+ruta[23].getNombre()+"\n"*2+rutaString + "\n"*2 + respuesta)
             self.labelRespuesta.adjustSize()
             self.setPuntosMapa(ruta)
 
     def btnRutaMinimia_clicked(self):
-        ruta = buscarRutaMinima()
+        ruta = CiudadesDAO.buscarRutaMinima()
         # Strign con la lista de ciudades de la ruta encontrada.
         rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
         arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
         distancia = np.sum(arreglo_distancias)
         respuesta = f"La distancia entre {ruta[23].getNombre()} y {ruta[0].getNombre()} \n es de {distancia} KMs"
-        self.labelRespuesta.setText(rutaString + "\n"*2 + respuesta)
+        self.labelRespuesta.setText("Recorrido partiendo de la ciudad de "+ruta[23].getNombre()+"\n"*2+rutaString + "\n"*2 + respuesta)
         self.labelRespuesta.adjustSize()
         self.setPuntosMapa(ruta)
         self.selectCiudad.setCurrentText(ruta[23].getNombre())
+        self.setPuntosMapa(ruta)
 
     def moussePressEvent(self, event):
         if event.buttons() and Qt.LeftButton:
@@ -184,7 +170,9 @@ class Ui_MainWindow(object):
         self.btnRutaMinima.setText(_translate("MainWindow", "Buscar ruta mínima"))
         self.btnRutaMinima.clicked.connect(self.btnRutaMinimia_clicked)
         self.btnRutaAGenetico.setText(_translate("MainWindow", "Buscar ruta con AG"))
+        self.selectCiudad.addItem("")
         self.selectCiudad.setItemText(0, _translate("MainWindow", "Seleccione ciudad ..."))
+        self.setItemsCombo()
         self.selectCiudad.activated[str].connect(self.selectCiudad_onChanged)
         # ==================== WIDGET QLABEL =======================      
         self.labelImagen = QLabel(self)
@@ -196,7 +184,7 @@ class Ui_MainWindow(object):
         # TODO Clase QPixMap para poder escribir un punto sobre la imagen
         pixmapImagen = QPixmap('./UserInterface/provincias.png').scaled(365, 634, Qt.KeepAspectRatio,Qt.SmoothTransformation)
         self.labelImagen.setPixmap(pixmapImagen)  
-        self.setPuntosMapa()
+        
   
 
 

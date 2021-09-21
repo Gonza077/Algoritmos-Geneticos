@@ -21,6 +21,14 @@ class Generacion(object):
         poblacion.calculoDatosPoblacion()                     
         self.arrPoblaciones.append(poblacion)
 
+    def datosGeneracion(self):
+        tuplas=[]
+        for poblacion in self.arrPoblaciones:
+            tuplas.append(poblacion.ATupla())
+        cabecera=["Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"]
+        print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
+        #self.dibujoGrafica()
+
     """
     def dibujoGrafica(self):
         arrPromedios = []
@@ -54,13 +62,4 @@ class Generacion(object):
         for poblacion in self.arrPoblaciones:                      
             hoja.append(poblacion.ATupla())  
         wb.save("DatosEjercicio1.xlsx")            
-    
-    def datosGeneracion(self):
-        tuplas=[]
-        for poblacion in self.arrPoblaciones:
-            #if (poblacion.ID % ((len(self.arrPoblaciones)/20)) == 0): #Dependiendo del tamaño de la poblacion, y la cantidad de registros que se quieran mostrar, en este caso 20
-                tuplas.append(poblacion.ATupla())
-        cabecera=["Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"]
-        print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
-        self.dibujoGrafica()
     """

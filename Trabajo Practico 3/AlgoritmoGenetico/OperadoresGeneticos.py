@@ -39,37 +39,6 @@ class Torneo():
             paresPadres.append(pares)
         return paresPadres
 
-class CrossOverUnPunto():
-
-    def __init__(self,probCross):
-        self.probCrossover=probCross
-
-    def aplicoCrossover(self,padres):
-        nuevosCromosomas=[]
-        for par in padres:  #Padres viene de a pares
-            padre=par[0] 
-            madre=par[1]
-            if(rnd.random() <= self.probCrossover):      
-                hijo1=Cromosoma()
-                hijo2=Cromosoma()
-                posicionCorte=rnd.randint(0,Cromosoma.tCromo-1)
-                #Se instancia los primeros N genes de cada padre hasta la posicion de corte en cada hijo
-                for j in range(0,posicionCorte):
-                    hijo1.insertoGen(padre.arrGenes[j])
-                    hijo2.insertoGen(madre.arrGenes[j])
-                    #Posteriormente se intercambian los genes de cada padre en los hijos, luego de la posicion del corte
-                for k in range(posicionCorte,cr.Cromosoma.tCromo):
-                    hijo1.insertoGen(madre.arrGenes[k])
-                    hijo2.insertoGen(padre.arrGenes[k])             
-                #Se guarda cada cromosoma en la nueva poblacion
-                nuevosCromosomas.append(hijo1)
-                nuevosCromosomas.append(hijo2)          
-            else:
-                #Se guarda cada cromosoma en la nueva poblacion
-                nuevosCromosomas.append(padre)
-                nuevosCromosomas.append(madre)       
-        return nuevosCromosomas
-
 class MutacionInvertida():
 
     def __init__(self,probMuta):

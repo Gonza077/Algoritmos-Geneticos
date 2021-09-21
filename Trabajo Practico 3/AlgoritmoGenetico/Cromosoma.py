@@ -9,10 +9,8 @@ class Cromosoma():
     def __init__(self):
         self._genes = []
         self._funcObjetivo = 0
-
         # Crear una lista con las ciudades, se usa deepcopy para no alterar los datos del DAO
-        lista = copy.deepcopy(CiudadesDAO.retornarCiudades()) 
-
+        lista = [num for num in range(1,25)] 
         # Agregar genes al cromosoma hasta llegar a las 23 ciudades, la seleccion se hace de forma aleatoria
         while lista:
             pick = random.choice(lista)
@@ -25,3 +23,6 @@ class Cromosoma():
     def getGenes(self):
         print('Lista de genes:')
         print(self._genes)
+
+    def getFuncObjetivo(self):
+        return self._funcObjetivo
