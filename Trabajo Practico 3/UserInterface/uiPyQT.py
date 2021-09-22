@@ -1,3 +1,4 @@
+ 
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'UITP3Viajante.ui'
 # Created by: PyQt5 UI code generator 5.14.1
@@ -153,6 +154,63 @@ class Ui_MainWindow(object):
         self.selectCiudad.setCurrentText(ruta[23].getNombre())
         self.setPuntosMapa(ruta)
 
+    def btnGeneticos_showDialog(self):
+        dialog = QtWidgets.QDialog()
+        self.buttonBox = QtWidgets.QDialogButtonBox(dialog)
+        self.buttonBox.setGeometry(QtCore.QRect(10, 280, 341, 32))
+        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setObjectName("buttonBox")
+        self.label = QtWidgets.QLabel(dialog)
+        self.label.setGeometry(QtCore.QRect(20, 20, 191, 41))
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(dialog)
+        self.label_2.setGeometry(QtCore.QRect(20, 70, 191, 41))
+        self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(dialog)
+        self.label_3.setGeometry(QtCore.QRect(20, 120, 191, 41))
+        self.label_3.setObjectName("label_3")
+        self.label_4 = QtWidgets.QLabel(dialog)
+        self.label_4.setGeometry(QtCore.QRect(20, 170, 191, 41))
+        self.label_4.setObjectName("label_4")
+        self.numCromosomas = QtWidgets.QLineEdit(dialog)
+        self.numCromosomas.setGeometry(QtCore.QRect(250, 20, 113, 36))
+        self.numCromosomas.setObjectName("numCromosomas")
+        self.numCromosomas.setText('50')
+        self.cantCiclos = QtWidgets.QLineEdit(dialog)
+        self.cantCiclos.setGeometry(QtCore.QRect(250, 70, 113, 36))
+        self.cantCiclos.setObjectName("cantCiclos")
+        self.cantCiclos.setText('200')
+        self.probCrossover = QtWidgets.QLineEdit(dialog)
+        self.probCrossover.setGeometry(QtCore.QRect(250, 120, 113, 36))
+        self.probCrossover.setObjectName("probCrossover")
+        self.probCrossover.setText('0.70')
+        self.probMutacion = QtWidgets.QLineEdit(dialog)
+        self.probMutacion.setGeometry(QtCore.QRect(250, 170, 113, 36))
+        self.probMutacion.setObjectName("probMutacion")
+        self.probMutacion.setText('0.05')
+        _translate = QtCore.QCoreApplication.translate
+        dialog.setWindowTitle("Parametros del Algoritmo Genético")
+        self.label.setText(_translate("Dialog", "Número de cromosomas:"))
+        self.label_2.setText(_translate("Dialog", "Cantidad de ciclos:"))
+        self.label_3.setText(_translate("Dialog", "Probabilidad de crossover:"))
+        self.label_4.setText(_translate("Dialog", "Probabilidad de mutación:"))
+        dialog.setWindowModality(Qt.ApplicationModal)
+        self.buttonBox.accepted.connect(dialog.accept)
+        self.buttonBox.rejected.connect(dialog.reject)
+
+        respuesta = dialog.exec_()
+        print("Valor del boton presionado 1-Aceptar 0-Cancelar:", respuesta)
+
+        if(respuesta):
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText("Valores ingresados")
+            msg.setInformativeText("Ver valores ingresados")
+            msg.setWindowTitle("Ver valores")
+            msg.setDetailedText("Número de cromosomas: {self.numCromosomas.text()}")
+            msg.exec_()
+    
     def moussePressEvent(self, event):
         if event.buttons() and Qt.LeftButton:
             print(f'Posicion x: {event.pos().x()}')
@@ -170,6 +228,7 @@ class Ui_MainWindow(object):
         self.btnRutaMinima.setText(_translate("MainWindow", "Buscar ruta mínima"))
         self.btnRutaMinima.clicked.connect(self.btnRutaMinimia_clicked)
         self.btnRutaAGenetico.setText(_translate("MainWindow", "Buscar ruta con AG"))
+        self.btnRutaAGenetico.clicked.connect(self.btnGeneticos_showDialog)
         self.selectCiudad.addItem("")
         self.selectCiudad.setItemText(0, _translate("MainWindow", "Seleccione ciudad ..."))
         self.setItemsCombo()
@@ -184,7 +243,4 @@ class Ui_MainWindow(object):
         # TODO Clase QPixMap para poder escribir un punto sobre la imagen
         pixmapImagen = QPixmap('./UserInterface/provincias.png').scaled(365, 634, Qt.KeepAspectRatio,Qt.SmoothTransformation)
         self.labelImagen.setPixmap(pixmapImagen)  
-        
-  
-
-
+        self.setPuntosMapa()
