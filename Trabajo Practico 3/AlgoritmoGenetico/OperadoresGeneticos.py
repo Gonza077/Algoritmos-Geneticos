@@ -85,7 +85,7 @@ class CrossOverCiclico():
         except ValueError:
             return None
 
-class MutacionInvertida():
+class Mutacion():
 
     def __init__(self,probMuta):
         self.probMutacion=probMuta
