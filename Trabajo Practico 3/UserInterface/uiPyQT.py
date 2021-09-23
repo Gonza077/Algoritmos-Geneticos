@@ -10,28 +10,6 @@ from PyQt5.QtCore import Qt
 from CiudadesDAO import CiudadesDAO
 import numpy as np
 
-class Example(QtWidgets.QMainWindow):
-
-    def __init__(self):
-        super(Example, self).__init__()
-        self.initUI()
-
-    def mousePressEvent(self, QMouseEvent):
-        print(QMouseEvent.pos())
-        
-    def mouseReleaseEvent(self, QMouseEvent):
-        cursor = QtGui.QCursor()
-        print(cursor.pos())
-
-    def initUI(self):
-        qbtn = QtWidgets.QPushButton('Quit', self)
-        qbtn.resize(qbtn.sizeHint())
-        qbtn.move(50, 50)
-        self.setGeometry(0, 0, 1024, 768)
-        self.setWindowTitle('Quit button')
-        self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
-        self.show()
-
 class Punto(object):
     # Variables iniciales de referencia para dibujar puntos en las provincias del mapa.
     CERO_X = 932.5
@@ -121,11 +99,8 @@ class Ui_MainWindow(object):
                 punto = Punto(i + 1, nombre, posiciones_x[i], posiciones_y[i], str(i))
                 punto.dibujarPunto(self)
             else:
-                # text = str(int(nombres.index(ruta[i].getNombre())) + 1)
                 nombres_ruta = list(map(lambda i:i.getNombre(), ruta))
                 text = str(int(nombres_ruta.index(nombres[i])) + 1)
-                #print(f'En ruta posicion {ruta[i].getNombre()} se encontro la posición: {text}')
-                #print(f'index nombres devolvio {nombres.index(ruta[i].getNombre())}')
                 punto = Punto(i + 1, nombre, posiciones_x[i], posiciones_y[i], text)
                 punto.dibujarPunto(self)
 
@@ -134,7 +109,6 @@ class Ui_MainWindow(object):
             ruta = CiudadesDAO.buscarRuta(text)
             arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
             distancia = np.sum(arreglo_distancias)
-            # Strign con la lista de ciudades de la ruta encontrada.
             rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
             respuesta = f"La distancia entre {ruta[23].getNombre()} y {ruta[0].getNombre()} \n es de {distancia} KMs"
             self.labelRespuesta.setText("Recorrido partiendo de la ciudad de "+ruta[23].getNombre()+"\n"*2+rutaString + "\n"*2 + respuesta)
@@ -150,14 +124,13 @@ class Ui_MainWindow(object):
         respuesta = f"La distancia entre {ruta[23].getNombre()} y {ruta[0].getNombre()} \n es de {distancia} KMs"
         self.labelRespuesta.setText("Recorrido partiendo de la ciudad de "+ruta[23].getNombre()+"\n"*2+rutaString + "\n"*2 + respuesta)
         self.labelRespuesta.adjustSize()
-        self.setPuntosMapa(ruta)
         self.selectCiudad.setCurrentText(ruta[23].getNombre())
         self.setPuntosMapa(ruta)
 
     def btnGeneticos_showDialog(self):
         dialog = QtWidgets.QDialog()
         self.buttonBox = QtWidgets.QDialogButtonBox(dialog)
-        self.buttonBox.setGeometry(QtCore.QRect(10, 280, 341, 32))
+        self.buttonBox.setGeometry(QtCore.QRect(10, 280, 400, 80))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
@@ -203,19 +176,41 @@ class Ui_MainWindow(object):
         print("Valor del boton presionado 1-Aceptar 0-Cancelar:", respuesta)
 
         if(respuesta):
+            """
+                Aca iria la función que retorna la mejor solución encontrada
+                por el algoritmo genetico.
+
+                numCromosomas = int(self.numCromosomas.text())
+                cantCiclos = int(self.cantCiclos.text())
+                probMutacion = float(self.probMutacion.text())
+                probCrossover = float(self.probCrossover.text())
+
+                ruta = buscarRutaAlgoritmoGenetico(numCromosomas, cantCiclos, probMutacion, probCrossover)
+                arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
+                distancia = np.sum(arreglo_distancias)
+                rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
+
+                respuesta = (f"La distancia mínima encontrada por el Algoritmo Genetico es \n"
+                 f"desde {ruta[23].getNombre()} a {ruta[0].getNombre()} \n con una distancia de {distancia} KMs")
+                
+                self.labelRespuesta.setText(respuesta)
+                self.labelRespuesta.adjustSize()
+                self.setPuntosMapa(ruta)
+
+            """
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
             msg.setText("Valores ingresados")
             msg.setInformativeText("Ver valores ingresados")
             msg.setWindowTitle("Ver valores")
-            msg.setDetailedText("Número de cromosomas: {self.numCromosomas.text()}")
+            # String multilinea definido entre parentesis. Ej: string = (f"\n" f"\n" f"\n" )
+            stringDetailedText = (f"Número de cromosomas: {self.numCromosomas.text()} \n" 
+                f"Cantidad de ciclos: {self.cantCiclos.text()}\n"
+                f"Probabilidad de mutación: {self.probMutacion.text()}\n"
+                f"Probabilidad de crossover: {self.probCrossover.text()} \n"
+                f"Suma Mutacion y Crossover: {float(self.probCrossover.text()) + float(self.probMutacion.text())}")
+            msg.setDetailedText(stringDetailedText)
             msg.exec_()
-    
-    def moussePressEvent(self, event):
-        if event.buttons() and Qt.LeftButton:
-            print(f'Posicion x: {event.pos().x()}')
-            print(f'Posicion y  : {event.pos().y()}')  
-        self.update()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -233,14 +228,12 @@ class Ui_MainWindow(object):
         self.selectCiudad.setItemText(0, _translate("MainWindow", "Seleccione ciudad ..."))
         self.setItemsCombo()
         self.selectCiudad.activated[str].connect(self.selectCiudad_onChanged)
-        # ==================== WIDGET QLABEL =======================      
         self.labelImagen = QLabel(self)
         self.labelImagen.setGeometry(750, 25, 365, 634)
         self.labelImagen.setToolTip("Imagen")
         self.labelImagen.setCursor(Qt.PointingHandCursor)
         self.labelImagen.setStyleSheet("QLabel {background-color: white; border: 1px solid #01DFD7; border-radius: 5px;}")     
         self.labelImagen.setAlignment(Qt.AlignCenter)
-        # TODO Clase QPixMap para poder escribir un punto sobre la imagen
         pixmapImagen = QPixmap('./UserInterface/provincias.png').scaled(365, 634, Qt.KeepAspectRatio,Qt.SmoothTransformation)
         self.labelImagen.setPixmap(pixmapImagen)  
         self.setPuntosMapa()
