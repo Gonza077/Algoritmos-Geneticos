@@ -47,17 +47,18 @@ class CrossOverCiclico():
     def aplicoCrossover(self,padres):
         nuevosCromosomas=[]
         #for par in padres:  #Padres viene de a pares
-        padre=padres[0] 
-        madre=padres[1]
-        if(rnd.random() <= self.probCrossover):
-            hijo1 = self.getGenesHijo(padre, madre)     
-            hijo2 = self.getGenesHijo(madre, padre)
-            nuevosCromosomas.append(hijo1)
-            nuevosCromosomas.append(hijo2)
-        else:
-            #Se guarda cada cromosoma en la nueva poblacion
-            nuevosCromosomas.append(padre)
-            nuevosCromosomas.append(madre)    
+        for par in padres:
+            padre=par[0] 
+            madre=par[1]
+            if(rnd.random() <= self.probCrossover):
+                hijo1 = self.getGenesHijo(padre, madre)     
+                hijo2 = self.getGenesHijo(madre, padre)
+                nuevosCromosomas.append(hijo1)
+                nuevosCromosomas.append(hijo2)
+            else:
+                #Se guarda cada cromosoma en la nueva poblacion
+                nuevosCromosomas.append(padre)
+                nuevosCromosomas.append(madre)    
         return nuevosCromosomas
 
     def getGenesHijo(self, padre, madre):
@@ -85,7 +86,7 @@ class CrossOverCiclico():
         except ValueError:
             return None
 
-class MutacionInvertida():
+class MutacionAdjointSwap():
 
     def __init__(self,probMuta):
         self.probMutacion=probMuta

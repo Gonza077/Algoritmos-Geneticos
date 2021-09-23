@@ -74,3 +74,9 @@ class Cromosoma(object):
 
     def getFitness(self):
         return self._funcFitness
+
+    def mutoGen(self):
+        numRandom = random.randint(0, Cromosoma.tCromo - 2)
+        gen = self._genes[numRandom]
+        self._genes[numRandom] = self._genes[numRandom + 1]
+        self._genes[numRandom + 1] = gen

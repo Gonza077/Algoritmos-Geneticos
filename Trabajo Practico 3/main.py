@@ -127,7 +127,7 @@ def main():
         Poblacion.tPobla = 50
         Poblacion.tipoSeleccion = Ruleta()
         Poblacion.tipoCrossover = CrossOverCiclico(0.75)
-        Poblacion.tipoMutacion = MutacionInvertida(0.05)
+        Poblacion.tipoMutacion = MutacionAdjointSwap(0.05)
         Poblacion.elitismo = False
         generacion = Generacion()
         for _ in range(0, Corridas):
