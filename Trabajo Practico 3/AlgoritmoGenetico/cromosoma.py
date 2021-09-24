@@ -1,11 +1,13 @@
 import random
-import copy
+#import copy
+from CiudadDAO import *
 
 class Cromosoma(object):
 
     IDCromosoma = 1
     Dominio = None
     tCromo = None
+    ciudadesDAO = None
 
     def __init__(self):
         self._funcFitness = 0
@@ -33,10 +35,10 @@ class Cromosoma(object):
         return self._valorDecimal != cromosoma._valorDecimal
 
     def instancioGenes(self):
-        # Crear una lista con los números del 1 al 23.
+        # Crear una lista con los números del 1 al 24.
         lista = [ num for num in range(1,24)]
 
-        # Agregar genes al cromosoma hasta llegar a los 23
+        # Agregar genes al cromosoma hasta llegar a los 24
         while lista:
             pick = random.choice(lista)
             lista.remove(pick)
@@ -48,12 +50,15 @@ class Cromosoma(object):
             self._genes.append(0)
     
     def calculoDatosCromosoma(self):
-        for i in range(-1, len(self._genes)):
-            self._funcObjetivo += self._genes[i].getDistanciaTo(self._genes[i+1])
+        ciudadDAO = CiudadesDAO()
+        ciudadDAO.cargarCiudades()
+        for i in range(-1, len(self._genes)-1):
+            self._funcObjetivo += self.ciudadesDAO.getDistanciaById(self._genes[i], self._genes[i+1])
+            
 
     def calculoFitness(self,sumaPoblacion): 
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada cromosoma"""
-        self.funcFitness = self._funcObjetivo / sumaPoblacion
+        self.funcFitness = 1 - (self._funcObjetivo / sumaPoblacion)
 
     def mostrarGenes(self):
         print('Lista de genes:')
@@ -80,3 +85,8 @@ class Cromosoma(object):
         gen = self._genes[numRandom]
         self._genes[numRandom] = self._genes[numRandom + 1]
         self._genes[numRandom + 1] = gen
+
+    @classmethod
+    def instanciarCiudades(self):
+        ciudadesDAO = CiudadesDAO()
+        ciudadesDAO.cargarCiudades()

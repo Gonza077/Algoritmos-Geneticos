@@ -1,10 +1,10 @@
-from ciudad import *
+from Ciudad import *
 import pandas as pd
 import numpy as np
-from AlgoritmoGenetico.cromosoma import *
-from AlgoritmoGenetico.poblacion import *
-from AlgoritmoGenetico.operadoresGeneticos import *
-from AlgoritmoGenetico.generacion import *
+from AlgoritmoGenetico.Cromosoma import *
+from AlgoritmoGenetico.Poblacion import *
+from AlgoritmoGenetico.OperadoresGeneticos import *
+from AlgoritmoGenetico.Generacion import *
 
 def cargarCiudades():
     ciudades=[]

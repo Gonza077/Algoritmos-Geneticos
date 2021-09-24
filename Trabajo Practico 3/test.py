@@ -1,16 +1,20 @@
-from AlgoritmoGenetico.operadoresGeneticos import *
-from AlgoritmoGenetico.cromosoma import *
+from AlgoritmoGenetico.Cromosoma import *
+from AlgoritmoGenetico.Poblacion import *
+from AlgoritmoGenetico.OperadoresGeneticos import *
+from AlgoritmoGenetico.Generacion import *
 
+Corridas = 200
 Cromosoma.tCromo = 24
-padres = []
-for _ in range(0, 2):
-    cromo = Cromosoma()
-    cromo.instancioGenes()
-    print(cromo.getGenes())
-    padres.append(cromo)
+Cromosoma.ciudadesDAO = CiudadesDAO()
+Cromosoma.ciudadesDAO.cargarCiudades()
+Poblacion.tPobla = 50
+Poblacion.tipoSeleccion = Ruleta()
+Poblacion.tipoCrossover = CrossOverCiclico(0.75)
+Poblacion.tipoMutacion = MutacionAdjointSwap(0.05)
+Poblacion.elitismo = False
+generacion = Generacion()
+for i in range(0, Corridas):
+    print(i)
+    generacion.creoGeneracion()
 
-crosover = CrossOverCiclico(0.99)
-
-hijos = crosover.aplicoCrossover(padres)
-
-print(hijos[0].getGenes())
+generacion.datosGeneracion()

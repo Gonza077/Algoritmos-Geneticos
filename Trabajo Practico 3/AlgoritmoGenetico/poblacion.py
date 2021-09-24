@@ -1,4 +1,4 @@
-from AlgoritmoGenetico.cromosoma import *
+from AlgoritmoGenetico.Cromosoma import *
 import copy
 
 class Poblacion(object):
@@ -74,11 +74,11 @@ class Poblacion(object):
             self.buscoMayoresCromosomas(poblacionAnterior)
         paresPadres=self.tipoSeleccion.aplicarSeleccion(poblacionAnterior,len(self.arrCromosomas))   
         cromosomasNuevos=self.tipoCrossover.aplicoCrossover(paresPadres)  #Por que a los cromosomas del elitismo, no hay que modificarlos 
-        self.tipoMutacion.aplicoMutacion(cromosomasNuevos)
+        #self.tipoMutacion.aplicoMutacion(cromosomasNuevos)
         for cromosoma in cromosomasNuevos:
             self.arrCromosomas.append(cromosoma)
 
     def ATupla(self):
-        cadena1="".join([ str(gen) for gen in self.maxCromosoma.arrGenes])  
-        cadena2="".join([ str(gen) for gen in self.minCromosoma.arrGenes])       
-        return [self.ID,self.minCromosoma.funcObjetivo,cadena2,self.maxCromosoma.funcObjetivo,cadena1,self.mediaPoblacionFO]
+        cadena1="".join([ str(gen) for gen in self.maxCromosoma.getGenes()])  
+        cadena2="".join([ str(gen) for gen in self.minCromosoma.getGenes()])       
+        return [self.ID,self.minCromosoma.getFuncObjetivo(),cadena2,self.maxCromosoma.getFuncObjetivo(),cadena1,self.mediaPoblacionFO]
