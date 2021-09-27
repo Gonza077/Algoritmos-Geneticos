@@ -50,8 +50,8 @@ class Cromosoma(object):
             self._genes.append(0)
     
     def calculoDatosCromosoma(self):
-        ciudadDAO = CiudadesDAO()
-        ciudadDAO.cargarCiudades()
+        #ciudadDAO = CiudadesDAO()
+        #ciudadDAO.cargarCiudades()
         for i in range(-1, len(self._genes)-1):
             self._funcObjetivo += self.ciudadesDAO.getDistanciaById(self._genes[i], self._genes[i+1])
             
@@ -81,10 +81,18 @@ class Cromosoma(object):
         return self._funcFitness
 
     def mutoGen(self):
-        numRandom = random.randint(0, Cromosoma.tCromo - 2)
-        gen = self._genes[numRandom]
-        self._genes[numRandom] = self._genes[numRandom + 1]
-        self._genes[numRandom + 1] = gen
+        while True:
+            #Solo se copia el valor, si no se copia la direccion de memoria y se modifica el valor seleccionado
+            genMutado1 = random.choice(self._genes)
+            genMutado2 = random.choice(self._genes)          
+            if genMutado1!=genMutado2:
+                #Se necesita un auxiliar por el hecho de que cuando se modifica un valor, se volveria a pisar el mismo indice
+                aux1=self._genes.index(genMutado1)
+                aux2=self._genes.index(genMutado2)
+                #print(f"Nro: {genMutado1} - Posicion: {self._genes.index(genMutado1)}")
+                #print(f"Nro: {genMutado2} - Posicion: {self._genes.index(genMutado2)}")
+                self._genes[aux1] , self._genes[aux2] = genMutado2 , genMutado1
+                break
 
     @classmethod
     def instanciarCiudades(self):

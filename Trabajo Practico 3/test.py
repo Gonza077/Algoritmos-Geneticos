@@ -14,7 +14,7 @@ Poblacion.tipoMutacion = MutacionAdjointSwap(0.05)
 Poblacion.elitismo = False
 generacion = Generacion()
 for i in range(0, Corridas):
-    print(i)
     generacion.creoGeneracion()
+    print(i)
 
 generacion.datosGeneracion()

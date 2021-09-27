@@ -74,7 +74,7 @@ class Poblacion(object):
             self.buscoMayoresCromosomas(poblacionAnterior)
         paresPadres=self.tipoSeleccion.aplicarSeleccion(poblacionAnterior,len(self.arrCromosomas))   
         cromosomasNuevos=self.tipoCrossover.aplicoCrossover(paresPadres)  #Por que a los cromosomas del elitismo, no hay que modificarlos 
-        #self.tipoMutacion.aplicoMutacion(cromosomasNuevos)
+        self.tipoMutacion.aplicoMutacion(cromosomasNuevos)
         for cromosoma in cromosomasNuevos:
             self.arrCromosomas.append(cromosoma)
 

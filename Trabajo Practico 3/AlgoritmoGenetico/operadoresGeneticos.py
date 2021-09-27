@@ -57,7 +57,7 @@ class CrossOverCiclico():
             else:
                 #Se guarda cada cromosoma en la nueva poblacion
                 nuevosCromosomas.append(padre)
-                nuevosCromosomas.append(madre)    
+                nuevosCromosomas.append(madre)
         return nuevosCromosomas
 
     def getGenesHijo(self, padre, madre):
