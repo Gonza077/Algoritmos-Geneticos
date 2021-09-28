@@ -62,3 +62,10 @@ class Generacion(object):
         cabecera=["Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"]
         print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
         self.dibujoGrafica()
+
+    def menorCromosoma(self):
+        cr = self.arrPoblaciones[0].minCromosoma
+        for poblacion in self.arrPoblaciones:
+            if(cr.getFuncObjetivo() > poblacion.minCromosoma.getFuncObjetivo()):
+                cr = poblacion.minCromosoma
+        return cr
