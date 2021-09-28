@@ -1,3 +1,7 @@
+from UserInterface import uiPyQT
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication
+import sys
 from Ciudad import *
 import pandas as pd
 import numpy as np
@@ -13,7 +17,7 @@ def cargarCiudades():
         ciudad=Ciudad()
         ciudad.agregarNombre(fila[0])
         for j in range(1,len(fila)):
-            ciudad.agregarCiudad(hojaExcel.columns[j], fila[j])
+            ciudad.agregarCiudad(hojaExcel.columns[j])
         ciudades.append(ciudad)
     return ciudades
 
@@ -84,7 +88,7 @@ def condicionFiltro(x):
     return type(x.getDistancia()) == float
 
 # Se podría meter todo esto en una función
-def main():
+def menuConsola():
     print(f"--------------------------------------------------------")
     print(f"Que desea hacer:")
     print(f"1- Buscar ruta mínima desde una ciudad:")
@@ -133,5 +137,21 @@ def main():
         for _ in range(0, Corridas):
             generacion.creoGeneracion()
 
+class ExampleApp(QtWidgets.QMainWindow, uiPyQT.Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(ExampleApp, self).__init__(parent)
+        self.setupUi(self)
+
+def main():
+    app = QApplication(sys.argv)
+    form = ExampleApp()
+    form.show()
+    app.exec_()
+
+if __name__ == '__main__':
+    #CARGA DE LOS DATOS DEL EXCEL
+    CiudadesDAO.cargarCiudades()
+    main()
+    #menuConsola()
 # Programa Principal
 main()
