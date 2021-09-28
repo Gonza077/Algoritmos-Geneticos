@@ -17,22 +17,22 @@ class Cromosoma(object):
 
     #Operadores logicos, ya que Python no permite comparar obejtos 
     def __gt__(self, cromosoma):
-        return self._valorDecimal > cromosoma._valorDecimal
+        return self._funcFitness > cromosoma._funcFitness
 
     def __lt__(self, cromosoma):
-        return self._valorDecimal < cromosoma._valorDecimal
+        return self._funcFitness < cromosoma._funcFitness
 
     def __ge__(self, cromosoma):
-        return self._valorDecimal >= cromosoma._valorDecimal
+        return self._funcFitness >= cromosoma._funcFitness
 
     def __le__(self, cromosoma):
-        return self._valorDecimal <= cromosoma._valorDecimal
+        return self._funcFitness <= cromosoma._funcFitness
 
     def __eq__(self, cromosoma):
-        return self._valorDecimal == cromosoma._valorDecimal
+        return self._funcFitness == cromosoma._funcFitness
 
     def __ne__(self, cromosoma):
-        return self._valorDecimal != cromosoma._valorDecimal
+        return self._funcFitness != cromosoma._funcFitness
 
     def instancioGenes(self):
         # Crear una lista con los números del 1 al 24.
@@ -58,7 +58,7 @@ class Cromosoma(object):
 
     def calculoFitness(self,sumaPoblacion): 
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada cromosoma"""
-        self.funcFitness = 1 - (self._funcObjetivo / sumaPoblacion)
+        self._funcFitness = self._funcObjetivo / sumaPoblacion
 
     def mostrarGenes(self):
         print('Lista de genes:')

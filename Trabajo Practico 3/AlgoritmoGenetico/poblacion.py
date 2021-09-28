@@ -22,7 +22,7 @@ class Poblacion(object):
         Poblacion.IDPoblacion +=1       
         self.arrCromosomas=[]
         self.sumaPoblacion=0
-        self.mediaPoblacionFO=0   
+        self.mediaPoblacionFO=0
         
     def instancioCromosomas(self):
         for _ in range(0, Poblacion.tPobla):
@@ -43,7 +43,7 @@ class Poblacion(object):
         self.minCromosoma=copy.deepcopy(self.arrCromosomas[0]) #Deepcopy nos permite tomar el objeto sin hacer referencia a la memoria
         for cromosoma in self.arrCromosomas:               
             if (self.minCromosoma > cromosoma):
-                self.minCromosoma = copy.deepcopy(cromosoma)        
+                self.minCromosoma = copy.deepcopy(cromosoma)    
     
     def buscoMayorCromosoma(self):
         """ Busca al mayor cromosoma de la poblacion instnaciada"""
@@ -72,13 +72,13 @@ class Poblacion(object):
         cromosomasNuevos=[] 
         if (Poblacion.elitismo):
             self.buscoMayoresCromosomas(poblacionAnterior)
-        paresPadres=self.tipoSeleccion.aplicarSeleccion(poblacionAnterior,len(self.arrCromosomas))   
+        paresPadres=self.tipoSeleccion.aplicarSeleccion(poblacionAnterior,len(self.arrCromosomas))
         cromosomasNuevos=self.tipoCrossover.aplicoCrossover(paresPadres)  #Por que a los cromosomas del elitismo, no hay que modificarlos 
         self.tipoMutacion.aplicoMutacion(cromosomasNuevos)
         for cromosoma in cromosomasNuevos:
             self.arrCromosomas.append(cromosoma)
 
     def ATupla(self):
-        cadena1="".join([ str(gen) for gen in self.maxCromosoma.getGenes()])  
-        cadena2="".join([ str(gen) for gen in self.minCromosoma.getGenes()])       
+        cadena1=" ".join([ str(gen) for gen in self.maxCromosoma.getGenes()])  
+        cadena2=" ".join([ str(gen) for gen in self.minCromosoma.getGenes()])       
         return [self.ID,self.minCromosoma.getFuncObjetivo(),cadena2,self.maxCromosoma.getFuncObjetivo(),cadena1,self.mediaPoblacionFO]

@@ -18,7 +18,7 @@ class Generacion(object):
             poblacion.instancioCromosomas()   
         else:
             poblacion.creoNuevaPoblacion(self.arrPoblaciones[-1])      
-        poblacion.calculoDatosPoblacion()                     
+        poblacion.calculoDatosPoblacion()                 
         self.arrPoblaciones.append(poblacion)
 
     def dibujoGrafica(self):

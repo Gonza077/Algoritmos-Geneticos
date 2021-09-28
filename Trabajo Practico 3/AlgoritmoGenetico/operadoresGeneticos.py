@@ -5,11 +5,13 @@ class Ruleta():
 
     def aplicarSeleccion(self,poblacionAnterior,cantCromosomasPobla):
         ruleta=[0]
-        valor=0     
-        paresPadres=[]         
+        valor=0
+        paresPadres=[]   
+        poblacionAnterior.arrCromosomas.sort()
         for cromosoma in poblacionAnterior.arrCromosomas:       
-            valor+=cromosoma.funcFitness
+            valor += cromosoma._funcFitness
             ruleta.append(valor)
+        poblacionAnterior.arrCromosomas.sort(reverse = True)
         for _ in range ((len(poblacionAnterior.arrCromosomas) - cantCromosomasPobla) // 2): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero por que tira error
                 pares=[]
                 while ( len(pares) < 2 ): #Se debe armar el par, esto garantiza que siempre se forme
@@ -31,7 +33,7 @@ class Torneo():
                 # Elijo aleatoriamente 2 cromosomas
                 crom1 = poblacionAnterior.arrCromosomas[rnd.randint(0,9)]
                 crom2 = poblacionAnterior.arrCromosomas[rnd.randint(0,9)]
-                if crom1 >= crom2: # Elijo el mejor de ambos
+                if crom1 <= crom2: # Elijo el mejor de ambos
                     pares.append(crom1)
                 else:
                     pares.append(crom2)
