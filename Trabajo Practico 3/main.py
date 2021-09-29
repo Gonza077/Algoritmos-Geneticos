@@ -3,86 +3,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
 import sys
 from Ciudad import *
+from CiudadDAO import *
 import pandas as pd
 import numpy as np
 from AlgoritmoGenetico.Cromosoma import *
 from AlgoritmoGenetico.Poblacion import *
 from AlgoritmoGenetico.OperadoresGeneticos import *
 from AlgoritmoGenetico.Generacion import *
-
-def cargarCiudades():
-    ciudades=[]
-    hojaExcel = pd.read_excel('./TablaCapitales.xlsx')
-    for fila in hojaExcel.values:
-        ciudad=Ciudad()
-        ciudad.agregarNombre(fila[0])
-        for j in range(1,len(fila)):
-            ciudad.agregarCiudad(hojaExcel.columns[j])
-        ciudades.append(ciudad)
-    return ciudades
-
-def nombreCiudades():
-    nombres=[]
-    for ciudad in ciudades:
-        nombres.append(ciudad._nombre)
-    return nombres
-
-ciudades=cargarCiudades()
-
-for ciudad in ciudades:
-    ciudad.datosCiudad()
-
-def getCiudad(listaCiudades, nombre):
-    for ciu in listaCiudades:
-        if ciu.getNombre().lower() == nombre.lower():
-            return ciu
-            
-def buscarRuta(listaCiudades, nombreCiudad):
-    ruta = []
-    ciudad = Ciudad()
-
-    # Se supone que ingresa siempre una ciudad válida
-    ciudad = getCiudad(listaCiudades, nombreCiudad)
-
-    # TORESEARCH Solución a un error de tipos de datos, 
-    #   TODO/DONE https://realpython.com/python-type-checking/#type-systems
-    
-    ruta.append(ciudad)
-    # Tengo que ir descartando de la busqueda las ciudades que ya estan en el arreglo de rutas.
-    #     Creo que va a hacer el arreglo de ciudades con objetos y no con tuplas.
-    proxCiudad = ciudad.getCiudadMasCercana(ruta)
-    
-    # TODO No esta funcionando el corte. Cuando llega a la ultima ciudad deberia cortar y tira error
-    while len(ruta) <= 23:
-        ruta.append(proxCiudad)
-        # Le tengo que pedir a la lista de ciudades que cargamos desde Pandas
-        #     donde esta la proxima mas cercana.
-        ciudad = getCiudad(listaCiudades, proxCiudad.getNombre())
-        proxCiudad = ciudad.getCiudadMasCercana(ruta)
-    # Saco la ciudad inicial, ya que luego la agregamos al final
-    ruta.pop(0)
-    # Agrego la distancia de la ciudad final a la incial, nos dijo Victor en clase que lo hagamos.
-    proxCiudad = ciudad.getCiudadMasCercana(ruta)
-    ruta.append(proxCiudad)
-
-    return ruta
-
-def buscarRutaMinima(listaCiudades):
-    rutaMinima = []
-    # Uso esta distancia mínima para buscar la menor, se podría hacer de una mejor manera, OBVIO.
-    distanciaMinima = 100000
-
-    for ciu in listaCiudades:
-        ruta = buscarRuta(listaCiudades, ciu.getNombre())
-        arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
-        distTotal = np.sum(arreglo_distancias)
-        if (distTotal < distanciaMinima):
-            distanciaMinima = distTotal
-            rutaMinima = ruta
-        print(f"La ruta mínima desde {ciu.getNombre()} es de:{distTotal} Km.")
-        # print(f'{list(map(lambda x:x.getNombre(), ruta))}')
-
-    return rutaMinima
 
 def condicionFiltro(x):
     return type(x.getDistancia()) == float
@@ -102,7 +29,7 @@ def menuConsola():
     if opc1 == 1:
         print(f"Ingrese su ciudad de origen:")
         ciudad_origen = input()
-        ruta = buscarRuta(ciudades, ciudad_origen)
+        ruta = CiudadesDAO.buscarRuta(ciudad_origen)
         print(f"La ruta encontrada es:")
         print(f'{list(map(lambda x:x.getNombre(), ruta))}')
         # for c in ruta:
@@ -115,7 +42,7 @@ def menuConsola():
         print(f"La distancia total es: {np.sum(arreglo_distancias)}")
 
     if opc1 == 2:
-        ruta = buscarRutaMinima(ciudades)
+        ruta = CiudadesDAO.buscarRutaMinima()
         print("La ruta minima encontrada es:")
         print(f'{list(map(lambda x:x.getNombre(), ruta))}')
         ciudades_filtradas = list(filter(condicionFiltro, ruta))

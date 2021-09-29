@@ -9,7 +9,8 @@ class CiudadesDAO():
     @classmethod
     def cargarCiudades(self):
         hojaExcel = pd.read_excel('./TablaCapitales.xlsx')
-        idCiudad = 0
+        print(hojaExcel.values)
+        idCiudad = 1
         for fila in hojaExcel.values:
             ciudad=Ciudad()
             ciudad.agregarNombre(fila[0])
@@ -51,8 +52,6 @@ class CiudadesDAO():
         ciudadDestino = self.getCiudadById(id_destino)
         return ciudadOrigen.getDistanciaTo(ciudadDestino)
 
-
-    
     @classmethod
     def buscarRuta(self,nombreCiudad):
         ruta = []

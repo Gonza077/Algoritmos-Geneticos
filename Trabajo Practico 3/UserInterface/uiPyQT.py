@@ -9,6 +9,10 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from CiudadDAO import CiudadesDAO
 import numpy as np
+from AlgoritmoGenetico.Cromosoma import *
+from AlgoritmoGenetico.Poblacion import *
+from AlgoritmoGenetico.OperadoresGeneticos import *
+from AlgoritmoGenetico.Generacion import *
 
 class Punto(object):
     # Variables iniciales de referencia para dibujar puntos en las provincias del mapa.
@@ -93,7 +97,7 @@ class Ui_MainWindow(object):
         posiciones_y = [ -50, -90, -150, -265, 0, -165, -30, 20, -85, -170, 140, -220, 230, -210, -188, -258, -240, -120, -60, -120, 5, -155, 280, 60 ]
         nombres=[]
         for ciudad in CiudadesDAO.retornarCiudades():
-            nombres.append(ciudad._nombre)
+            nombres.append(ciudad.getNombre())
         for i, nombre in enumerate(nombres):
             if not(ruta):
                 punto = Punto(i + 1, nombre, posiciones_x[i], posiciones_y[i], str(i))
@@ -178,26 +182,42 @@ class Ui_MainWindow(object):
         if(respuesta):
             """
                 Aca iria la función que retorna la mejor solución encontrada
-                por el algoritmo genetico.
+                por el algoritmo genetico."""
 
-                numCromosomas = int(self.numCromosomas.text())
-                cantCiclos = int(self.cantCiclos.text())
-                probMutacion = float(self.probMutacion.text())
-                probCrossover = float(self.probCrossover.text())
+            numCromosomas = int(self.numCromosomas.text())
+            cantCiclos = int(self.cantCiclos.text())
+            probMutacion = float(self.probMutacion.text())
+            probCrossover = float(self.probCrossover.text())
 
-                ruta = buscarRutaAlgoritmoGenetico(numCromosomas, cantCiclos, probMutacion, probCrossover)
-                arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
-                distancia = np.sum(arreglo_distancias)
-                rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
+            Corridas = cantCiclos
+            Cromosoma.instanciarCiudades()
+            Cromosoma.tCromo = numCromosomas
+            Poblacion.tPobla = 50
+            Poblacion.tipoSeleccion = Ruleta()
+            Poblacion.tipoCrossover = CrossOverCiclico(probMutacion)
+            Poblacion.tipoMutacion = MutacionAdjointSwap(probCrossover)
+            Poblacion.elitismo = False
+            generacion = Generacion()
+            for _ in range(0, Corridas):
+                generacion.creoGeneracion()
 
-                respuesta = (f"La distancia mínima encontrada por el Algoritmo Genetico es \n"
-                 f"desde {ruta[23].getNombre()} a {ruta[0].getNombre()} \n con una distancia de {distancia} KMs")
+            cr = generacion.menorCromosoma()
+            #arreglo_distancias = list(map(lambda x:x.getDistancia(), cr))
+            distancia = cr.getFuncObjetivo()
+            #rutaString = "\n".join(ciu.getNombre() for ciu in cr)
+
+            respuesta = (f"La distancia mínima encontrada por el Algoritmo Genetico es \n"
+             f"desde {CiudadesDAO.getCiudadById(cr.getGenEnPosicion(23)).getNombre()} a {CiudadesDAO.getCiudadById(cr.getGenEnPosicion(0)).getNombre()} \n con una distancia de {distancia} KMs")
                 
-                self.labelRespuesta.setText(respuesta)
-                self.labelRespuesta.adjustSize()
-                self.setPuntosMapa(ruta)
+            self.labelRespuesta.setText(respuesta)
+            self.labelRespuesta.adjustSize()
+            #ruta = list(map(lambda x:x.getCiudadById(), cr.getGenes()))
+            ruta = []
+            for gen in cr.getGenes():
+                ruta.append(CiudadesDAO.getCiudadById(gen))
+            self.setPuntosMapa(ruta)
 
-            """
+            
             msg = QtWidgets.QMessageBox()
             msg.setIcon(QtWidgets.QMessageBox.Information)
             msg.setText("Valores ingresados")

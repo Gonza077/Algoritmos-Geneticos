@@ -7,7 +7,7 @@ class Cromosoma(object):
     IDCromosoma = 1
     Dominio = None
     tCromo = None
-    ciudadesDAO = None
+    ciudadesDAO = CiudadesDAO()
 
     def __init__(self):
         self._funcFitness = 0
@@ -36,7 +36,7 @@ class Cromosoma(object):
 
     def instancioGenes(self):
         # Crear una lista con los números del 1 al 24.
-        lista = [ num for num in range(1,24)]
+        lista = [ num for num in range(1,25)]
 
         # Agregar genes al cromosoma hasta llegar a los 24
         while lista:
@@ -46,7 +46,7 @@ class Cromosoma(object):
 
     def instancioGenesParaCrossover(self):
         # Creo un cromosoma donde todos sus genes tienen el valor 0
-        for _ in range(0, 23):
+        for _ in range(0, 24):
             self._genes.append(0)
     
     def calculoDatosCromosoma(self):
@@ -97,4 +97,4 @@ class Cromosoma(object):
     @classmethod
     def instanciarCiudades(self):
         ciudadesDAO = CiudadesDAO()
-        ciudadesDAO.cargarCiudades()
+        #ciudadesDAO.cargarCiudades()
