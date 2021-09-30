@@ -7,7 +7,6 @@ import sys
 import pandas as pd
 import numpy as np 
 
-# Se podría meter todo esto en una función
 def menuConsola():
     print(f"--------------------------------------------------------")
     print(f"Que desea hacer:")
@@ -78,7 +77,7 @@ def main():
     app.exec_()
 
 if __name__ == '__main__':
-    #CARGA DE LOS DATOS DEL EXCEL
+    # Carga de los datos del excel
     CiudadesDAO.cargarCiudades()
     main()
     #menuConsola()

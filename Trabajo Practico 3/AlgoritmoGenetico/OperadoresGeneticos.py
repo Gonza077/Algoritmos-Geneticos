@@ -1,6 +1,6 @@
 from enum import Enum
 import random as rnd
-from AlgoritmoGenetico.cromosoma import *
+from AlgoritmoGenetico.Cromosoma import *
 
 class Ruleta():
 

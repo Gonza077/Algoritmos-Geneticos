@@ -1,5 +1,7 @@
+from Ciudad import Ciudad
 import random
 import copy
+import CiudadesDAO
 
 class Cromosoma(object):
 
@@ -25,7 +27,8 @@ class Cromosoma(object):
     
     def calculoDatosCromosoma(self):
         for i in range(-1, len(self._genes)):
-            self._funcObjetivo += self._genes[i].getDistanciaTo(self._genes[i+1])
+            ciudadActual = CiudadesDAO.getCiudadById(self._genes[i])
+            self._funcObjetivo += ciudadActual.getDistanciaTo(self._genes[i+1])
 
     def calculoFitness(self,sumaPoblacion): 
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada cromosoma"""
@@ -59,10 +62,10 @@ class Cromosoma(object):
                 #Se necesita un auxiliar por el hecho de que cuando se modifica un valor, se volveria a pisar el mismo indice
                 aux1=self._genes.index(genMutado1)
                 aux2=self._genes.index(genMutado2)
-                #print(f"Nro: {genMutado1} - Posicion: {self._genes.index(genMutado1)}")
-                #print(f"Nro: {genMutado2} - Posicion: {self._genes.index(genMutado2)}")
+                # print(f"Nro: {genMutado1} - Posicion: {self._genes.index(genMutado1)}")
+                # print(f"Nro: {genMutado2} - Posicion: {self._genes.index(genMutado2)}")
                 self._genes[aux1] , self._genes[aux2] = genMutado2 , genMutado1
                 break
-        #print(f"Nro: {genMutado1} - Posicion: {self._genes.index(genMutado1)}")
-        #print(f"Nro: {genMutado2} - Posicion: {self._genes.index(genMutado2)}")
+        # print(f"Nro: {genMutado1} - Posicion: {self._genes.index(genMutado1)}")
+        # print(f"Nro: {genMutado2} - Posicion: {self._genes.index(genMutado2)}")
 

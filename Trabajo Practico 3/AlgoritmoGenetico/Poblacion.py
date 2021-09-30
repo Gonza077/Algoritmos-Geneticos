@@ -27,9 +27,9 @@ class Poblacion(object):
     def instancioCromosomas(self):
         for i in range(Poblacion.tPobla):
             cromosoma = Cromosoma()   
-            Cromosoma._idCiudad=Cromosoma.IDCiudad+1
+            Cromosoma._idCiudad=Cromosoma.IDCromosoma+1
             self.arrCromosomas.append(cromosoma)
-        Cromosoma.IDCiudad=1
+        Cromosoma.IDCromosoma=1
 
     def calculoSumaPobla(self):
         """Se calcula la suma de la poblacion a partir del valor de cada cromosoma"""
