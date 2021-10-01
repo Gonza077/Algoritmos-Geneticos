@@ -1,3 +1,4 @@
+from Ciudad import Ciudad
 import random
 from CiudadesDAO import *
 
@@ -82,7 +83,7 @@ class Cromosoma(object):
                 #Se necesita un auxiliar por el hecho de que cuando se modifica un valor, se volveria a pisar el mismo indice
                 aux1=self._genes.index(genMutado1)
                 aux2=self._genes.index(genMutado2)
-                #print(f"Nro: {genMutado1} - Posicion: {self._genes.index(genMutado1)}")
-                #print(f"Nro: {genMutado2} - Posicion: {self._genes.index(genMutado2)}")
+                # print(f"Nro: {genMutado1} - Posicion: {self._genes.index(genMutado1)}")
+                # print(f"Nro: {genMutado2} - Posicion: {self._genes.index(genMutado2)}")
                 self._genes[aux1] , self._genes[aux2] = genMutado2 , genMutado1
                 break

@@ -1,3 +1,6 @@
+from AlgoritmoGenetico.Poblacion import Poblacion
+from AlgoritmoGenetico.Generacion import Generacion
+from AlgoritmoGenetico.OperadoresGeneticos import *
 from Ciudad import *
 import pandas as pd
 import numpy as np
@@ -32,6 +35,18 @@ class CiudadesDAO():
         for ciu in self._ciudades:
             if ciu.getNombre().lower() == nombre.lower():
                 return ciu
+
+    @classmethod
+    def getCiudadById(self, id):
+        """
+            Retorna una ciudad segun su id, considerando que los genes van del 1 al 24 y las 
+            ciudades se cargan siempre en orden alfabético.
+        """
+        if id > 0 and id < 25:
+            return self._ciudades[id - 1]
+        else:
+            raise IndexError('Id fuera de rango, solo estan permitidos Ids desde 1 a 24.')
+            
     
     @classmethod
     def buscarRuta(self,nombreCiudad):

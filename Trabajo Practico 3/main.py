@@ -18,7 +18,7 @@ def main():
     app.exec_()
 
 if __name__ == '__main__':
-    #CARGA DE LOS DATOS DEL EXCEL
+    # Carga de los datos del excel
     CiudadesDAO.cargarCiudades()
     main()
     #menuConsola()
