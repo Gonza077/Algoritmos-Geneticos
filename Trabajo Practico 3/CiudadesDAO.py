@@ -41,8 +41,7 @@ class CiudadesDAO():
         proxCiudad = ciudad.getCiudadMasCercana(ruta)  
         while len(ruta) <= 23:
             ruta.append(proxCiudad)
-            # Le tengo que pedir a la lista de ciudades que cargamos desde Pandas
-            #     donde esta la proxima mas cercana.
+            # Le tengo que pedir a la lista de ciudades que cargamos desde Pandas donde esta la proxima mas cercana.
             ciudad = self.getCiudad(proxCiudad.getNombre())
             proxCiudad = ciudad.getCiudadMasCercana(ruta)
         # Saco la ciudad inicial, ya que luego la agregamos al final
@@ -63,8 +62,26 @@ class CiudadesDAO():
             if (distTotal < distanciaMinima):
                 distanciaMinima = distTotal
                 rutaMinima = ruta
-            #print(f"La ruta mínima desde {ciu.getNombre()} es de:{distTotal} Km.")
-            #print(f'{list(map(lambda x:x.getNombre(), ruta))}')
         return rutaMinima
+
+    @classmethod
+    def getCiudadById(self, ID):
+        for ciu in self._ciudades:
+            if ciu.getID() == ID:
+                return ciu
+                break
+
+    @classmethod
+    def getDistanciaById(self, id_origen, id_destino):
+        ciudadOrigen = self.getCiudadById(id_origen)
+        ciudadDestino = self.getCiudadById(id_destino)
+        return ciudadOrigen.getDistanciaTo(ciudadDestino)
+
+    @classmethod
+    def getRutaByIDS(self,arrIDs):
+        ruta=[]
+        for ID in arrIDs:
+            ruta.append(self.getCiudadById(ID))
+        return ruta
     
     

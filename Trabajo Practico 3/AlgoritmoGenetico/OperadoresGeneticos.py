@@ -1,16 +1,17 @@
-from enum import Enum
 import random as rnd
-from AlgoritmoGenetico.cromosoma import *
+from AlgoritmoGenetico.Cromosoma import *
 
 class Ruleta():
 
     def aplicarSeleccion(self,poblacionAnterior,cantCromosomasPobla):
         ruleta=[0]
-        valor=0     
-        paresPadres=[]         
+        valor=0
+        paresPadres=[]   
+        poblacionAnterior.arrCromosomas.sort()
         for cromosoma in poblacionAnterior.arrCromosomas:       
-            valor+=cromosoma.funcFitness
+            valor += cromosoma._funcFitness
             ruleta.append(valor)
+        poblacionAnterior.arrCromosomas.sort(reverse = True)
         for _ in range ((len(poblacionAnterior.arrCromosomas) - cantCromosomasPobla) // 2): #Se debe armar 5 pares de longitud 2, tengo que castearlo a entero por que tira error
                 pares=[]
                 while ( len(pares) < 2 ): #Se debe armar el par, esto garantiza que siempre se forme
@@ -32,7 +33,7 @@ class Torneo():
                 # Elijo aleatoriamente 2 cromosomas
                 crom1 = poblacionAnterior.arrCromosomas[rnd.randint(0,9)]
                 crom2 = poblacionAnterior.arrCromosomas[rnd.randint(0,9)]
-                if crom1 >= crom2: # Elijo el mejor de ambos
+                if crom1 <= crom2: # Elijo el mejor de ambos
                     pares.append(crom1)
                 else:
                     pares.append(crom2)
@@ -47,17 +48,18 @@ class CrossOverCiclico():
     def aplicoCrossover(self,padres):
         nuevosCromosomas=[]
         #for par in padres:  #Padres viene de a pares
-        padre=padres[0] 
-        madre=padres[1]
-        if(rnd.random() <= self.probCrossover):
-            hijo1 = self.getGenesHijo(padre, madre)     
-            hijo2 = self.getGenesHijo(madre, padre)
-            nuevosCromosomas.append(hijo1)
-            nuevosCromosomas.append(hijo2)
-        else:
-            #Se guarda cada cromosoma en la nueva poblacion
-            nuevosCromosomas.append(padre)
-            nuevosCromosomas.append(madre)    
+        for par in padres:
+            padre=par[0] 
+            madre=par[1]
+            if(rnd.random() <= self.probCrossover):
+                hijo1 = self.getGenesHijo(padre, madre)     
+                hijo2 = self.getGenesHijo(madre, padre)
+                nuevosCromosomas.append(hijo1)
+                nuevosCromosomas.append(hijo2)
+            else:
+                #Se guarda cada cromosoma en la nueva poblacion
+                nuevosCromosomas.append(padre)
+                nuevosCromosomas.append(madre)
         return nuevosCromosomas
 
     def getGenesHijo(self, padre, madre):
@@ -85,12 +87,12 @@ class CrossOverCiclico():
         except ValueError:
             return None
 
-class Mutacion():
+class MutacionAdjointSwap():
 
     def __init__(self,probMuta):
         self.probMutacion=probMuta
 
     def aplicoMutacion(self,cromosomas):
         for cromosoma in cromosomas:          
-            if(rnd.random() <= self.probMutacion):                  
+            if(rnd.random() <= self.probMutacion):   
                 cromosoma.mutoGen()

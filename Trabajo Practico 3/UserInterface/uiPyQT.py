@@ -8,6 +8,10 @@ from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from CiudadesDAO import CiudadesDAO
+from AlgoritmoGenetico.Cromosoma import *
+from AlgoritmoGenetico.Poblacion import *
+from AlgoritmoGenetico.OperadoresGeneticos import *
+from AlgoritmoGenetico.Generacion import *
 import numpy as np
 
 class Punto(object):
@@ -171,46 +175,31 @@ class Ui_MainWindow(object):
         dialog.setWindowModality(Qt.ApplicationModal)
         self.buttonBox.accepted.connect(dialog.accept)
         self.buttonBox.rejected.connect(dialog.reject)
-
         respuesta = dialog.exec_()
-        print("Valor del boton presionado 1-Aceptar 0-Cancelar:", respuesta)
-
         if(respuesta):
-            """
-                Aca iria la función que retorna la mejor solución encontrada
-                por el algoritmo genetico.
+            #----- Parametros------
+            Poblacion.tPobla = int(self.numCromosomas.text())
+            Corridas = int(self.cantCiclos.text())
+            probMutacion = float(self.probMutacion.text())
+            probCrossover = float(self.probCrossover.text())
+            Poblacion.tipoSeleccion = Ruleta()
+            Poblacion.tipoCrossover = CrossOverCiclico(probCrossover)
+            Poblacion.tipoMutacion = MutacionAdjointSwap(probMutacion)
+            Poblacion.elitismo = True
+            generacion = Generacion()
+            #----- Parametros------
 
-                numCromosomas = int(self.numCromosomas.text())
-                cantCiclos = int(self.cantCiclos.text())
-                probMutacion = float(self.probMutacion.text())
-                probCrossover = float(self.probCrossover.text())
+            for _ in range(0, Corridas):
+                generacion.creoGeneracion()
 
-                ruta = buscarRutaAlgoritmoGenetico(numCromosomas, cantCiclos, probMutacion, probCrossover)
-                arreglo_distancias = list(map(lambda x:x.getDistancia(), ruta))
-                distancia = np.sum(arreglo_distancias)
-                rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
+            cr = generacion.menorCromosoma()
 
-                respuesta = (f"La distancia mínima encontrada por el Algoritmo Genetico es \n"
-                 f"desde {ruta[23].getNombre()} a {ruta[0].getNombre()} \n con una distancia de {distancia} KMs")
-                
-                self.labelRespuesta.setText(respuesta)
-                self.labelRespuesta.adjustSize()
-                self.setPuntosMapa(ruta)
-
-            """
-            msg = QtWidgets.QMessageBox()
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Valores ingresados")
-            msg.setInformativeText("Ver valores ingresados")
-            msg.setWindowTitle("Ver valores")
-            # String multilinea definido entre parentesis. Ej: string = (f"\n" f"\n" f"\n" )
-            stringDetailedText = (f"Número de cromosomas: {self.numCromosomas.text()} \n" 
-                f"Cantidad de ciclos: {self.cantCiclos.text()}\n"
-                f"Probabilidad de mutación: {self.probMutacion.text()}\n"
-                f"Probabilidad de crossover: {self.probCrossover.text()} \n"
-                f"Suma Mutacion y Crossover: {float(self.probCrossover.text()) + float(self.probMutacion.text())}")
-            msg.setDetailedText(stringDetailedText)
-            msg.exec_()
+            ruta= CiudadesDAO.getRutaByIDS(cr.getGenes())
+            rutaString = "\n".join(ciu.getNombre() for ciu in ruta)
+            respuesta = f"La distancia entre {ruta[23].getNombre()} y {ruta[0].getNombre()} \n es de {cr.getFuncObjetivo()} KMs"
+            self.labelRespuesta.setText("La distancia mínima encontrada por el AG desde "+ruta[23].getNombre()+"\n"*2+ rutaString + "\n"*2 + respuesta)
+            self.labelRespuesta.adjustSize()
+            self.setPuntosMapa(ruta)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
