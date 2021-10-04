@@ -24,14 +24,48 @@ class Generacion(object):
     def datosGeneracion(self):
         tuplas=[]
         for poblacion in self.arrPoblaciones:
-            #if (poblacion.ID % ((len(self.arrPoblaciones)/20)) == 0): #Dependiendo del tamaño de la poblacion, y la cantidad de registros que se quieran mostrar, en este caso 20
             tuplas.append(poblacion.ATupla())
         cabecera=["Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"]
         print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
         self.dibujoGrafica()
 
+    def dibujoGrafica(self):
+        arrPromedios = []
+        arrMaximos = []
+        arrMinimos = []
+
+        for pobla in self.arrPoblaciones:
+            arrPromedios.append(pobla.mediaPoblacionFO)
+            arrMaximos.append(pobla.maxCromosoma.funcObjetivo)
+            arrMinimos.append(pobla.minCromosoma.funcObjetivo)
+
+        plt.plot( arrPromedios, color='r', label='Medias',)
+        plt.plot( arrMaximos, color='g', label='Maximos', alpha=0.6)
+        plt.plot( arrMinimos, color='y', label='Minimos',alpha=0.6)
+        
+
+        cantPoblacion=len(self.arrPoblaciones)
+        plt.title(f"Grafico con {cantPoblacion} corridas")
+        plt.xlabel("Numero de población")
+        plt.ylabel("Valor")
+        plt.ylim(0, 1.1)
+
+        plt.legend()
+
+        plt.show()
+        
+    def cargoDatosExcel(self,wb):
+        #Se crea una instancia de un libro en blanco que NO esta activa
+        hoja=wb.create_sheet("Generacion")     
+        hoja.append(("Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"))
+        for poblacion in self.arrPoblaciones:                      
+            hoja.append(poblacion.ATupla())  
+        wb.save("DatosEjercicio1.xlsx")
+
     def menorCromosoma(self):
-        for poblacion in self.arrPoblaciones:
-            if(float("inf") > poblacion.minCromosoma.getFuncObjetivo()):
-                cr = poblacion.minCromosoma
+        cr = Cromosoma()
+        cr.setFuncObj(float("inf"))
+        poblacion= self.arrPoblaciones[-1]
+        if(cr.getFuncObjetivo() > poblacion.minCromosoma.getFuncObjetivo()):
+            cr = poblacion.minCromosoma
         return cr

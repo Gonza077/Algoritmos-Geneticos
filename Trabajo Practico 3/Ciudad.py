@@ -31,6 +31,7 @@ class Ciudad():
         for c in self._ciudades:
             if (c.getNombre() == ciudadSiguiente.getNombre()):
                 return c.getDistancia()
+                break
 
     def getNombre(self):
         return self._nombre

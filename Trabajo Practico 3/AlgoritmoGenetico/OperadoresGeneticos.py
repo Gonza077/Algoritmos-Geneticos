@@ -31,8 +31,8 @@ class Torneo():
             pares = []
             for _ in range(0, t):
                 # Elijo aleatoriamente 2 cromosomas
-                crom1 = poblacionAnterior.arrCromosomas[rnd.randint(0,9)]
-                crom2 = poblacionAnterior.arrCromosomas[rnd.randint(0,9)]
+                crom1 = poblacionAnterior.arrCromosomas[rnd.randint((1,24))]
+                crom2 = poblacionAnterior.arrCromosomas[rnd.randint((1,24))]
                 if crom1 <= crom2: # Elijo el mejor de ambos
                     pares.append(crom1)
                 else:

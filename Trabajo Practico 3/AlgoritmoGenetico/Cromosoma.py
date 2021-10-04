@@ -61,6 +61,9 @@ class Cromosoma(object):
     def setGenEnPosicion(self, gen, posicion):
         #Por el momento supongo que la lista esta instanciada
         self._genes[posicion] = gen
+    
+    def setFuncObj(self,valor):
+        self._funcObjetivo=valor
 
     def getGenEnPosicion(self, posicion):
         return self._genes[posicion]

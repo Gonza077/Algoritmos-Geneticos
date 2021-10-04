@@ -18,7 +18,7 @@ class CiudadesDAO():
                 DistanciaCiudad=Ciudad()
                 DistanciaCiudad.agregarNombre(hojaExcel.columns[j])
                 DistanciaCiudad.agregarDistancia(fila[j])
-                if ciudad._nombre==DistanciaCiudad.getNombre():  
+                if ciudad.getNombre()==DistanciaCiudad.getNombre():  
                     DistanciaCiudad.agregarDistancia(0)
                 ciudad.agregarCiudad(DistanciaCiudad)
             self._ciudades.append(ciudad)
@@ -32,20 +32,7 @@ class CiudadesDAO():
         for ciu in self._ciudades:
             if ciu.getNombre().lower() == nombre.lower():
                 return ciu
-
-    @classmethod
-    def getCiudadById(self, ID):
-        for ciu in self._ciudades:
-            if ciu.getID() == ID:
-                return ciu
                 break
-
-    @classmethod
-    def getDistanciaById(self, id_origen, id_destino):
-        ciudadOrigen = self.getCiudadById(id_origen)
-        ciudadDestino = self.getCiudadById(id_destino)
-        return ciudadOrigen.getDistanciaTo(ciudadDestino)
-            
     
     @classmethod
     def buscarRuta(self,nombreCiudad):
@@ -91,5 +78,19 @@ class CiudadesDAO():
         for ID in arrIDs:
             ruta.append(self.getCiudadById(ID))
         return ruta
+
+    @classmethod
+    def getDistanciaById(self, id_origen, id_destino):
+        ciudadOrigen = self.getCiudadById(id_origen)
+        ciudadDestino = self.getCiudadById(id_destino)
+        return ciudadOrigen.getDistanciaTo(ciudadDestino)
+    
+    @classmethod
+    def getCiudadById(self, ID):
+        for ciu in self._ciudades:
+            if ciu.getID() == ID:
+                return ciu
+                break
+            
     
     

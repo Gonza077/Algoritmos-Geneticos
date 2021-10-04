@@ -23,6 +23,8 @@ class Poblacion(object):
         self.arrCromosomas=[]
         self.sumaPoblacion=0
         self.mediaPoblacionFO=0
+        self.minCromosoma = None
+        self.maxCromosoma = None
         
     def instancioCromosomas(self):
         for _ in range(0, Poblacion.tPobla):
