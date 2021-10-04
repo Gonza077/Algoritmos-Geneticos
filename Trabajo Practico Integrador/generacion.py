@@ -12,18 +12,19 @@ class Generacion(object):
 
     #Metodos
     def creoGeneracion(self):
-        """Si se ejecuta por primera vez, generara una poblacion, si no, a la ultima existente se le aplicara algun operador genetico"""
+        #TESTEO PARA VER SI CREA LAS DEMAS   
         poblacion=Poblacion()
+        poblacion.instacioParques()
+        """
         if(self.arrPoblaciones == [] ): 
             poblacion.instacioParques()       
         else:              
             #poblacion.creoNuevoParqueEolico(self.arrPoblaciones[-1]) 
-            poblacion.instacioParques() #TESTEO PARA VER SI CREA LAS DEMAS   
-        poblacion.calculoDatosParqueEolico()                     
-        self.arrPoblaciones.append(poblacion)
-    
-    #Esto ya no serviria por que no tenemos estos nuevos valores
-    """
+            poblacion.instacioParques() 
+        """
+        poblacion.calculoDatosPoblacion()                   
+        self.arrPoblaciones.append(poblacion)    
+
     def dibujoGrafica(self):
         arrPromedios = []
         arrMaximos = []
@@ -57,13 +58,12 @@ class Generacion(object):
         for poblacion in self.arrPoblaciones:                      
             hoja.append(poblacion.ATupla())  
         wb.save("DatosEjercicio1.xlsx")        
-    """    
+      
 
     def datosGeneracion(self):
         tuplas=[]      
         for poblacion in self.arrPoblaciones:
             print("---------------------------------------------")
-            print(f"Poblacion N°{poblacion.ID}\n")
             #tuplas.append(poblacion.ATupla())
             poblacion.diseñoParques()
             print("---------------------------------------------")  

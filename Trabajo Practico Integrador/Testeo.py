@@ -2,16 +2,16 @@ import random
 import numpy as np
 from Generacion import *
 from Poblacion import *
-from ParqueEolico import *
+from Cromosoma import *
 #from OperadoresGeneticos import *
 
 Corridas=[1]   
 generaciones=[]
 #Parametros del Parque
-ParqueEolico.cantAerogeneradores=25
+Cromosoma.tCromo=25
 #Parametros de la Poblacion
 Poblacion.TamañoCelda=180  #Distancia Minima de 4*R, donde R es 45 m
-Poblacion.CantParques=5
+Poblacion.CantParques=1
 
 """
 #Testeo de la construccion de la matriz
@@ -30,13 +30,20 @@ for gene in generaciones:
 arr=np.array([[0]*10]*10)
 contador=0
 while(contador<25):
-    contador+=1
     fRandom=random.randrange(len(arr))
-    cRandom=random.randrange(len(arr[0]))
-    arr[fRandom][cRandom]=1
+    cRandom=random.randrange(len(arr[0]))    
+    if arr[fRandom][cRandom]!=1:
+        arr[fRandom][cRandom]=1
+        contador+=1
 
-print()
+sum=0
+for fila in arr:
+    sum+= len(np.where(fila==1)[0])
 
+print(sum)
+
+
+"""
 for fila in arr:
     aeroFilas=np.where(fila==1)[0]#Dado que devuelve una tupla con un arreglo y el tipo de dato, solo tomo el arreglo
     #existeEstela() -> si existen dos generadores en la misma fila devuelve true
@@ -55,3 +62,4 @@ for i in range(len(velocidadesViento)-1):
     if velocidadesViento[i][0]<=velViento and velocidadesViento[i+1][0]>velViento:
         print(f"La potencia asociada esa velocidad es {velocidadesViento[i][1]}")
         break
+"""
