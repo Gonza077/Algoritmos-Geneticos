@@ -12,10 +12,10 @@ class Cromosoma(object):
 
     #Atributos
     def __init__(self):   
-        self.ID = Cromosoma.IDCromosoma  
+        self._ID = Cromosoma.IDCromosoma  
         self._funcFitness=0
         self._funcObjetivo=0
-        self._terrenoParque=np.array([[0]*10]*10) #Definira una matriz de 10*10
+        self._genes=np.array([[0]*10]*10) #Definira una matriz de 10*10
         Cromosoma.IDCromosoma +=1
 
     @staticmethod
@@ -44,7 +44,7 @@ class Cromosoma(object):
     #Metodos de instancia
     def calculoFuncObjetivo(self):
         """Se calcula la potencia total de cada parque""" 
-        for fila in self._terrenoParque:
+        for fila in self._genes:
             velViento=Cromosoma.VelocidadViento 
             aeroFilas=np.where(fila==1)[0] #Devuelve una tupla con un arreglo y el tipo de dato, solo tomo el arreglo
             if(len(aeroFilas)>0):
@@ -75,7 +75,7 @@ class Cromosoma(object):
         return self._funcFitness
     
     def getGenes(self):
-        return self._terrenoParque
+        return self._genes
         
     def calculoFitness(self,sumaPoblacion): 
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada parque"""
@@ -94,17 +94,17 @@ class Cromosoma(object):
         contador=0
         while(contador<Cromosoma.tCromo):
             #Se toma un indice de fila al azar
-            filRnd=rnd.randrange(len(self._terrenoParque))
-            colRnd=rnd.randrange(len(self._terrenoParque[0]))
+            filRnd=rnd.randrange(len(self._genes))
+            colRnd=rnd.randrange(len(self._genes[0]))
             #Se toma un indice de columna al azar
-            if self._terrenoParque[filRnd,colRnd]!=1:
-                self._terrenoParque[filRnd,colRnd]=1
+            if self._genes[filRnd,colRnd]!=1:
+                self._genes[filRnd,colRnd]=1
                 contador+=1
     
     def datosParque(self):
-        print(f"Parque N° {self.ID} -- Func.Fitness: {self._funcFitness} -- Func. Objetivo: {self._funcObjetivo} \n")
+        print(f"Parque N° {self._ID} -- Func.Fitness: {self._funcFitness} -- Func. Objetivo: {self._funcObjetivo} \n")
         print("Diseño del Parque")
-        for fila in self._terrenoParque:
+        for fila in self._genes:
             print(fila)
         print()
 

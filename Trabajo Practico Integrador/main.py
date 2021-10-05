@@ -4,7 +4,7 @@ from Cromosoma import *
 from OperadoresGeneticos import *
 import openpyxl as opyxl
 
-CantPoblaciones=[1]   
+CantPoblaciones=[20]   
 generaciones=[]
 #Parametros del Parque 
 Cromosoma.tCromo=25
