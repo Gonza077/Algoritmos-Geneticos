@@ -4,7 +4,7 @@ from Cromosoma import *
 from OperadoresGeneticos import *
 import openpyxl as opyxl
 
-Corridas=[1]   
+CantPoblaciones=[1]   
 generaciones=[]
 #Parametros del Parque 
 Cromosoma.tCromo=25
@@ -17,10 +17,10 @@ Poblacion.tipoCrossover=CrossOverUnPunto(0.75)
 Poblacion.tipoMutacion=MutacionInvertida(0.20)
 Poblacion.elitismo=False
 
-for x in Corridas:
+for x in CantPoblaciones:
     generacion=Generacion()
     for _ in range(x):        
-        generacion.creoGeneracion()
+        generacion.creoPoblacion()
     Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
     generaciones.append(generacion)
 
@@ -35,4 +35,3 @@ wb = opyxl.Workbook()
 for generacion in generaciones:
     generacion.cargoDatosExcel(wb)
 """
-

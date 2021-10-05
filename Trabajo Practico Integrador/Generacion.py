@@ -5,13 +5,17 @@ from Poblacion import *
 from tabulate import tabulate
 
 class Generacion(object):
+
+    IDGeneracion = 1
     
     #Atributos de instancia
     def __init__(self):    
+        self.ID=Generacion.IDGeneracion
         self.arrPoblaciones=[]
+        Generacion.IDGeneracion+=1
 
     #Metodos
-    def creoGeneracion(self):
+    def creoPoblacion(self):
         #TESTEO PARA VER SI CREA LAS DEMAS   
         poblacion=Poblacion()
         poblacion.instacioParques()
@@ -48,25 +52,23 @@ class Generacion(object):
         plt.legend()
 
         plt.show()
-    
-        
+           
     def cargoDatosExcel(self,wb):
          #Se crea una instancia de un libro en blanco que NO esta activa
-        hoja=wb.create_sheet("Generacion")     
-        hoja.append(("Poblacion","Min. FO","Genes cromosoma menor","Max. FO","Genes cromosoma Mayor","Media FO"))
+        hoja=wb.create_sheet(f"Generacion {self.ID}")     
+        hoja.append(("Poblacion","Min. Func. Objetivo","Max. Func. Objetivo","Media Func. Objetivo"))
         for poblacion in self.arrPoblaciones:                      
             hoja.append(poblacion.ATupla())  
         wb.save("DatosEjercicio1.xlsx")        
       
-
     def datosGeneracion(self):
-        #tuplas=[]    
+        tuplas=[]    
         for poblacion in self.arrPoblaciones:
             print("---------------------------------------------")
-            #tuplas.append(poblacion.ATupla())
+            tuplas.append(poblacion.ATupla())
             poblacion.diseñoParques()
             print("---------------------------------------------")  
-        #cabecera=["Parque","Minima Potencia","Maxima Potencia","Potencia Media"]
-        #print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
+        cabecera=["Poblacion","Min. Func. Objetivo","Max. Func. Objetivo","Media Func. Objetivo"]
+        print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
         #self.dibujoGrafica()
     
