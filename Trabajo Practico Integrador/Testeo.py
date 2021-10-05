@@ -3,30 +3,22 @@ import numpy as np
 from Generacion import *
 from Poblacion import *
 from Cromosoma import *
-#from OperadoresGeneticos import *
+from OperadoresGeneticos import *
 
 Corridas=[1]   
 generaciones=[]
-#Parametros del Parque
+#Parametros del Parque 
 Cromosoma.tCromo=25
+Cromosoma.VelocidadViento=25 #Velocidad del viento
+Cromosoma.TamañoCelda=180 #Distancia Minima de 4*R, donde R es 45 m
 #Parametros de la Poblacion
-Poblacion.TamañoCelda=180  #Distancia Minima de 4*R, donde R es 45 m
-Poblacion.CantParques=1
+Poblacion.tPobla=5 #Cantidad de parques x Poblacion
+Poblacion.tipoSeleccion=Ruleta()
+Poblacion.tipoCrossover=CrossOverUnPunto(0.75)
+Poblacion.tipoMutacion=MutacionInvertida(0.20)
+Poblacion.elitismo=False
 
-"""
-#Testeo de la construccion de la matriz
-for x in Corridas:
-    generacion=Generacion()
-    for _ in range(x):        
-        generacion.creoGeneracion()
-    Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
-    generaciones.append(generacion)
-
-for gene in generaciones:
-    gene.datosGeneracion()
-
-"""
-
+#-----Creacion del parque eolico-----
 arr=np.array([[0]*10]*10)
 contador=0
 while(contador<25):
@@ -36,30 +28,51 @@ while(contador<25):
         arr[fRandom][cRandom]=1
         contador+=1
 
+#Verificacion de aerogeneradores
 sum=0
 for fila in arr:
     sum+= len(np.where(fila==1)[0])
 
-print(sum)
+#print(sum)
 
+#-----Creacion del parque eolico-----
 
-"""
+#-------Calculo del efecto estela-----
+a=0.3333
+radioAero=45
+distanciaCasillas=1
+coefDeArrastre= round(( 1 / (2 * math.log(80/0.05))),4)
+
+#print(( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
+#print(25 * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
+
+#-------Calculo del efecto estela-----
+def efectoEstela(velViento,distanciaCasillas):
+    a=0.3333
+    radioAero=45
+    coefDeArrastre= round(( 1 / (2 * math.log(80/0.05))),4) #Aproximadamente 0.0678
+    return velViento * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * Cromosoma.TamañoCelda) / radioAero )**2) ) 
+
+def calculoPotenciaAerogenerador(velViento):  
+    #Cada indice de la lista contiene una lista donde el primer indice indica la velocidad del viento y el segundo la potencia asociada  
+    velocidadesViento=[[0, 0],[1, 0],[2, 0],[3, 10],[4, 46],[5, 170],[6, 355],[7, 580],[8, 874],[9, 1219],[10, 1544],[11, 1740],[12, 1789],[13, 1800],[14, 1800],[15, 1800],[16, 1800],[17, 1800],[18, 1800],[19, 1800],[20, 1800],[21, 1800],[22, 1800],[23, 1800],[24, 1800],[25, 1800],[26, 0]]
+    for i in range(len(velocidadesViento)-1):
+        if velocidadesViento[i][0]<=velViento and velocidadesViento[i+1][0]>velViento:
+            return velocidadesViento[i][1]
+            break
+
+funcObjetivo=0
+
 for fila in arr:
-    aeroFilas=np.where(fila==1)[0]#Dado que devuelve una tupla con un arreglo y el tipo de dato, solo tomo el arreglo
-    #existeEstela() -> si existen dos generadores en la misma fila devuelve true
-    if len(aeroFilas) >=2:
-        #calculoDistancia(aeroFilas) -> Se haria un metodo con los indices de la fila, despues se calcula el viento
-        for i in range(0,len(aeroFilas)-1):
-            print(f"La distancia entre AeroGenerador N° {aeroFilas[i] +1} y {aeroFilas[i+1] +1} es {aeroFilas[i+1]-aeroFilas[i]} de la fila \t {fila}")
+    velViento=Cromosoma.VelocidadViento 
+    aeroFilas=np.where(fila==1)[0] #Devuelve una tupla con un arreglo y el tipo de dato, solo tomo el arreglo
+    if(len(aeroFilas)>0):
+        funcObjetivo += calculoPotenciaAerogenerador(velViento)
+        if(len(aeroFilas)>=2):  #Si existen al menos dos generadores en una fila existira el efecto estela
+            for i in range(1,len(aeroFilas)):
+                velViento = efectoEstela(velViento,aeroFilas[i]-aeroFilas[i-1]) #Distancia en indices entre cada aerogenerador
+                funcObjetivo += calculoPotenciaAerogenerador(velViento)
 
-print()
-for fila in arr:
-    print(fila)
+#print(funcObjetivo)
 
-velViento=17
-velocidadesViento=[[0, 0],[1, 0],[2, 0],[3, 10],[4, 46],[5, 170],[6, 355],[7, 580],[8, 874],[9, 1219],[10, 1544],[11, 1740],[12, 1789],[13, 1800],[14, 1800],[15, 1800],[16, 1800],[17, 1800],[18, 1800],[19, 1800],[20, 1800],[21, 1800],[22, 1800],[23, 1800],[24, 1800],[25, 1800],[26, 0]]
-for i in range(len(velocidadesViento)-1):
-    if velocidadesViento[i][0]<=velViento and velocidadesViento[i+1][0]>velViento:
-        print(f"La potencia asociada esa velocidad es {velocidadesViento[i][1]}")
-        break
-"""
+#-------Calculo del efecto estela-----

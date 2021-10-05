@@ -3,8 +3,6 @@ from CiudadesDAO import CiudadesDAO
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
 import sys
-import pandas as pd
-import numpy as np 
     
 class ExampleApp(QtWidgets.QMainWindow, uiPyQT.Ui_MainWindow):
     def __init__(self, parent=None):

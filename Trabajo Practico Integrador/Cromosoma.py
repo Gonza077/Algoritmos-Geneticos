@@ -5,22 +5,22 @@ import copy
 
 class Cromosoma(object):
     
-    IDParque=1
+    IDCromosoma=1
     tCromo=None
     TamañoCelda=None
     VelocidadViento=None
 
     #Atributos
     def __init__(self):   
-        self.ID = Cromosoma.IDParque  
+        self.ID = Cromosoma.IDCromosoma  
         self._funcFitness=0
         self._funcObjetivo=0
         self._terrenoParque=np.array([[0]*10]*10) #Definira una matriz de 10*10
-        Cromosoma.IDParque +=1
+        Cromosoma.IDCromosoma +=1
 
     @staticmethod
-    def reseteoIDParques():
-         Cromosoma.IDParque=1
+    def reseteoIDCromosoma():
+         Cromosoma.IDCromosoma=1
     
     #Operadores logicos, ya que Python no permite comparar obejtos 
     def __gt__(self, parque):
@@ -73,6 +73,9 @@ class Cromosoma(object):
     
     def getFuncFitness(self):
         return self._funcFitness
+    
+    def getGenes(self):
+        return self._terrenoParque
         
     def calculoFitness(self,sumaPoblacion): 
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada parque"""
@@ -99,7 +102,8 @@ class Cromosoma(object):
                 contador+=1
     
     def datosParque(self):
-        print(f"Parque N° {self.ID} -- Fitness: {self._funcFitness} -- Potencia Parque: {self._funcObjetivo}")
+        print(f"Parque N° {self.ID} -- Func.Fitness: {self._funcFitness} -- Func. Objetivo: {self._funcObjetivo} \n")
+        print("Diseño del Parque")
         for fila in self._terrenoParque:
             print(fila)
         print()

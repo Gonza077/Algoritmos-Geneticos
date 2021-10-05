@@ -32,8 +32,8 @@ class Generacion(object):
 
         for pobla in self.arrPoblaciones:
             arrPromedios.append(pobla.mediaPoblacionFO)
-            arrMaximos.append(pobla.maxCromosoma.funcObjetivo)
-            arrMinimos.append(pobla.minCromosoma.funcObjetivo)
+            arrMaximos.append(pobla.maxCromosoma._funcObjetivo)
+            arrMinimos.append(pobla.minCromosoma._funcObjetivo)
 
         plt.plot( arrPromedios, color='r', label='Medias',)
         plt.plot( arrMaximos, color='g', label='Maximos', alpha=0.6)
@@ -44,7 +44,6 @@ class Generacion(object):
         plt.title(f"Grafico con {cantPoblacion} corridas")
         plt.xlabel("Numero de población")
         plt.ylabel("Valor")
-        plt.ylim(0, 1.1)
         # Se agrega la leyenda para poder diferenciar cada color
         plt.legend()
 
@@ -61,13 +60,13 @@ class Generacion(object):
       
 
     def datosGeneracion(self):
-        tuplas=[]      
+        #tuplas=[]    
         for poblacion in self.arrPoblaciones:
             print("---------------------------------------------")
             #tuplas.append(poblacion.ATupla())
             poblacion.diseñoParques()
             print("---------------------------------------------")  
-        #cabecera=["Parque","Potencia en kW"]
+        #cabecera=["Parque","Minima Potencia","Maxima Potencia","Potencia Media"]
         #print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
         #self.dibujoGrafica()
     

@@ -19,8 +19,9 @@ class Poblacion(object):
     #Metodos de instancia
     def __init__(self):
         self.ID = Poblacion.IDPoblacion 
-        self.sumatoriaPotencia=0     
+        self.sumaPoblacion=0     
         self.arrCromosomas=[] 
+        self.mediaPoblacionFO=0
         self.minCromosoma = None
         self.maxCromosoma = None
         Poblacion.IDPoblacion +=1
@@ -30,19 +31,26 @@ class Poblacion(object):
             cromosoma = Cromosoma()
             cromosoma.intancioAerogeneradores()   
             self.arrCromosomas.append(cromosoma)
-        Cromosoma.reseteoIDParques()
+        Cromosoma.reseteoIDCromosoma()
 
     def calculoSumaPobla(self):
         """Se calcula la suma de la Cromosoma a partir del valor de cada cromosoma"""
         for cromosoma in self.arrCromosomas:
-            self.sumatoriaPotencia += cromosoma.getFuncObjetivo()
+            self.sumaPoblacion += cromosoma.getFuncObjetivo()
+
+    def calculoMediaFO(self):
+        """Se calcula la media poblacional""" 
+        self.mediaPoblacionFO = self.sumaPoblacion / len(self.arrCromosomas)
 
     def calculoDatosPoblacion(self):
         for cromosoma in self.arrCromosomas:
             cromosoma.calculoFuncObjetivo()
         self.calculoSumaPobla()
+        self.calculoMediaFO()
         for cromosoma in self.arrCromosomas:   
-            cromosoma.calculoFitness(self.sumatoriaPotencia)
+            cromosoma.calculoFitness(self.sumaPoblacion)
+        self.buscoMayorCromosoma()
+        self.buscoMenorCromosoma()
 
     def creoNuevoCromosoma(self,CromosomaAnterior):
         cromosomasNuevos=[] 
@@ -81,10 +89,8 @@ class Poblacion(object):
         for cromosoma in cromosomasNuevos:
             self.arrCromosomas.append(cromosoma)
 
-    def ATupla(self):
-        cadena1=" ".join([ str(gen) for gen in self.maxCromosoma.getGenes()])  
-        cadena2=" ".join([ str(gen) for gen in self.minCromosoma.getGenes()])       
-        return [self.ID,self.minCromosoma.getFuncObjetivo(),cadena2,self.maxCromosoma.getFuncObjetivo(),cadena1,self.mediaPoblacionFO]
+    def ATupla(self):    
+        return [self.ID,self.minCromosoma.getFuncObjetivo(),self.maxCromosoma.getFuncObjetivo(),self.mediaPoblacionFO]
 
     def diseñoParques(self):
         print("---------------------------------------------")
