@@ -8,7 +8,8 @@ from OperadoresGeneticos import *
 Corridas=[1]   
 generaciones=[]
 #Parametros del Parque 
-Cromosoma.tCromo=25
+Cromosoma.tCromo=10
+Cromosoma.CantAerogeneradores=25
 Cromosoma.VelocidadViento=25 #Velocidad del viento
 Cromosoma.TamañoCelda=180 #Distancia Minima de 4*R, donde R es 45 m
 #Parametros de la Poblacion
@@ -76,3 +77,52 @@ for fila in arr:
 #print(funcObjetivo)
 
 #-------Calculo del efecto estela-----
+
+#-------Crossover-----
+
+cr1 = Cromosoma()
+cr1.intancioAerogeneradores()
+cr1.calculoFuncObjetivo()
+cr2= Cromosoma()
+cr2.intancioAerogeneradores()
+cr2.calculoFuncObjetivo()
+
+#cr1.datosParque()
+#cr2.datosParque()
+
+hijo1=Cromosoma()
+hijo2=Cromosoma()
+
+posicionCorte=random.randint(0,Cromosoma.tCromo-1)
+#print(f"Posicion de corte en indice N° {posicionCorte}")
+
+for fila in range(Cromosoma.tCromo):
+    for col in range(0,posicionCorte):
+        #Habria que pensar si es posible hacer que la fila y col se saquen por defecto
+        hijo1.insertoGen(cr1._genes[fila][col],fila,col)
+        hijo2.insertoGen(cr2._genes[fila][col],fila,col)
+        #Posteriormente se intercambian los genes de cada padre en los hijos, luego de la posicion del corte
+    for col in range(posicionCorte,Cromosoma.tCromo):
+        hijo1.insertoGen(cr2._genes[fila][col],fila,col)
+        hijo2.insertoGen(cr1._genes[fila][col],fila,col)  
+
+hijo1.calculoFuncObjetivo()
+hijo2.calculoFuncObjetivo()
+
+#hijo1.datosParque()
+#hijo2.datosParque()
+
+#EL UNICO PROBLEMA QUE QUEDA ACA ES QUE CUANDO SE APLICA, QUEDAN EN LA MAYORIA
+#SUPERANDO LOS 25 MOLINOS POR PARQUE
+#hijo1.getAeroParques()
+#hijo2.getAeroParques()
+
+#-------Crossover-----
+
+hijo1.intancioAerogeneradores()
+hijo1.datosParque()
+print(f"Filas: {np.where(hijo1._genes==1)[0]}")
+print(f"Columnas: {np.where(hijo1._genes==1)[1]}")
+
+
+

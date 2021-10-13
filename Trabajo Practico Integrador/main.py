@@ -4,10 +4,11 @@ from Cromosoma import *
 from OperadoresGeneticos import *
 import openpyxl as opyxl
 
-CantPoblaciones=[20]   
+CantPoblaciones=[20,200]   
 generaciones=[]
 #Parametros del Parque 
-Cromosoma.tCromo=25
+Cromosoma.tCromo=10  #Sera una matriz de 10x10
+Cromosoma.CantAerogeneradores=25
 Cromosoma.VelocidadViento=25 #Velocidad del viento
 Cromosoma.TamañoCelda=180 #Distancia Minima de 4*R, donde R es 45 m
 #Parametros de la Poblacion
@@ -24,14 +25,11 @@ for x in CantPoblaciones:
     Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
     generaciones.append(generacion)
 
+#Se crea una archivo XLSX y se elimina la primer pagina
+wb = opyxl.Workbook() 
+wb.remove(wb.active) 
 print("\n")
 for generacion in generaciones:
-    generacion.datosGeneracion()
+    generacion.datosGeneracion(wb)
     print("\n")
 
-#Esto es para registrar los datos en el excel
-"""
-wb = opyxl.Workbook()    
-for generacion in generaciones:
-    generacion.cargoDatosExcel(wb)
-"""

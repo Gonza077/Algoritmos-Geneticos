@@ -7,6 +7,7 @@ class Cromosoma(object):
     
     IDCromosoma=1
     tCromo=None
+    CantAerogeneradores=None
     TamañoCelda=None
     VelocidadViento=None
 
@@ -15,7 +16,7 @@ class Cromosoma(object):
         self._ID = Cromosoma.IDCromosoma  
         self._funcFitness=0
         self._funcObjetivo=0
-        self._genes=np.array([[0]*10]*10) #Definira una matriz de 10*10
+        self._genes = np.array([ [0] * Cromosoma.tCromo] * Cromosoma.tCromo) #Definira una matriz de 10*10
         Cromosoma.IDCromosoma +=1
 
     @staticmethod
@@ -81,18 +82,33 @@ class Cromosoma(object):
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada parque"""
         self._funcFitness = self._funcObjetivo / sumaPoblacion
 
-    def mutoGen(self):
-        #FALTA DEFINIR
-        pass
+    def getAeroParques(self):
+        cantAeros=0
+        for fila in self._genes:
+            cantAeros += len(np.where(fila==1)[0])
+        print(cantAeros)
 
-    def insertoGen(self,gen):
-        """Se envia el gen a insertar en el arreglo del parque"""
-        #FALTA DEFINIR 
-        pass
+    def mutoGen(self):
+        for fila in self._genes:
+            while True:
+                    #Solo se copia el valor, si no se copia la direccion de memoria y se modifica el valor seleccionado
+                    genMutado1 = rnd.choice(fila)
+                    genMutado2 = rnd.choice(fila)          
+                    if genMutado1!=genMutado2:
+                        #Se necesita un auxiliar por el hecho de que cuando se modifica un valor, se volveria a pisar el mismo indice
+                        aux1=fila.index(genMutado1)
+                        aux2=fila.index(genMutado2)
+                        #print(f"Nro: {genMutado1} - Posicion: {fila.index(genMutado1)}")
+                        #print(f"Nro: {genMutado2} - Posicion: {fila.index(genMutado2)}")
+                        fila[aux1] , fila[aux2] = genMutado2 , genMutado1
+                        break
+
+    def insertoGen(self,gen,fila,col):
+        self._genes[fila,col]=gen
 
     def intancioAerogeneradores(self):
         contador=0
-        while(contador<Cromosoma.tCromo):
+        while(contador<Cromosoma.CantAerogeneradores):
             #Se toma un indice de fila al azar
             filRnd=rnd.randrange(len(self._genes))
             colRnd=rnd.randrange(len(self._genes[0]))

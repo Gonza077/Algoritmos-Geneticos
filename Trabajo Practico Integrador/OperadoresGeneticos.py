@@ -1,5 +1,6 @@
 from enum import Enum
 import random as rnd
+from Cromosoma import Cromosoma
 
 class Ruleta():
 
@@ -51,15 +52,16 @@ class CrossOverUnPunto():
             if(rnd.random() <= self.probCrossover):      
                 hijo1=cr.Cromosoma()
                 hijo2=cr.Cromosoma()
-                posicionCorte=rnd.randint(0,cr.Cromosoma.tCromo-1)
-                #Se instancia los primeros N genes de cada padre hasta la posicion de corte en cada hijo
-                for j in range(0,posicionCorte):
-                    hijo1.insertoGen(padre.arrGenes[j])
-                    hijo2.insertoGen(madre.arrGenes[j])
-                    #Posteriormente se intercambian los genes de cada padre en los hijos, luego de la posicion del corte
-                for k in range(posicionCorte,cr.Cromosoma.tCromo):
-                    hijo1.insertoGen(madre.arrGenes[k])
-                    hijo2.insertoGen(padre.arrGenes[k])             
+                posicionCorte=rnd.randint(0,Cromosoma.tCromo-1)
+                for fila in range(Cromosoma.tCromo):
+                    for col in range(0,posicionCorte):
+                        #Habria que pensar si es posible hacer que la fila y col se saquen por defecto
+                        hijo1.insertoGen(padre._genes[fila][col],fila,col)
+                        hijo2.insertoGen(madre._genes[fila][col],fila,col)
+                        #Posteriormente se intercambian los genes de cada padre en los hijos, luego de la posicion del corte
+                    for col in range(posicionCorte,Cromosoma.tCromo):
+                        hijo1.insertoGen(madre._genes[fila][col],fila,col)
+                        hijo2.insertoGen(padre._genes[fila][col],fila,col)             
                 #Se guarda cada cromosoma en la nueva poblacion
                 nuevosCromosomas.append(hijo1)
                 nuevosCromosomas.append(hijo2)          
