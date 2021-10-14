@@ -44,6 +44,7 @@ class Cromosoma(object):
 
     #Metodos de instancia
     def calculoFuncObjetivo(self):
+        self._funcObjetivo=0
         """Se calcula la potencia total de cada parque""" 
         for fila in self._genes:
             velViento=Cromosoma.VelocidadViento 
@@ -82,26 +83,31 @@ class Cromosoma(object):
         """Dependiendo de la suma de la poblacion, se calcula el fitness de cada parque"""
         self._funcFitness = self._funcObjetivo / sumaPoblacion
 
-    def getAeroParques(self):
+    def getAerogeneradores(self):
         cantAeros=0
         for fila in self._genes:
             cantAeros += len(np.where(fila==1)[0])
         print(cantAeros)
 
     def mutoGen(self):
-        for fila in self._genes:
+        listaAux=[]
+        for fila in self._genes.tolist():
+            print(fila)
             while True:
-                    #Solo se copia el valor, si no se copia la direccion de memoria y se modifica el valor seleccionado
-                    genMutado1 = rnd.choice(fila)
-                    genMutado2 = rnd.choice(fila)          
-                    if genMutado1!=genMutado2:
-                        #Se necesita un auxiliar por el hecho de que cuando se modifica un valor, se volveria a pisar el mismo indice
-                        aux1=fila.index(genMutado1)
-                        aux2=fila.index(genMutado2)
-                        #print(f"Nro: {genMutado1} - Posicion: {fila.index(genMutado1)}")
-                        #print(f"Nro: {genMutado2} - Posicion: {fila.index(genMutado2)}")
-                        fila[aux1] , fila[aux2] = genMutado2 , genMutado1
-                        break
+                #Se tomaran dos indices de la fila para hacer el intercambio de los genes
+                IndiceGenMutado1 = rnd.randint(0, len(fila)-1)
+                IndiceGenMutado2 = rnd.randint(0, len(fila)-1)   
+                print(f"Indice N°1: {IndiceGenMutado1} - Valor{fila[IndiceGenMutado1]}")
+                print(f"Indice N°2: {IndiceGenMutado2} - Valor{fila[IndiceGenMutado2]}")
+                #Se verifica que los indices sean distintos
+                if IndiceGenMutado1!=IndiceGenMutado2:
+                    #Se copia el valor de los indices
+                    aux1=fila[IndiceGenMutado1]
+                    aux2=fila[IndiceGenMutado2]
+                    fila[IndiceGenMutado1] , fila[IndiceGenMutado2] = aux2 , aux1
+                    listaAux.append(fila)
+                    break             
+        self._genes=np.array(listaAux)
 
     def insertoGen(self,gen,fila,col):
         self._genes[fila,col]=gen

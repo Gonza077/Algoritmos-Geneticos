@@ -119,10 +119,13 @@ hijo2.calculoFuncObjetivo()
 
 #-------Crossover-----
 
-hijo1.intancioAerogeneradores()
 hijo1.datosParque()
-print(f"Filas: {np.where(hijo1._genes==1)[0]}")
-print(f"Columnas: {np.where(hijo1._genes==1)[1]}")
+hijo1.mutoGen()
+hijo1.calculoFuncObjetivo()
+hijo1.datosParque()
+
+hijo1.getAerogeneradores()
+
 
 
 
