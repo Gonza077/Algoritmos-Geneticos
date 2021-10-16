@@ -8,16 +8,16 @@ class Ruleta():
         ruleta=[0]
         valor=0     
         paresPadres=[]         
-        for cromosoma in poblacionAnterior.arrCromosomas:       
-            valor+=cromosoma.funcFitness
+        for cromosoma in poblacionAnterior.getCromosomas():       
+            valor+=cromosoma.getFuncFitness()
             ruleta.append(valor)
-        for _ in range ((len(poblacionAnterior.arrCromosomas)- cantCromosomasPobla) // 2):
+        for _ in range ((len(poblacionAnterior.getCromosomas())- cantCromosomasPobla) // 2):
                 pares=[]
                 while ( len(pares) < 2 ): #Se debe armar el par, esto garantiza que siempre se forme
                     numAleatorio = rnd.random()     
-                    for j in range(len(poblacionAnterior.arrCromosomas)-1):  
+                    for j in range(len(poblacionAnterior.getCromosomas())-1):  
                         if (numAleatorio >= ruleta[j] and numAleatorio < ruleta[j+1]):
-                            pares.append(poblacionAnterior.arrCromosomas[j])
+                            pares.append(poblacionAnterior._arrCromosomas[j])
                 paresPadres.append(pares)          
         return paresPadres
 
@@ -26,13 +26,13 @@ class Torneo():
     def aplicarSeleccion(self, poblacionAnterior,cantCromosomasPobla):
         t = 2
         paresPadres = []
-        for _ in range ((len(poblacionAnterior.arrCromosomas)- cantCromosomasPobla)//2):
+        for _ in range ((len(poblacionAnterior.getCromosomas())- cantCromosomasPobla) // 2):
             pares = []
             for _ in range(0, t):
                 # Elijo aleatoriamente 2 cromosomas
-                crom1 = rnd.choice(poblacionAnterior.arrCromosomas)
-                crom2 = rnd.choice(poblacionAnterior.arrCromosomas)
-                if crom1 <= crom2: # Elijo el mejor de ambos
+                crom1 = rnd.choice(poblacionAnterior._arrCromosomas)
+                crom2 = rnd.choice(poblacionAnterior._arrCromosomas)
+                if crom1 >= crom2: # Elijo el mejor de ambos
                     pares.append(crom1)
                 else:
                     pares.append(crom2)
@@ -50,8 +50,8 @@ class CrossOverUnPunto():
             padre=par[0] 
             madre=par[1]
             if(rnd.random() <= self.probCrossover):      
-                hijo1=cr.Cromosoma()
-                hijo2=cr.Cromosoma()
+                hijo1=Cromosoma()
+                hijo2=Cromosoma()
                 posicionCorte=rnd.randint(0,Cromosoma.tCromo-1)
                 for fila in range(Cromosoma.tCromo):
                     for col in range(0,posicionCorte):

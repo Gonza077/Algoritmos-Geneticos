@@ -4,7 +4,7 @@ from Cromosoma import *
 from OperadoresGeneticos import *
 import openpyxl as opyxl
 
-CantPoblaciones=[20,200]   
+CantPoblaciones=[200]   
 generaciones=[]
 #Parametros del Parque 
 Cromosoma.tCromo=10  #Sera una matriz de 10x10

@@ -18,14 +18,10 @@ class Generacion(object):
     def creoPoblacion(self):
         #TESTEO PARA VER SI CREA LAS DEMAS   
         poblacion=Poblacion()
-        poblacion.instacioParques()
-        """
-        if(self.arrPoblaciones == [] ): 
+        if(self._arrPoblaciones == [] ): 
             poblacion.instacioParques()       
         else:              
-            #poblacion.creoNuevoParqueEolico(self.arrPoblaciones[-1]) 
-            poblacion.instacioParques() 
-        """
+            poblacion.creoNuevaPoblacion(self._arrPoblaciones[-1]) 
         poblacion.calculoDatosPoblacion()                   
         self._arrPoblaciones.append(poblacion)    
 

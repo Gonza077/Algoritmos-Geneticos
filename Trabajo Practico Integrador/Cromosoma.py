@@ -92,13 +92,13 @@ class Cromosoma(object):
     def mutoGen(self):
         listaAux=[]
         for fila in self._genes.tolist():
-            print(fila)
+            #print(fila)
             while True:
                 #Se tomaran dos indices de la fila para hacer el intercambio de los genes
                 IndiceGenMutado1 = rnd.randint(0, len(fila)-1)
                 IndiceGenMutado2 = rnd.randint(0, len(fila)-1)   
-                print(f"Indice N°1: {IndiceGenMutado1} - Valor{fila[IndiceGenMutado1]}")
-                print(f"Indice N°2: {IndiceGenMutado2} - Valor{fila[IndiceGenMutado2]}")
+                #print(f"Indice N°1: {IndiceGenMutado1} - Valor{fila[IndiceGenMutado1]}")
+                #print(f"Indice N°2: {IndiceGenMutado2} - Valor{fila[IndiceGenMutado2]}")
                 #Se verifica que los indices sean distintos
                 if IndiceGenMutado1!=IndiceGenMutado2:
                     #Se copia el valor de los indices

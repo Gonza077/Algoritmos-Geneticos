@@ -114,8 +114,8 @@ hijo2.calculoFuncObjetivo()
 
 #EL UNICO PROBLEMA QUE QUEDA ACA ES QUE CUANDO SE APLICA, QUEDAN EN LA MAYORIA
 #SUPERANDO LOS 25 MOLINOS POR PARQUE
-#hijo1.getAeroParques()
-#hijo2.getAeroParques()
+#hijo1.getAerogeneradores()
+#hijo2.getAerogeneradores()
 
 #-------Crossover-----
 

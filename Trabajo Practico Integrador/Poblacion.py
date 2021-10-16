@@ -79,7 +79,7 @@ class Poblacion(object):
         cromosomasNuevos=self.tipoCrossover.aplicoCrossover(paresPadres)  #Por que a los cromosomas del elitismo, no hay que modificarlos 
         self.tipoMutacion.aplicoMutacion(cromosomasNuevos)
         for cromosoma in cromosomasNuevos:
-            self.arrCromosomas.append(cromosoma)
+            self._arrCromosomas.append(cromosoma)
 
     def ATupla(self):    
         return [self._ID,self._minCromosoma.getFuncObjetivo(),self._maxCromosoma.getFuncObjetivo(),self._mediaPoblacionFO]
@@ -92,6 +92,9 @@ class Poblacion(object):
     
     def getMaxCromosoma(self):
         return self._maxCromosoma
+
+    def getCromosomas(self):
+        return self._arrCromosomas
 
     def diseñoParques(self):
         print("---------------------------------------------")
