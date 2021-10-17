@@ -97,5 +97,16 @@ class ParqueEolico(object):
         for fila in self.terrenoParque:
             print(fila)
         print()
+    
+    def getCantGenesEnUno(self):
+        """Devuelve la cantidad de genes en uno para simplificar el calculo del crossover"""
+
+        cont = 0
+        for fila in self.terrenoParque:
+                for gen in fila:
+                    if gen == 1:
+                        cont += 1
+        
+        return cont
  
         
