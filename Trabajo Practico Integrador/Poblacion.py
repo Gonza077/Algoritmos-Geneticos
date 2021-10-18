@@ -67,9 +67,9 @@ class Poblacion(object):
 
     def buscoMayoresCromosomas(self,poblacionAnterior):
         """ Busca al mayor cromosoma de la poblacion enviada como parametro"""
-        poblacionAnterior.arrCromosomas.sort(reverse=True)  #Ordena los cromosomas de mayor a menor segun su valor decimal
-        self._arrCromosomas.append(copy.deepcopy(poblacionAnterior.arrCromosomas[0]))
-        self._arrCromosomas.append(copy.deepcopy(poblacionAnterior.arrCromosomas[1]))
+        poblacionAnterior._arrCromosomas.sort(reverse=True)  #Ordena los cromosomas de mayor a menor segun su valor decimal
+        self._arrCromosomas.append(copy.deepcopy(poblacionAnterior._arrCromosomas[0]))
+        self._arrCromosomas.append(copy.deepcopy(poblacionAnterior._arrCromosomas[1]))
     
     def creoNuevaPoblacion(self,poblacionAnterior):
         cromosomasNuevos=[] 

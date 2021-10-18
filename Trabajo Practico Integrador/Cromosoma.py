@@ -109,6 +109,9 @@ class Cromosoma(object):
                     break             
         self._genes=np.array(listaAux)
 
+    def insertoGenes(self,genes,fila):
+        self._genes[fila]=genes
+
     def insertoGen(self,gen,fila,col):
         self._genes[fila,col]=gen
 

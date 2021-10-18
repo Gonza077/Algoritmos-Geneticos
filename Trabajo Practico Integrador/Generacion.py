@@ -46,7 +46,7 @@ class Generacion(object):
         # Se agrega la leyenda para poder diferenciar cada color
         plt.legend()
         plt.savefig(f"./Salidas/Grafica Generacion N°{self._ID}")
-        #plt.show()
+        plt.close()
                               
     def datosGeneracion(self,wb):
         hojaExcel=wb.create_sheet(f"Generacion {self._ID}")

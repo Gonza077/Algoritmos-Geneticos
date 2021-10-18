@@ -87,16 +87,17 @@ cr2= Cromosoma()
 cr2.intancioAerogeneradores()
 cr2.calculoFuncObjetivo()
 
-#cr1.datosParque()
-#cr2.datosParque()
+cr1.datosParque()
+cr2.datosParque()
 
 hijo1=Cromosoma()
 hijo2=Cromosoma()
 
+#La posicion de corte se mide en horizontal
 posicionCorte=random.randint(0,Cromosoma.tCromo-1)
-#print(f"Posicion de corte en indice N° {posicionCorte}")
+print(f"Posicion de corte en indice N° {posicionCorte}")
 
-for fila in range(Cromosoma.tCromo):
+""" for fila in range(0,Cromosoma.tCromo):
     for col in range(0,posicionCorte):
         #Habria que pensar si es posible hacer que la fila y col se saquen por defecto
         hijo1.insertoGen(cr1._genes[fila][col],fila,col)
@@ -104,13 +105,20 @@ for fila in range(Cromosoma.tCromo):
         #Posteriormente se intercambian los genes de cada padre en los hijos, luego de la posicion del corte
     for col in range(posicionCorte,Cromosoma.tCromo):
         hijo1.insertoGen(cr2._genes[fila][col],fila,col)
-        hijo2.insertoGen(cr1._genes[fila][col],fila,col)  
+        hijo2.insertoGen(cr1._genes[fila][col],fila,col)   """
+for fila in range(0,posicionCorte):
+    hijo1.insertoGenes(cr1._genes[fila],fila)
+    hijo2.insertoGenes(cr2._genes[fila],fila)
+for fila in range(posicionCorte,Cromosoma.tCromo):
+    hijo1.insertoGenes(cr2._genes[fila],fila)
+    hijo2.insertoGenes(cr1._genes[fila],fila)
+
 
 hijo1.calculoFuncObjetivo()
 hijo2.calculoFuncObjetivo()
 
-#hijo1.datosParque()
-#hijo2.datosParque()
+hijo1.datosParque()
+hijo2.datosParque()
 
 #EL UNICO PROBLEMA QUE QUEDA ACA ES QUE CUANDO SE APLICA, QUEDAN EN LA MAYORIA
 #SUPERANDO LOS 25 MOLINOS POR PARQUE
