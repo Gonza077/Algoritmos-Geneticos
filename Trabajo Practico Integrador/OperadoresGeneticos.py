@@ -52,15 +52,17 @@ class CrossOverUnPunto():
             if(rnd.random() <= self.probCrossover):      
                 hijo1=Cromosoma()
                 hijo2=Cromosoma()
-                posicionCorte=rnd.randint(0,Cromosoma.tCromo-1)         
+                posicionCorte=rnd.randint(0,Cromosoma.tCromo-1)   
+                """ 
                 #Tipo de Cruce por fila
                 for fila in range(0,posicionCorte):
                     hijo1.insertoGenes(padre._genes[fila],fila)
                     hijo2.insertoGenes(madre._genes[fila],fila)
                 for fila in range(posicionCorte,Cromosoma.tCromo):
                     hijo1.insertoGenes(madre._genes[fila],fila)
-                    hijo2.insertoGenes(padre._genes[fila],fila)                   
-                """    
+                    hijo2.insertoGenes(padre._genes[fila],fila)
+                """                     
+                   
                 #Tipo de Cruce por fila y columna        
                 for fila in range(Cromosoma.tCromo):
                     for col in range(0,posicionCorte):
@@ -71,7 +73,7 @@ class CrossOverUnPunto():
                     for col in range(posicionCorte,Cromosoma.tCromo):
                         hijo1.insertoGen(madre._genes[fila][col],fila,col)
                         hijo2.insertoGen(padre._genes[fila][col],fila,col)   
-                """      
+                      
                 #Se guarda cada cromosoma en la nueva poblacion
                 nuevosCromosomas.append(hijo1)
                 nuevosCromosomas.append(hijo2)          

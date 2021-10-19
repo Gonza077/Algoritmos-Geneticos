@@ -4,7 +4,7 @@ from Cromosoma import *
 from OperadoresGeneticos import *
 import openpyxl as opyxl
 
-CantPoblaciones=[20]   
+CantPoblaciones=[50]   
 generaciones=[]
 #Parametros del Parque 
 Cromosoma.tCromo=10  #Sera una matriz de 10x10
@@ -12,11 +12,11 @@ Cromosoma.CantAerogeneradores=25
 Cromosoma.VelocidadViento=25 #Velocidad del viento
 Cromosoma.TamañoCelda=180 #Distancia Minima de 4*R, donde R es 45 m
 #Parametros de la Poblacion
-Poblacion.tPobla=50 #Cantidad de parques x Poblacion
+Poblacion.tPobla=50 #Cantidad de cromosomas x Poblacion
 Poblacion.tipoSeleccion=Ruleta()
-Poblacion.tipoCrossover=CrossOverUnPunto(0.8)
+Poblacion.tipoCrossover=CrossOverUnPunto(0.9)
 Poblacion.tipoMutacion=MutacionInvertida(0.05)
-Poblacion.elitismo=False
+Poblacion.elitismo=True
 
 for x in CantPoblaciones:
     generacion=Generacion()
