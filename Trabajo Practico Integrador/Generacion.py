@@ -75,4 +75,6 @@ class Generacion(object):
         #Se guardan los datos de cada generacion en una hoja de Excel
         wb.save("./Salidas/Datos.xlsx")
         self.dibujoGrafica()
-    
+
+    def getPoblacion(self, indice):
+        return self._arrPoblaciones[indice]

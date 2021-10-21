@@ -87,7 +87,8 @@ class Cromosoma(object):
         cantAeros=0
         for fila in self._genes:
             cantAeros += len(np.where(fila==1)[0])
-        print(cantAeros)
+        #print(cantAeros)
+        return cantAeros
 
     def mutoGen(self):
         listaAux=[]
@@ -133,5 +134,11 @@ class Cromosoma(object):
             print(fila)
         print()
 
- 
-        
+    def limitarAerogeneradores(self):
+        cantAeros = self.getAerogeneradores()
+        while(cantAeros > 25):
+            filRnd=rnd.randrange(len(self._genes))
+            colRnd=rnd.randrange(len(self._genes[0]))
+            if(self._genes[filRnd][colRnd] == 1):
+                self._genes[filRnd][colRnd] = 0
+                cantAeros -= 1
