@@ -41,11 +41,11 @@ for fila in arr:
 #-------Calculo del efecto estela-----
 a=0.3333
 radioAero=45
-distanciaCasillas=1
-coefDeArrastre= round(( 1 / (2 * math.log(80/0.05))),4)
+distanciaCasillas=5
+coefDeArrastre= round(( 1 / (2 * math.log(80/0.0025))),4)
 
-#print(( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
-#print(25 * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
+print(( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
+print(8 * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
 
 #-------Calculo del efecto estela-----
 def efectoEstela(velViento,distanciaCasillas):
@@ -87,15 +87,15 @@ cr2= Cromosoma()
 cr2.intancioAerogeneradores()
 cr2.calculoFuncObjetivo()
 
-cr1.datosParque()
-cr2.datosParque()
+#cr1.datosParque()
+#cr2.datosParque()
 
 hijo1=Cromosoma()
 hijo2=Cromosoma()
 
 #La posicion de corte se mide en horizontal
 posicionCorte=random.randint(0,Cromosoma.tCromo-1)
-print(f"Posicion de corte en indice N° {posicionCorte}")
+#print(f"Posicion de corte en indice N° {posicionCorte}")
 
 """ for fila in range(0,Cromosoma.tCromo):
     for col in range(0,posicionCorte):
@@ -117,8 +117,8 @@ for fila in range(posicionCorte,Cromosoma.tCromo):
 hijo1.calculoFuncObjetivo()
 hijo2.calculoFuncObjetivo()
 
-hijo1.datosParque()
-hijo2.datosParque()
+#hijo1.datosParque()
+#hijo2.datosParque()
 
 #EL UNICO PROBLEMA QUE QUEDA ACA ES QUE CUANDO SE APLICA, QUEDAN EN LA MAYORIA
 #SUPERANDO LOS 25 MOLINOS POR PARQUE
@@ -127,12 +127,13 @@ hijo2.datosParque()
 
 #-------Crossover-----
 
-hijo1.datosParque()
+""" hijo1.datosParque()
 hijo1.mutoGen()
 hijo1.calculoFuncObjetivo()
 hijo1.datosParque()
 
 hijo1.getAerogeneradores()
+hijo2.getAerogeneradores() """
 
 
 

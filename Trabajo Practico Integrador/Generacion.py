@@ -42,8 +42,8 @@ class Generacion(object):
         plt.plot( arrMinimos, color='y', label='Minimos', linewidth=1,alpha=0.5)      
         # Se pone nombre a los ejes X e Y 
         plt.title(f"Grafico de {len(self._arrPoblaciones)} corridas")
-        plt.xlabel("Numero de población")
-        plt.ylabel("Valor")
+        plt.xlabel("Población N°")
+        plt.ylabel("Potencia [kW]")
         # Se agrega la leyenda para poder diferenciar cada color
         plt.legend()
         plt.savefig(f"./Salidas/Grafica Generacion N°{self._ID}")
@@ -51,11 +51,11 @@ class Generacion(object):
         #----------------Figura 1----------------
         #----------------Figura 2----------------
         plt.title(f"Grafico de {len(self._arrPoblaciones)} corridas")
-        plt.xlabel("Numero de población")
-        plt.ylabel("Potencia")
+        plt.xlabel("Población N°")
+        plt.ylabel("Potencia [kW]")
         # Se agrega la leyenda para poder diferenciar cada color
         #Grafico de las potencias
-        plt.plot(arrPotenciasMax, color='r', label='Pot. Max', linewidth=1)
+        plt.plot(arrPotenciasMax, color='r', label='Pot. Max [kW]', linewidth=1)
         plt.legend()
         plt.savefig(f"./Salidas/Grafica Potencia Generacion N°{self._ID}")
         plt.close()
