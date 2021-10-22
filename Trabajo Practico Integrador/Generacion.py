@@ -42,24 +42,27 @@ class Generacion(object):
         plt.plot( arrMinimos, color='y', label='Minimos', linewidth=1,alpha=0.5)      
         # Se pone nombre a los ejes X e Y 
         plt.title(f"Grafico de {len(self._arrPoblaciones)} corridas")
-        plt.xlabel("Población N°")
-        plt.ylabel("Potencia [kW]")
+        plt.xlabel("Numero de población")
+        plt.ylabel("Valor")
         # Se agrega la leyenda para poder diferenciar cada color
         plt.legend()
-        plt.savefig(f"./Salidas/Grafica Generacion N°{self._ID}")
+        rutaImagen1 = f"./Salidas/Grafica Generacion N°{self._ID}"
+        plt.savefig(rutaImagen1)
         plt.close()
         #----------------Figura 1----------------
         #----------------Figura 2----------------
         plt.title(f"Grafico de {len(self._arrPoblaciones)} corridas")
-        plt.xlabel("Población N°")
-        plt.ylabel("Potencia [kW]")
+        plt.xlabel("Numero de población")
+        plt.ylabel("Potencia")
         # Se agrega la leyenda para poder diferenciar cada color
         #Grafico de las potencias
-        plt.plot(arrPotenciasMax, color='r', label='Pot. Max [kW]', linewidth=1)
+        plt.plot(arrPotenciasMax, color='r', label='Pot. Max', linewidth=1)
         plt.legend()
-        plt.savefig(f"./Salidas/Grafica Potencia Generacion N°{self._ID}")
+        rutaImagen2 = f"./Salidas/Grafica Potencia Generacion N°{self._ID}"
+        plt.savefig(rutaImagen2)
         plt.close()
         #----------------Figura 2----------------
+        return rutaImagen1, rutaImagen2
                                    
     def datosGeneracion(self,wb):
         hojaExcel=wb.create_sheet(f"Generacion {self._ID}")
@@ -74,5 +77,6 @@ class Generacion(object):
         print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
         #Se guardan los datos de cada generacion en una hoja de Excel
         wb.save("./Salidas/Datos.xlsx")
-        self.dibujoGrafica()
+        rutaImagen1, rutaImagen2 = self.dibujoGrafica()
+        return rutaImagen1, rutaImagen2
 
