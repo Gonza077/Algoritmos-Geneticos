@@ -59,7 +59,7 @@ class Cromosoma(object):
     def efectoEstela(self,velViento,distanciaCasillas):
         a=0.3333
         radioAero=45
-        coefDeArrastre= round(( 1 / (2 * math.log(80/0.0025))),4) #Aproximadamente 0.0678
+        coefDeArrastre= round(( 1 / (2 * math.log(80/0.0025))),4) #Aproximadamente 0.0482
         return velViento * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * Cromosoma.TamañoCelda) / radioAero )**2) ) 
 
     def calculoPotenciaAerogenerador(self,velViento):  

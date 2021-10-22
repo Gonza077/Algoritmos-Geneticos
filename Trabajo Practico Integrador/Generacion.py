@@ -76,5 +76,3 @@ class Generacion(object):
         wb.save("./Salidas/Datos.xlsx")
         self.dibujoGrafica()
 
-    def getPoblacion(self, indice):
-        return self._arrPoblaciones[indice]

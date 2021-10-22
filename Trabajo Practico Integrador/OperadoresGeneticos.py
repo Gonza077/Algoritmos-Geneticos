@@ -1,4 +1,3 @@
-from enum import Enum
 import random as rnd
 from Cromosoma import Cromosoma
 
@@ -54,6 +53,7 @@ class CrossOverUnPunto():
                 hijo2=Cromosoma()
                 posicionCorte=rnd.randint(0,Cromosoma.tCromo-1)                  
                 #Tipo de Cruce por fila
+                
                 for fila in range(0,posicionCorte):
                     hijo1.insertoGenes(padre._genes[fila],fila)
                     hijo2.insertoGenes(madre._genes[fila],fila)

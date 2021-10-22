@@ -1,7 +1,6 @@
 import random as rnd
 from Cromosoma import *
 import copy
-from enum import Enum
 
 class Poblacion(object):
 
