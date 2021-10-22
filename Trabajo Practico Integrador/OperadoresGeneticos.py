@@ -71,7 +71,7 @@ class CrossOverUnPunto():
                     for col in range(posicionCorte,Cromosoma.tCromo):
                         hijo1.insertoGen(madre._genes[fila][col],fila,col)
                         hijo2.insertoGen(padre._genes[fila][col],fila,col)   
-                """      
+                """     
                 #Se guarda cada cromosoma en la nueva poblacion
                 hijo1.limitarAerogeneradores()
                 hijo2.limitarAerogeneradores()

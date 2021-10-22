@@ -134,7 +134,3 @@ hijo1.datosParque()
 
 hijo1.getAerogeneradores()
 hijo2.getAerogeneradores() """
-
-
-
-

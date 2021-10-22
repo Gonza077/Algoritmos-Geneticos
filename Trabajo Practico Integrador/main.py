@@ -3,7 +3,6 @@ from Poblacion import *
 from Cromosoma import *
 from OperadoresGeneticos import *
 import openpyxl as opyxl
-
 from UserInterface import Ui_Dialog
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication

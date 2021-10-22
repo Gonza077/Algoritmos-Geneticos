@@ -36,33 +36,44 @@ class Generacion(object):
             arrMaximos.append(pobla.getMaxCromosoma().getFuncObjetivo())
             arrMinimos.append(pobla.getMinCromosoma().getFuncObjetivo())
             arrPotenciasMax.append(pobla.getSumaPoblacional())
+
         #----------------Figura 1----------------
+        plt.figure()
         plt.plot( arrPromedios, color='r', label='Medias', linewidth=1)
         plt.plot( arrMaximos, color='g', label='Maximos', linewidth=1,alpha=0.5)
         plt.plot( arrMinimos, color='y', label='Minimos', linewidth=1,alpha=0.5)      
         # Se pone nombre a los ejes X e Y 
         plt.title(f"Grafico de {len(self._arrPoblaciones)} corridas")
-        plt.xlabel("Numero de población")
-        plt.ylabel("Valor")
+        plt.xlabel("Población N°")
+        plt.ylabel("Potencia [kW]")
         # Se agrega la leyenda para poder diferenciar cada color
         plt.legend()
-        rutaImagen1 = f"./Salidas/Grafica Generacion N°{self._ID}"
-        plt.savefig(rutaImagen1)
-        plt.close()
+        plt.savefig(f"./Salidas/Grafica Generacion")
         #----------------Figura 1----------------
         #----------------Figura 2----------------
+        plt.figure()
         plt.title(f"Grafico de {len(self._arrPoblaciones)} corridas")
-        plt.xlabel("Numero de población")
-        plt.ylabel("Potencia")
+        plt.xlabel("Población N°")
+        plt.ylabel("Potencia [kW]")
         # Se agrega la leyenda para poder diferenciar cada color
         #Grafico de las potencias
-        plt.plot(arrPotenciasMax, color='r', label='Pot. Max', linewidth=1)
+        plt.plot(arrPotenciasMax, color='r', label='Pot. Max [kW]', linewidth=1)
         plt.legend()
-        rutaImagen2 = f"./Salidas/Grafica Potencia Generacion N°{self._ID}"
-        plt.savefig(rutaImagen2)
-        plt.close()
+        plt.savefig(f"./Salidas/Grafica Potencia Generacion")
         #----------------Figura 2----------------
-        return rutaImagen1, rutaImagen2
+        #----------------Figura 3----------------
+        plt.figure()
+        maxCromoPobInicial=self._arrPoblaciones[0].getMaxCromosoma()
+        maxCromoPobFinal=self._arrPoblaciones[-1].getMaxCromosoma()
+        plt.subplot(121)
+        plt.title(f"Maximo Cromosoma Pob. Inicial")
+        plt.imshow(maxCromoPobInicial.getGenes(),origin="lower",cmap="gray")
+        plt.subplot(122)
+        plt.title(f"Maximo Cromosoma Pob. Final")
+        plt.imshow(maxCromoPobFinal.getGenes(),origin="lower",cmap="gray")
+        plt.savefig(f"./Salidas/Comparacion de poblaciones")
+        plt.show()
+        #----------------Figura 3----------------
                                    
     def datosGeneracion(self,wb):
         hojaExcel=wb.create_sheet(f"Generacion {self._ID}")
@@ -77,6 +88,5 @@ class Generacion(object):
         print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
         #Se guardan los datos de cada generacion en una hoja de Excel
         wb.save("./Salidas/Datos.xlsx")
-        rutaImagen1, rutaImagen2 = self.dibujoGrafica()
-        return rutaImagen1, rutaImagen2
+        self.dibujoGrafica()
 
