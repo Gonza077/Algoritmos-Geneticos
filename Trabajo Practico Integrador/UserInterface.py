@@ -118,9 +118,9 @@ class Ui_Dialog(object):
         self.label_14 = QtWidgets.QLabel(self.formLayoutWidget_2)
         self.label_14.setObjectName("label_14")
         self.formLayout_2.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.label_14)
-        self.velocidadViento_2 = QtWidgets.QLineEdit(self.formLayoutWidget_2)
-        self.velocidadViento_2.setObjectName("velocidadViento_2")
-        self.formLayout_2.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.velocidadViento_2)
+        self.coefRugosidad = QtWidgets.QLineEdit(self.formLayoutWidget_2)
+        self.coefRugosidad.setObjectName("coefRugosidad")
+        self.formLayout_2.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.coefRugosidad)
         self.groupBox_4 = QtWidgets.QGroupBox(Dialog)
         self.groupBox_4.setGeometry(QtCore.QRect(840, 10, 391, 261))
         self.groupBox_4.setObjectName("groupBox_4")
@@ -206,8 +206,7 @@ class Ui_Dialog(object):
         self.label_4.setText(_translate("Dialog", "Tipo de crossover"))
         self.label_12.setText(_translate("Dialog", "Tipo de mutación"))
         self.selectSeleccion.setItemText(0, _translate("Dialog", "Ruleta"))
-        self.selectSeleccion.setItemText(1, _translate("Dialog", "Rango"))
-        self.selectSeleccion.setItemText(2, _translate("Dialog", "Torneo"))
+        self.selectSeleccion.setItemText(1, _translate("Dialog", "Torneo"))
         self.selectCrossover.setItemText(0, _translate("Dialog", "Crossover de 1 Punto por fila"))
         self.selectCrossover.setItemText(1, _translate("Dialog", "Crossover Nico"))
         self.selectMutacion.setItemText(0, _translate("Dialog", "Invertida"))
@@ -221,7 +220,7 @@ class Ui_Dialog(object):
         self.label_8.setText(_translate("Dialog", "Velocidad del viento"))
         self.velocidadViento.setText(_translate("Dialog", "25"))
         self.label_14.setText(_translate("Dialog", "Coeficiente de rugosidad"))
-        self.velocidadViento_2.setText(_translate("Dialog", "0.05"))
+        self.coefRugosidad.setText(_translate("Dialog", "0.05"))
         self.groupBox_4.setTitle(_translate("Dialog", "Parametros del Algoritmo"))
         self.label_9.setText(_translate("Dialog", "Cantidad de Poblaciones"))
         self.cantPoblaciones.setText(_translate("Dialog", "200"))
@@ -234,8 +233,6 @@ class Ui_Dialog(object):
         self.radioNOElitismo.setText(_translate("Dialog", "NO"))
         self.btnEjecutar.setText(_translate("Dialog", "Correr Algoritmo Genético"))
         self.btnResetear.setText(_translate("Dialog", "Resetear"))
-        self.imagen1.setText(_translate("Dialog", "TextLabel"))
-        self.imagen2.setText(_translate("Dialog", "TextLabel"))
         
     def ejecutarAlgoritmo(self):
         print('Presiono ejecutar algoritmo')
@@ -247,14 +244,29 @@ class Ui_Dialog(object):
         Cromosoma.CantAerogeneradores=int(self.cantAerogeneradores.text())
         Cromosoma.VelocidadViento= int(self.velocidadViento.text()) #Velocidad del viento
         Cromosoma.TamañoCelda = int(self.tamCromosoma.text()) #Distancia Minima de 4*R, donde R es 45 m
+        Cromosoma.CoeficienteRugosidad = float(self.coefRugosidad.text())
         #Parametros de la Poblacion
         Poblacion.tPobla = int(self.tamPoblacion.text()) #Cantidad de cromosomas x Poblacion
         Poblacion.tipoSeleccion=Ruleta()
 
+        # Poblacion.tipoCrossover=CrossOverUnPunto(0.9)
+        # Poblacion.tipoMutacion=MutacionInvertida(0.05)
+
         probCrossover = float(self.probCrossover.text())
-        probMutacion = float(self.probMutacion.text())
-        Poblacion.tipoCrossover=CrossOverUnPunto(probCrossover)
-        Poblacion.tipoMutacion=MutacionInvertida(probMutacion)
+        probMutacion = float(self.probMutacion.text())       
+
+        if self.selectSeleccion.currentIndex() == 0:
+            Poblacion.tipoSeleccion=Ruleta()
+        elif self.selectSeleccion.currentIndex() == 1:
+            Poblacion.tipoSeleccion=Torneo()
+
+        if self.selectCrossover.currentIndex() == 0:
+            Poblacion.tipoCrossover=CrossOverUnPunto(probCrossover)
+        elif self.selectSeleccion.currentIndex() == 1:
+            Poblacion.tipoCrossover=CrossOverUnPuntoNico(probCrossover)
+
+        if self.selectMutacion.currentIndex() == 0:
+            Poblacion.tipoMutacion=MutacionInvertida(probMutacion)
 
         if self.radioSIElitismo.isChecked():
             Poblacion.elitismo=True

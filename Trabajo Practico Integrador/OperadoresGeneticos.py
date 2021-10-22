@@ -74,7 +74,12 @@ class CrossOverUnPunto():
                 nuevosCromosomas.append(madre)       
         return nuevosCromosomas
 
-    def aplicoCrossoverNico(self,padres):
+class CrossOverUnPuntoNico():
+
+    def __init__(self,probCross):
+        self.probCrossover=probCross
+    
+    def aplicoCrossover(self,padres):
         """ 
             Recibe un arreglo con arreglos de dos elementos: [[p,m], [p2, m2] ... ], donde cada uno es un padre.
             Luego, en función de la probabilidad de crossover, puede aplicarlo o no.
@@ -202,11 +207,6 @@ class CrossOverUnPunto():
                 nuevosParques.append(madre)  
         
         return nuevosParques
-
-        # padre.datosParque()
-        # madre.datosParque()
-        # hijo.datosParque()
-        # hija.datosParque()
         
         # nuevosCromosomas=[]
         # for par in padres:  #Padres viene de a pares
