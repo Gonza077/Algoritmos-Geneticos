@@ -10,6 +10,7 @@ class Cromosoma(object):
     CantAerogeneradores=None
     TamañoCelda=None
     VelocidadViento=None
+    coefRugosidad=None
 
     #Atributos
     def __init__(self):   
@@ -59,7 +60,7 @@ class Cromosoma(object):
     def efectoEstela(self,velViento,distanciaCasillas):
         a=0.3333
         radioAero=45
-        coefDeArrastre= round(( 1 / (2 * math.log(80/0.0025))),4) #Aproximadamente 0.0482
+        coefDeArrastre= round(( 1 / (2 * math.log(80/Cromosoma.coefRugosidad))),4) #Aproximadamente 0.0482
         return velViento * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * Cromosoma.TamañoCelda) / radioAero )**2) ) 
 
     def calculoPotenciaAerogenerador(self,velViento):  
@@ -90,7 +91,7 @@ class Cromosoma(object):
         #print(cantAeros)
         return cantAeros
 
-    def mutoGen(self):
+    def MutacionSwap(self):
         listaAux=[]
         for fila in self._genes.tolist():
             #print(fila)
@@ -110,6 +111,15 @@ class Cromosoma(object):
                     break             
         self._genes=np.array(listaAux)
 
+    def MutacionInvertida(self):
+        filRnd=rnd.randrange(len(self._genes))
+        colRnd=rnd.randrange(len(self._genes[0]))
+        #print(f"{filRnd}----{colRnd}")
+        #print(self._genes[filRnd,colRnd])
+        #Se toma una fila y indice al azar, dependiendo del valor que haya en esa posicion se invierte
+        self._genes[filRnd,colRnd]= not(self._genes[filRnd,colRnd])
+        #print(self._genes[filRnd,colRnd])
+        
     def insertoGenes(self,genes,fila):
         self._genes[fila]=genes
 
@@ -136,7 +146,7 @@ class Cromosoma(object):
 
     def limitarAerogeneradores(self):
         cantAeros = self.getAerogeneradores()
-        while(cantAeros > 25):
+        while(cantAeros > Cromosoma.CantAerogeneradores):
             filRnd=rnd.randrange(len(self._genes))
             colRnd=rnd.randrange(len(self._genes[0]))
             if(self._genes[filRnd][colRnd] == 1):

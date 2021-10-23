@@ -161,7 +161,9 @@ class Ui_Dialog(object):
         self.label_4.setText(_translate("Dialog", "Tipo de crossover"))
         self.selectCrossover.setItemText(0, _translate("Dialog", "Por fila y columna"))
         self.label_12.setText(_translate("Dialog", "Tipo de mutación"))
-        self.selectMutacion.setItemText(0, _translate("Dialog", "Al Azar"))
+        self.selectMutacion.setItemText(0, _translate("Dialog", "Aleatoria"))
+        self.selectMutacion.addItem("")
+        self.selectMutacion.setItemText(1, _translate("Dialog", "Swap"))
         self.tamPoblacion.setText(_translate("Dialog", "50"))
         self.selectSeleccion.setItemText(0, _translate("Dialog", "Ruleta"))
         self.selectSeleccion.setItemText(1, _translate("Dialog", "Torneo"))
@@ -170,54 +172,65 @@ class Ui_Dialog(object):
         self.label_6.setText(_translate("Dialog", "Cantidad Generadores"))
         self.cantAerogeneradores.setText(_translate("Dialog", "25"))
         self.label_8.setText(_translate("Dialog", "Velocidad del viento"))
-        self.velocidadViento.setText(_translate("Dialog", "25"))
+        self.velocidadViento.setText(_translate("Dialog", "8"))
         self.label_14.setText(_translate("Dialog", "Coeficiente de rugosidad"))
-        self.coefRugosidad.setText(_translate("Dialog", "0.05"))
+        self.coefRugosidad.setText(_translate("Dialog", "0.0025"))
         self.tamCromosoma.setText(_translate("Dialog", "10"))
         self.groupBox_4.setTitle(_translate("Dialog", "Parametros del Algoritmo"))
         self.label_9.setText(_translate("Dialog", "Cantidad de Poblaciones"))
         self.cantPoblaciones.setText(_translate("Dialog", "200"))
         self.label_10.setText(_translate("Dialog", "Probabilidad de crossover"))
-        self.probCrossover.setText(_translate("Dialog", "0.9"))
+        self.probCrossover.setText(_translate("Dialog", "0.75"))
         self.label_11.setText(_translate("Dialog", "Probabilidad de mutación"))
-        self.probMutacion.setText(_translate("Dialog", "0.05"))
+        self.probMutacion.setText(_translate("Dialog", "0.1"))
         self.label_13.setText(_translate("Dialog", "Elitismo"))
         self.btnEjecutar.setText(_translate("Dialog", "Correr Algoritmo Genético"))
         self.btnResetear.setText(_translate("Dialog", "Resetear"))
 
         #Conexion del metodo con el boton
         self.btnEjecutar.clicked.connect(self.ejecutarAlgoritmo)
+        self.btnResetear.clicked.connect(self.reseteoValores)
 
     def ejecutarAlgoritmo(self):
-
         generaciones=[]
         CantPoblaciones = [int(self.cantPoblaciones.text())]
-        #Parametros del Parque 
+        #------------Cromosoma------------
         Cromosoma.tCromo = int(self.tamCromosoma.text())
         Cromosoma.CantAerogeneradores=int(self.cantAerogeneradores.text())
         Cromosoma.VelocidadViento= int(self.velocidadViento.text()) #Velocidad del viento
         Cromosoma.TamañoCelda = 180
-        Cromosoma.CoeficienteRugosidad = float(self.coefRugosidad.text())
-        #Parametros de la Poblacion
+        Cromosoma.coefRugosidad = float(self.coefRugosidad.text())
+        #------------Cromosoma------------
+
+        #------------Poblacion------------
         Poblacion.tPobla = int(self.tamPoblacion.text()) #Cantidad de cromosomas x Poblacion
         probCrossover = float(self.probCrossover.text())
-        probMutacion = float(self.probMutacion.text())       
+        probMutacion = float(self.probMutacion.text())    
+        #------------Poblacion------------   
 
+        #------------Seleccion------------
         if self.selectSeleccion.currentIndex() == 0:
             Poblacion.tipoSeleccion=Ruleta()
         elif self.selectSeleccion.currentIndex() == 1:
             Poblacion.tipoSeleccion=Torneo()
+        #------------Seleccion------------
 
-        print(self.selectCrossover.currentIndex())
+        #------------Crossover------------
         if self.selectCrossover.currentIndex() == 0:
             Poblacion.tipoCrossover=CrossOverUnPunto(probCrossover)
+        #------------Crossover------------
 
+        #------------Mutacion------------
         if self.selectMutacion.currentIndex() == 0:
             Poblacion.tipoMutacion=MutacionInvertida(probMutacion)
+        elif self.selectMutacion.currentIndex() == 1:
+            Poblacion.tipoMutacion=MutacionSwap(probMutacion)
+        #------------Mutacion------------
 
         #CheckBox Elitismo
         Poblacion.elitismo=self.checkBoxElitismo.isChecked()
 
+        #Esto si se quiere hacer multiples corridas
         for x in CantPoblaciones:
             generacion=Generacion()
             for _ in range(x):        
@@ -225,10 +238,32 @@ class Ui_Dialog(object):
             Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
             generaciones.append(generacion)
 
-        #Se crea una archivo XLSX y se elimina la primer pagina
-        wb = opyxl.Workbook() 
-        wb.remove(wb.active) 
         print("\n")
         for generacion in generaciones:
-            generacion.datosGeneracion(wb)
+            generacion.datosGeneracion()
             print("\n")
+            print(generacion._arrPoblaciones[0].getMaxCromosoma().getAerogeneradores())
+            print(generacion._arrPoblaciones[-1].getMaxCromosoma().getAerogeneradores())
+        
+
+    def reseteoValores(self):
+        #------------Poblacion------------
+        self.tamPoblacion.setText("50")
+        self.selectMutacion.setCurrentIndex(0)
+        self.selectCrossover.setCurrentIndex(0)
+        self.selectSeleccion.setCurrentIndex(0)
+        #------------Poblacion------------
+        
+        #------------Cromosoma------------
+        self.tamCromosoma.setText("10")
+        self.cantAerogeneradores.setText("25")
+        self.velocidadViento.setText("8")
+        self.coefRugosidad.setText("0.0025")
+        #------------Cromosoma------------
+
+        #------------AlgortimoGenetico------------
+        self.cantPoblaciones.setText("200")
+        self.probCrossover.setText("0.75")
+        self.probMutacion.setText("0.1")
+        self.checkBoxElitismo.setChecked(False)
+        #------------AlgortimoGenetico------------

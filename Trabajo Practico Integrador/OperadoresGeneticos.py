@@ -23,14 +23,13 @@ class Ruleta():
 class Torneo():
 
     def aplicarSeleccion(self, poblacionAnterior,cantCromosomasPobla):
-        t = 2
         paresPadres = []
         for _ in range ((len(poblacionAnterior.getCromosomas())- cantCromosomasPobla) // 2):
             pares = []
-            for _ in range(0, t):
+            for _ in range(0, 2):
                 # Elijo aleatoriamente 2 cromosomas
-                crom1 = rnd.choice(poblacionAnterior._arrCromosomas)
-                crom2 = rnd.choice(poblacionAnterior._arrCromosomas)
+                crom1 = rnd.choice(poblacionAnterior.getCromosomas())
+                crom2 = rnd.choice(poblacionAnterior.getCromosomas())
                 if crom1 >= crom2: # Elijo el mejor de ambos
                     pares.append(crom1)
                 else:
@@ -52,15 +51,14 @@ class CrossOverUnPunto():
                 hijo1=Cromosoma()
                 hijo2=Cromosoma()
                 posicionCorte=rnd.randint(0,Cromosoma.tCromo-1)                  
-                #Tipo de Cruce por fila
-                
+                #Tipo de Cruce por fila         
                 for fila in range(0,posicionCorte):
                     hijo1.insertoGenes(padre._genes[fila],fila)
                     hijo2.insertoGenes(madre._genes[fila],fila)
                 for fila in range(posicionCorte,Cromosoma.tCromo):
                     hijo1.insertoGenes(madre._genes[fila],fila)
                     hijo2.insertoGenes(padre._genes[fila],fila)                                  
-                """   
+                """  
                 #Tipo de Cruce por fila y columna        
                 for fila in range(Cromosoma.tCromo):
                     for col in range(0,posicionCorte):
@@ -91,7 +89,17 @@ class MutacionInvertida():
     def aplicoMutacion(self,cromosomas):
         for cromosoma in cromosomas:          
             if(rnd.random() <= self.probMutacion):   
-                cromosoma.mutoGen()
+                cromosoma.MutacionInvertida()
+
+class MutacionSwap():
+
+    def __init__(self,probMuta):
+        self.probMutacion=probMuta
+
+    def aplicoMutacion(self,cromosomas):
+        for cromosoma in cromosomas:          
+            if(rnd.random() <= self.probMutacion):   
+                cromosoma.MutacionSwap()
 
 
 

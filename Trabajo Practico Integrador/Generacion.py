@@ -48,7 +48,7 @@ class Generacion(object):
         plt.ylabel("Potencia [kW]")
         # Se agrega la leyenda para poder diferenciar cada color
         plt.legend()
-        plt.savefig(f"./Salidas/Grafica Generacion")
+        plt.savefig(f"./Salidas/Grafica Generacion N°{self._ID}")
         #----------------Figura 1----------------
         #----------------Figura 2----------------
         plt.figure()
@@ -59,7 +59,7 @@ class Generacion(object):
         #Grafico de las potencias
         plt.plot(arrPotenciasMax, color='r', label='Pot. Max [kW]', linewidth=1)
         plt.legend()
-        plt.savefig(f"./Salidas/Grafica Potencia Generacion")
+        plt.savefig(f"./Salidas/Grafica Potencia Generacion N°{self._ID}")
         #----------------Figura 2----------------
         #----------------Figura 3----------------
         plt.figure()
@@ -71,11 +71,14 @@ class Generacion(object):
         plt.subplot(122)
         plt.title(f"Maximo Cromosoma Pob. Final")
         plt.imshow(maxCromoPobFinal.getGenes(),origin="lower",cmap="gray")
-        plt.savefig(f"./Salidas/Comparacion de poblaciones")
+        plt.savefig(f"./Salidas/Comparacion de poblaciones generacion N°{self._ID}")
         plt.show()
         #----------------Figura 3----------------
                                    
-    def datosGeneracion(self,wb):
+    def datosGeneracion(self):
+        #Se crea una archivo XLSX y se elimina la primer pagina
+        wb = opyxl.Workbook() 
+        wb.remove(wb.active) 
         hojaExcel=wb.create_sheet(f"Generacion {self._ID}")
         tuplas=[]    
         cabecera=["Poblacion","Min. Func. Objetivo","Max. Func. Objetivo","Media Func. Objetivo","Potencia total"]  
@@ -87,6 +90,6 @@ class Generacion(object):
         #Se muestran los datos por consola      
         print(tabulate(tuplas, headers=cabecera, stralign='center',tablefmt="simple",numalign="center"))
         #Se guardan los datos de cada generacion en una hoja de Excel
-        wb.save("./Salidas/Datos.xlsx")
+        wb.save(f"./Salidas/Datos Generacion {self._ID}.xlsx")
         self.dibujoGrafica()
 

@@ -9,6 +9,7 @@ Corridas=[1]
 generaciones=[]
 #Parametros del Parque 
 Cromosoma.tCromo=10
+Cromosoma.coefRugosidad=0.0025
 Cromosoma.CantAerogeneradores=25
 Cromosoma.VelocidadViento=25 #Velocidad del viento
 Cromosoma.TamañoCelda=180 #Distancia Minima de 4*R, donde R es 45 m
@@ -44,8 +45,8 @@ radioAero=45
 distanciaCasillas=5
 coefDeArrastre= round(( 1 / (2 * math.log(80/0.0025))),4)
 
-print(( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
-print(8 * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
+#print(( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
+#print(8 * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
 
 #-------Calculo del efecto estela-----
 def efectoEstela(velViento,distanciaCasillas):
@@ -128,7 +129,7 @@ hijo2.calculoFuncObjetivo()
 #-------Crossover-----
 
 """ hijo1.datosParque()
-hijo1.mutoGen()
+hijo1.MutacionInvertida()
 hijo1.calculoFuncObjetivo()
 hijo1.datosParque()
 
