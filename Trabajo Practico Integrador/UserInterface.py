@@ -159,7 +159,9 @@ class Ui_Dialog(object):
         self.label.setText(_translate("Dialog", "Tamaño de población"))
         self.label_3.setText(_translate("Dialog", "Tipo de selección"))
         self.label_4.setText(_translate("Dialog", "Tipo de crossover"))
-        self.selectCrossover.setItemText(0, _translate("Dialog", "Por fila y columna"))
+        self.selectCrossover.setItemText(0, _translate("Dialog", "Por fila"))
+        self.selectCrossover.addItem("")
+        self.selectCrossover.setItemText(1, _translate("Dialog", "Por Columna"))
         self.label_12.setText(_translate("Dialog", "Tipo de mutación"))
         self.selectMutacion.setItemText(0, _translate("Dialog", "Aleatoria"))
         self.selectMutacion.addItem("")
@@ -172,7 +174,7 @@ class Ui_Dialog(object):
         self.label_6.setText(_translate("Dialog", "Cantidad Generadores"))
         self.cantAerogeneradores.setText(_translate("Dialog", "25"))
         self.label_8.setText(_translate("Dialog", "Velocidad del viento"))
-        self.velocidadViento.setText(_translate("Dialog", "8"))
+        self.velocidadViento.setText(_translate("Dialog", "6.84"))
         self.label_14.setText(_translate("Dialog", "Coeficiente de rugosidad"))
         self.coefRugosidad.setText(_translate("Dialog", "0.0025"))
         self.tamCromosoma.setText(_translate("Dialog", "10"))
@@ -197,7 +199,7 @@ class Ui_Dialog(object):
         #------------Cromosoma------------
         Cromosoma.tCromo = int(self.tamCromosoma.text())
         Cromosoma.CantAerogeneradores=int(self.cantAerogeneradores.text())
-        Cromosoma.VelocidadViento= int(self.velocidadViento.text()) #Velocidad del viento
+        Cromosoma.VelocidadViento= float(self.velocidadViento.text()) #Velocidad del viento
         Cromosoma.TamañoCelda = 180
         Cromosoma.coefRugosidad = float(self.coefRugosidad.text())
         #------------Cromosoma------------
@@ -217,7 +219,8 @@ class Ui_Dialog(object):
 
         #------------Crossover------------
         if self.selectCrossover.currentIndex() == 0:
-            Poblacion.tipoCrossover=CrossOverUnPunto(probCrossover)
+            Poblacion.tipoCrossover=CrossOverUnPunto(probCrossover,self.selectCrossover.currentIndex())
+            
         #------------Crossover------------
 
         #------------Mutacion------------
@@ -242,9 +245,6 @@ class Ui_Dialog(object):
         for generacion in generaciones:
             generacion.datosGeneracion()
             print("\n")
-            print(generacion._arrPoblaciones[0].getMaxCromosoma().getAerogeneradores())
-            print(generacion._arrPoblaciones[-1].getMaxCromosoma().getAerogeneradores())
-        
 
     def reseteoValores(self):
         #------------Poblacion------------
@@ -257,7 +257,7 @@ class Ui_Dialog(object):
         #------------Cromosoma------------
         self.tamCromosoma.setText("10")
         self.cantAerogeneradores.setText("25")
-        self.velocidadViento.setText("8")
+        self.velocidadViento.setText("6.84")
         self.coefRugosidad.setText("0.0025")
         #------------Cromosoma------------
 

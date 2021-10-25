@@ -40,14 +40,16 @@ for fila in arr:
 #-----Creacion del parque eolico-----
 
 #-------Calculo del efecto estela-----
-a=0.3333
+a=1/3
 radioAero=45
-distanciaCasillas=5
-coefDeArrastre= round(( 1 / (2 * math.log(80/0.0025))),4)
-
-#print(( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
-#print(8 * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
-
+distanciaCasillas=1
+coefDeArrastre= 1 / (2 * math.log(80/0.0025))
+Ct=4*a*(1-a)
+#a =1/2 *(1-math.sqrt(1-Ct)) OTRA FORMULA
+#print(8 * ( 1 - (  a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
+#print((  a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) )
+#print(( 1 - ( 1-math.sqrt(1-Ct) / (1+ (coefDeArrastre * distanciaCasillas * 180) / radioAero)**2 )))
+#print(8 * ( 1 - ( 1 - ( 1-math.sqrt(1-Ct) / (1+ (coefDeArrastre * distanciaCasillas * 180) / radioAero)**2 ))))
 #-------Calculo del efecto estela-----
 def efectoEstela(velViento,distanciaCasillas):
     a=0.3333

@@ -58,17 +58,20 @@ class Cromosoma(object):
                         self.calculoPotenciaAerogenerador(velViento)
 
     def efectoEstela(self,velViento,distanciaCasillas):
-        a=0.3333
+        a=1/3
         radioAero=45
-        coefDeArrastre= round(( 1 / (2 * math.log(80/Cromosoma.coefRugosidad))),4) #Aproximadamente 0.0482
-        return velViento * ( 1 - ( 2 * a / (1 + (coefDeArrastre * distanciaCasillas * Cromosoma.TamañoCelda) / radioAero )**2) ) 
+        alturaBuje=80
+        Ct=4*a*(1-a)
+        coefDeArrastre= ( 1 / (2 * math.log( alturaBuje /Cromosoma.coefRugosidad))) #Aproximadamente 0.0482
+        return velViento * ( 1 - ( a / (1 + (coefDeArrastre * distanciaCasillas * Cromosoma.TamañoCelda) / radioAero )**2) ) 
+        #return velViento * ( 1 - ( 1 - ( 1-math.sqrt(1-Ct) / (1+ (coefDeArrastre * distanciaCasillas * Cromosoma.TamañoCelda) / radioAero)**2 )) )
 
     def calculoPotenciaAerogenerador(self,velViento):  
         #Cada indice de la lista contiene una lista donde el primer indice indica la velocidad del viento y el segundo la potencia asociada  
         velocidadesViento=[[0, 0],[1, 0],[2, 0],[3, 10],[4, 46],[5, 170],[6, 355],[7, 580],[8, 874],[9, 1219],[10, 1544],[11, 1740],[12, 1789],[13, 1800],[14, 1800],[15, 1800],[16, 1800],[17, 1800],[18, 1800],[19, 1800],[20, 1800],[21, 1800],[22, 1800],[23, 1800],[24, 1800],[25, 1800],[26, 1800],[27, 0]]
         for i in range(len(velocidadesViento)-1):
             if velocidadesViento[i][0]<=velViento and velocidadesViento[i+1][0]>velViento:
-                self._funcObjetivo += velocidadesViento[i+1][1]
+                self._funcObjetivo += velocidadesViento[i][1]
                 break
     
     def getFuncObjetivo(self):

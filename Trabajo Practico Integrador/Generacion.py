@@ -67,10 +67,10 @@ class Generacion(object):
         maxCromoPobFinal=self._arrPoblaciones[-1].getMaxCromosoma()
         plt.subplot(121)
         plt.title(f"Maximo Cromosoma Pob. Inicial")
-        plt.imshow(maxCromoPobInicial.getGenes(),origin="lower",cmap="gray")
+        plt.imshow(maxCromoPobInicial.getGenes(),origin="lower",cmap="gray",extent=[1,10,1,10])
         plt.subplot(122)
         plt.title(f"Maximo Cromosoma Pob. Final")
-        plt.imshow(maxCromoPobFinal.getGenes(),origin="lower",cmap="gray")
+        plt.imshow(maxCromoPobFinal.getGenes(),origin="lower",cmap="gray",extent=[1,10,1,10])
         plt.savefig(f"./Salidas/Comparacion de poblaciones generacion N°{self._ID}")
         plt.show()
         #----------------Figura 3----------------
