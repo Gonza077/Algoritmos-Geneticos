@@ -69,6 +69,8 @@ class Poblacion(object):
         poblacionAnterior._arrCromosomas.sort(reverse=True)  #Ordena los cromosomas de mayor a menor segun su valor decimal
         self._arrCromosomas.append(copy.deepcopy(poblacionAnterior._arrCromosomas[0]))
         self._arrCromosomas.append(copy.deepcopy(poblacionAnterior._arrCromosomas[1]))
+        self._arrCromosomas.append(copy.deepcopy(poblacionAnterior._arrCromosomas[2]))
+        self._arrCromosomas.append(copy.deepcopy(poblacionAnterior._arrCromosomas[3]))
     
     def creoNuevaPoblacion(self,poblacionAnterior):
         cromosomasNuevos=[] 
@@ -81,7 +83,7 @@ class Poblacion(object):
             self._arrCromosomas.append(cromosoma)
 
     def ATupla(self):    
-        return [self._ID,f"{self._minCromosoma.getFuncObjetivo():,.2f}",f"{self._maxCromosoma.getFuncObjetivo():,.2f}",f"{self._mediaPoblacionFO:,.2f}",f"{self._sumaPoblacion:,.2f}"]
+        return [self._ID,self._minCromosoma.getFuncObjetivo(),self._maxCromosoma.getFuncObjetivo(),self._mediaPoblacionFO,self._sumaPoblacion]
 
     def getMediaPoblacion(self):
         return self._mediaPoblacionFO

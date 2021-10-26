@@ -174,9 +174,9 @@ class Ui_Dialog(object):
         self.label_6.setText(_translate("Dialog", "Cantidad Generadores"))
         self.cantAerogeneradores.setText(_translate("Dialog", "25"))
         self.label_8.setText(_translate("Dialog", "Velocidad del viento"))
-        self.velocidadViento.setText(_translate("Dialog", "6.84"))
+        self.velocidadViento.setText(_translate("Dialog", "7.11"))
         self.label_14.setText(_translate("Dialog", "Coeficiente de rugosidad"))
-        self.coefRugosidad.setText(_translate("Dialog", "0.0025"))
+        self.coefRugosidad.setText(_translate("Dialog", "0.694"))
         self.tamCromosoma.setText(_translate("Dialog", "10"))
         self.groupBox_4.setTitle(_translate("Dialog", "Parametros del Algoritmo"))
         self.label_9.setText(_translate("Dialog", "Cantidad de Poblaciones"))
@@ -218,8 +218,7 @@ class Ui_Dialog(object):
         #------------Seleccion------------
 
         #------------Crossover------------
-        if self.selectCrossover.currentIndex() == 0:
-            Poblacion.tipoCrossover=CrossOverUnPunto(probCrossover,self.selectCrossover.currentIndex())
+        Poblacion.tipoCrossover=CrossOverUnPunto(probCrossover,self.selectCrossover.currentIndex())
             
         #------------Crossover------------
 
@@ -257,8 +256,8 @@ class Ui_Dialog(object):
         #------------Cromosoma------------
         self.tamCromosoma.setText("10")
         self.cantAerogeneradores.setText("25")
-        self.velocidadViento.setText("6.84")
-        self.coefRugosidad.setText("0.0025")
+        self.velocidadViento.setText("7.11")
+        self.coefRugosidad.setText("0.694")
         #------------Cromosoma------------
 
         #------------AlgortimoGenetico------------

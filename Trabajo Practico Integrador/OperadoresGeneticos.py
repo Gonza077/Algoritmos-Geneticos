@@ -82,6 +82,7 @@ class CrossOverUnPunto():
     def crucePorColumna(self,padre,madre):
         hijo1=Cromosoma()
         hijo2=Cromosoma()
+        posicionCorte=rnd.randint(0,Cromosoma.tCromo-1)      
         for fila in range(Cromosoma.tCromo):
             for col in range(0,posicionCorte):
                 #Habria que pensar si es posible hacer que la fila y col se saquen por defecto

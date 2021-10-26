@@ -16,7 +16,7 @@ Cromosoma.TamañoCelda=180 #Distancia Minima de 4*R, donde R es 45 m
 #Parametros de la Poblacion
 Poblacion.tPobla=5 #Cantidad de parques x Poblacion
 Poblacion.tipoSeleccion=Ruleta()
-Poblacion.tipoCrossover=CrossOverUnPunto(0.75)
+Poblacion.tipoCrossover=CrossOverUnPunto(0.75,0)
 Poblacion.tipoMutacion=MutacionInvertida(0.20)
 Poblacion.elitismo=False
 
@@ -42,11 +42,11 @@ for fila in arr:
 #-------Calculo del efecto estela-----
 a=1/3
 radioAero=45
-distanciaCasillas=1
-coefDeArrastre= 1 / (2 * math.log(80/0.0025))
+distanciaCasillas=4
+coefDeArrastre= 1 / (2 * math.log(80/1))
 Ct=4*a*(1-a)
 #a =1/2 *(1-math.sqrt(1-Ct)) OTRA FORMULA
-#print(8 * ( 1 - (  a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) ) )
+print(7.11 * ( 1 - ( 2* a / (1+(coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) )) 
 #print((  a / (1 + (coefDeArrastre * distanciaCasillas * 180) / radioAero )**2) )
 #print(( 1 - ( 1-math.sqrt(1-Ct) / (1+ (coefDeArrastre * distanciaCasillas * 180) / radioAero)**2 )))
 #print(8 * ( 1 - ( 1 - ( 1-math.sqrt(1-Ct) / (1+ (coefDeArrastre * distanciaCasillas * 180) / radioAero)**2 ))))
@@ -137,3 +137,8 @@ hijo1.datosParque()
 
 hijo1.getAerogeneradores()
 hijo2.getAerogeneradores() """
+
+lista=[1,2,3,4,5,5,5,5,5,5,5]
+
+for idx,num in enumerate(lista):
+    print(idx,num)
