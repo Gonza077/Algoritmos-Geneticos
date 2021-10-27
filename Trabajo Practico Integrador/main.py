@@ -1,38 +1,18 @@
-from Generacion import *
-from Poblacion import *
-from ParqueEolico import *
-from OperadoresGeneticos import *
-import openpyxl as opyxl
+from UserInterface import Ui_Dialog
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication
+import sys
+    
+class App(QtWidgets.QMainWindow, Ui_Dialog):
+    def __init__(self, parent=None):
+        super(App, self).__init__(parent)
+        self.setupUi(self)
 
-Corridas=[1]   
-generaciones=[]
-#Parametros del Parque 
-ParqueEolico.CantAeroGeneradores=25
-ParqueEolico.VelocidadViento=25 #Velocidad del viento
-ParqueEolico.TamañoCelda=180  #Distancia Minima de 4*R, donde R es 45 m
-#Parametros de la Poblacion
-Poblacion.CantParques=1  #Cantidad de parques x Poblacion
-Poblacion.tipoSeleccion=Ruleta()
-Poblacion.tipoCrossover=CrossOverUnPunto(0.75)
-Poblacion.tipoMutacion=MutacionInvertida(0.20)
-#Poblacion.elitismo=False 
+def main():
+    app = QApplication(sys.argv)
+    form = App()
+    form.show()
+    app.exec_() 
 
-for x in Corridas:
-    generacion=Generacion()
-    for _ in range(x):        
-        generacion.creoGeneracion()
-    Poblacion.reseteoIDPoblacion() #Metodo de clase que vuelve el ID a 1
-    generaciones.append(generacion)
-
-print("\n")
-for generacion in generaciones:
-    generacion.datosGeneracion()
-    print("\n")
-
-#Esto es para registrar los datos en el excel
-"""
-wb = opyxl.Workbook()    
-for generacion in generaciones:
-    generacion.cargoDatosExcel(wb)
-"""
-
+if __name__ == '__main__':
+    main()

@@ -1,21 +1,24 @@
-from Ciudad import *
-import pandas as pd
+from UserInterface import uiPyQT
+from CiudadesDAO import CiudadesDAO
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication
+import sys
+    
+class ExampleApp(QtWidgets.QMainWindow, uiPyQT.Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(ExampleApp, self).__init__(parent)
+        self.setupUi(self)
 
-def cargarCiudades():
-    ciudades=[]
-    hojaExcel = pd.read_excel('./TablaCapitales.xlsx')
-    for fila in hojaExcel.values:
-        ciudad=Ciudad()
-        ciudad.agregarNombre(fila[0])
-        for j in range(1,len(fila)):
-            ciudad.agregarCiudad(hojaExcel.columns[j], fila[j])
-        ciudades.append(ciudad)
-    return ciudades
+def main():
+    app = QApplication(sys.argv)
+    form = ExampleApp()
+    form.show()
+    app.exec_()
 
-def nombreCiudades():
-    nombres=[]
-    for ciudad in ciudades:
-        nombres.append(ciudad._nombre)
-    return nombres
+if __name__ == '__main__':
+    # Carga de los datos del excel
+    CiudadesDAO.cargarCiudades()
+    main()
+    #menuConsola()
 
-ciudades=cargarCiudades()
+
